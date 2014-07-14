@@ -110,6 +110,22 @@
   	return {
   		getEm: getEm
   	};
-  });
+  })
+
+  .factory('SendMessageFactory', function($http){
+  	var sendMessage = function(){
+  		return $http({
+  			method: 'POST',
+  			url: '/main/crunch',
+  			data: data,
+  		})
+  		.then(function(response){
+  			return response;
+  		});
+  	};
+  	return {
+  		sendMessage: sendMessage
+  	};
+  })
 }(angular));
 

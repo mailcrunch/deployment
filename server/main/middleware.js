@@ -4,12 +4,18 @@
  * MiddleWare for the entire app
 */
 var fs = require('fs');
+var smtp = 
 var Imap = require('imap'),
     inspect = require('util').inspect;
 var Parser = require('imap-parser');
 var parser = new Parser();
 
 module.exports = exports = {
+  emailSender: function(res, req, obj){
+    if (req.method === 'POST'){
+
+    }
+  },
   emailGetter: function(req, res, obj){
     if (req.method === 'GET'){
       var imap = new Imap({

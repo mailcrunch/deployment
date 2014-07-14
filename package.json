@@ -5,7 +5,9 @@
     "express": "*",
     "express-session": "^1.6.4",
     "imap": "^0.8.12",
+    "imap-parser": "0.0.1",
     "mongoose": "*",
+    "nodemailer": "^0.7.1",
     "passport": "^0.2.0",
     "passport-local": "^1.0.0",
     "q": "*"

@@ -1,12 +1,11 @@
 "use strict";
 
+
 var mongoose    = require('mongoose'),
     morgan      = require('morgan'),
     bodyParser  = require('body-parser'),
     middle      = require('./middleware'),
     passport    = require('passport');
-
-mongoose.connect(process.env.DB_URL || 'mongodb://localhost/myApp');
 /*
  * Include all your global env variables here.
 */

@@ -72,7 +72,7 @@ module.exports = exports = {
           if (err) throw err;
           imap.search([ 'UNSEEN' ], function(err, results){
             if (err) throw err;
-             var fetched = imap.fetch(results, { struct: true, bodies: ['HEADER','TEXT'] });
+             var fetched = imap.fetch(results, { struct: true, bodies: ['HEADER', 'TEXT'] });
              fetched.on('message', function(msg, seqno) {
               var bodyBuffer = '';
               var headerBuffer = '';
@@ -81,22 +81,22 @@ module.exports = exports = {
                   stream.on('data', function(data){
                     headerBuffer += data;
                   });
-                }
-                if (info.which === 'TEXT'){
-                  stream.on('data', function(data){
-                    bodyBuffer += data.toString('utf8');
-                  });
                   stream.once('end', function(){
                     headerBuffer = Imap.parseHeader(headerBuffer);
                   })
+                }
+                if (info.which === 'TEXT'){
+                  stream.on('data', function(chunk){
+                    bodyBuffer += chunk;
+                  });
                  }
                })
                msg.on('end', function(){
-                allTheEmails.push(headerBuffer);
+                var message = {body: bodyBuffer.toString('utf8'), headers: headerBuffer};
+                allTheEmails.push(message);
                });
             });
             fetched.once('end', function(){
-
               res.end(JSON.stringify(allTheEmails));
             })
           });

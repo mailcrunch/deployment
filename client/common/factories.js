@@ -103,6 +103,13 @@
   			url: '/main/sort'
   		})
   		.then(function(response){
+        for (var i = 0; i < response.data.length; i++){
+          if (response.data[i].headers['x-mailer'] === undefined){
+            var msgId = response.data[i].headers['content-type'];
+            msgId = msgId.join('').split('=')[1];
+            response.data[i].body = response.data[i].body.split(msgId)[1];
+          }
+        }
   			return response;
   			
   		});

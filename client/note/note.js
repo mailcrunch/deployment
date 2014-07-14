@@ -17,7 +17,6 @@ angular.module('myApp.main.note', ['ui.router'])
     $scope.getEmails = function(){
       InboxFactory.getEm()
         .then(function(response){
-          console.log(response)
           for (var i = 0; i < response.data.length; i++){
             if (typeof response.data[i].headers === 'string'){
               
@@ -32,7 +31,6 @@ angular.module('myApp.main.note', ['ui.router'])
               $scope.inbox.push($scope.currentEmail); 
             }
           }
-        console.log($scope.inbox)
         });
     };
     $scope.sortManage = function(){

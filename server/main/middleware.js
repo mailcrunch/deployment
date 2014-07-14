@@ -13,6 +13,7 @@ var fs         = require('fs'),
 module.exports = exports = {
 
   emailSender: function(res, req, next){
+    if (req.method === 'POST'){
       var buffer = '';
       res.on('data', function(data){
         buffer += data.toString('utf8')
@@ -41,13 +42,15 @@ module.exports = exports = {
             if(error){
                 console.log(error);
             }else{
-                console.log("Message sent: " + response.message);
+                console.log("Message sent: ");
             }
         });
       });
       req.end(buffer);
+    }
   },
   emailGetter: function(req, res, next){
+    console.log(req.method)
     if (req.method === 'GET'){
       var imap = new Imap({
         user: 'bizarroforrest',
@@ -67,7 +70,7 @@ module.exports = exports = {
       imap.once('ready', function() {
         openInbox(function(err, box) {
           if (err) throw err;
-          imap.search([ 'UNSEEN', ['SINCE', 'July 09, 2014'] ], function(err, results){
+          imap.search([ 'UNSEEN' ], function(err, results){
             if (err) throw err;
              var fetched = imap.fetch(results, { struct: true, bodies: ['HEADER','TEXT'] });
              fetched.on('message', function(msg, seqno) {
@@ -89,10 +92,11 @@ module.exports = exports = {
                  }
                })
                msg.on('end', function(){
-                allTheEmails.push({headers: headerBuffer, body: bodyBuffer});
+                allTheEmails.push(headerBuffer);
                });
             });
             fetched.once('end', function(){
+
               res.end(JSON.stringify(allTheEmails));
             })
           });

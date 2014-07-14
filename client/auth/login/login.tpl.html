@@ -5,7 +5,7 @@
   <form name="loginForm" ng-controller='LoginController' ng-submit='getEmails()' novalidate>
     <input name="username" type='text' ng-model='user.username' ng-minlength="3" ng-maxlength="10" required>
     <input name="password" type="password" ng-model='user.password' ng-minlength="3" ng-maxlength="10" required>
-    <button ng-click="getEmails()">login</button>
+    <button ng-click="">login</button>
     <div>{{ error }}</div>
   </form>
   <a href="#/main/signup">Don't have an account? Signup ...</a>

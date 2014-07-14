@@ -97,7 +97,7 @@
    })
 
   .factory('InboxFactory', function($http){
-  	var getEm = function(username, password){
+  	var getEm = function(){
   		return $http({
   			method: 'GET',
   			url: '/main/login'
@@ -113,11 +113,11 @@
   })
 
   .factory('SendMessageFactory', function($http){
-  	var sendMessage = function(){
+  	var sendMessage = function(message){
   		return $http({
   			method: 'POST',
   			url: '/main/crunch',
-  			data: data,
+  			data: message,
   		})
   		.then(function(response){
   			return response;

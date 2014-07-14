@@ -3,20 +3,50 @@
 /*
  * MiddleWare for the entire app
 */
-var fs = require('fs');
-var smtp = 
-var Imap = require('imap'),
-    inspect = require('util').inspect;
-var Parser = require('imap-parser');
-var parser = new Parser();
+var fs         = require('fs'),
+    nodemailer = require('nodemailer'),
+    Imap       = require('imap'),
+    inspect    = require('util').inspect,
+    Parser     = require('imap-parser'),
+    parser     = new Parser();
 
 module.exports = exports = {
-  emailSender: function(res, req, obj){
-    if (req.method === 'POST'){
+  emailSender: function(res, req, next){
+      var buffer = '';
+      res.on('data', function(data){
+        buffer += data.toString('utf8')
+      });
+      res.on('end', function(){
+        buffer = buffer.split('###');
+        var to = buffer[1];
+        var subject = buffer[2];
+        var message = buffer[3];
 
-    }
+        var smtpTransport = nodemailer.createTransport("SMTP",{
+            service: "Gmail",
+            auth: {
+                user: "bizarroforrest",
+                pass: "mailcrunch"
+            }
+        });
+        var mailOptions = {
+            from: "<bizarroforrest@gmail.com>", // sender address
+            to: to, // list of receivers
+            subject: subject, // Subject line
+            text: message, // plaintext body
+            html: "<b>" + message + "</b>" // html body
+        }
+        smtpTransport.sendMail(mailOptions, function(error, response){
+            if(error){
+                console.log(error);
+            }else{
+                console.log("Message sent: " + response.message);
+            }
+        });
+      });
+      req.end(buffer);
   },
-  emailGetter: function(req, res, obj){
+  emailGetter: function(req, res, next){
     if (req.method === 'GET'){
       var imap = new Imap({
         user: 'bizarroforrest',
@@ -90,7 +120,7 @@ module.exports = exports = {
 
   handleError: function (err, req, res, next) {
     if (err) {
-      res.send(err, 500);
+      res.send(500, err);
     }
     next();
   },

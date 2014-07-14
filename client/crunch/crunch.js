@@ -11,14 +11,14 @@ angular.module('myApp.main.crunch', ['ui.router'])
 })
 
 //this is dummy data to test the list of inbox emails	
-.controller('CrunchController', function($scope, Inbox, $rootScope, SendMessageFactory) {
+.controller('CrunchController', function($scope, Inbox, $rootScope) {
 	$scope.inbox = Inbox.Inbox;
   $rootScope.emailIndex = 0;
   $scope.currentEmail = $scope.inbox[$rootScope.emailIndex];
   Inbox.timeLeft = 5;
 })
 
-.controller('ResponseController', function($scope, Inbox, $rootScope) {
+.controller('ResponseController', function($scope, Inbox, $rootScope, SendMessageFactory) {
   $scope.inbox = Inbox.Inbox;
   $rootScope.emailIndex = 0;
   $scope.currentEmail = $scope.inbox[$rootScope.emailIndex];
@@ -31,7 +31,8 @@ angular.module('myApp.main.crunch', ['ui.router'])
     $scope.currentEmail = $scope.inbox[$rootScope.emailIndex];
     $rootScope.timeLeft = 120;
     $('.input-group-addon').val('');
-    SendMessageFactory.sendMessage()
+    var message = '###' + $('#to').val() + '###' + $('#subject').val() + '###' + $('#message').val()
+    SendMessageFactory.sendMessage(message)
       .then(function(response){
         console.log(response);
       })

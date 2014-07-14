@@ -19,9 +19,9 @@
   <br>
   <div class="input-group" ng-controller='ResponseController'>
        <span class="input-group-addon">Response</span>
-       <input type="text" class="form-control" placeholder="To">
-       <input type="text" class="form-control" placeholder="Subject">
-       <input type="text" class="form-control" placeholder="Write a message">
+       <input id="to" type="text" class="form-control" placeholder="To">
+       <input id="subject" type="text" class="form-control" placeholder="Subject">
+       <input id="message" type="text" class="form-control" placeholder="Write a message">
        <button ng-click='send()' class="btn btn-primary btn-lg" role="button">Send</button><button ng-click='next()' class="btn btn-primary btn-lg" role="button">Next</button>
      </div>
 

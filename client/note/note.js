@@ -18,17 +18,14 @@ angular.module('myApp.main.note', ['ui.router'])
       InboxFactory.getEm()
         .then(function(response){
           for (var i = 0; i < response.data.length; i++){
-            if (typeof response.data[i].headers === 'string'){
-              
-            }
             if (response.data[i].headers.from !== undefined){
-              $scope.currentEmail = {
+              $scope.email = {
                 status: 'pending'
               };
-              $scope.currentEmail.from = response.data[i].headers.from.toString();
-              $scope.currentEmail.subject = response.data[i].headers.subject.toString();
-              $scope.currentEmail.time = response.data[i].headers.date.toString();
-              $scope.inbox.push($scope.currentEmail); 
+              $scope.email.from = response.data[i].headers.from.toString();
+              $scope.email.subject = response.data[i].headers.subject.toString();
+              $scope.email.time = response.data[i].headers.date.toString();
+              $scope.inbox.push($scope.email); 
             }
           }
         });

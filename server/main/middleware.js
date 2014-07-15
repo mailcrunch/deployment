@@ -50,7 +50,6 @@ module.exports = exports = {
     }
   },
   emailGetter: function(req, res, next){
-    console.log(req.method)
     if (req.method === 'GET'){
       var imap = new Imap({
         user: 'bizarroforrest',
@@ -109,6 +108,7 @@ module.exports = exports = {
 
       imap.once('end', function() {
         console.log('Connection ended');
+        imap.end();
       });
 
       imap.connect();

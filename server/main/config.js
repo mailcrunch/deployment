@@ -12,7 +12,7 @@ mongoose.connect(process.env.DB_URL || 'mongodb://localhost/myApp');
 /*
  * Include all your global env variables here.
 */
-module.exports = exports = function (app, express, routers, passport) {
+module.exports = exports = function (app, express, routers) {
   app.set('port', process.env.PORT || 3000);
   app.set('base url', process.env.URL || 'http://localhost');
   app.use(morgan('dev'));
@@ -25,16 +25,3 @@ module.exports = exports = function (app, express, routers, passport) {
   app.use(middle.logError);
   app.use(middle.handleError);
 };
-
-passport.use(new GoogleStrategy({
-    returnURL: 'http://localhost/auth/google/return',
-    realm: 'http://localhost'
-  },
-  function(identifier, profile, done) {
-    User.findOrCreate({ openId: identifier }, function(err, user) {
-      done(err, user);
-    });
-  }
-));
-
-

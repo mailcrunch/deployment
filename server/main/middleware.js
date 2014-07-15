@@ -23,9 +23,6 @@ mongoClient.connect('mongodb://localhost:27017/mailcrunch2', function(err,db){
 
 module.exports = exports = {
 
-  emailSender: function(res, req, next){
-    
-  },
   emailGetterAndSender: function(req, res, next){
     if (req.method === 'GET'){
       var imap = new Imap({

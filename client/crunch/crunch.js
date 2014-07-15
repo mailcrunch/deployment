@@ -10,13 +10,13 @@ angular.module('myApp.main.crunch', ['ui.router'])
     });
 })
 
-.controller('CrunchController', function($scope, $rootScope, Inbox, QueueView) {
-  $scope.inbox = QueueView.getView(Inbox.sortedInbox);
+.controller('CrunchController', function($scope, $rootScope, Inbox) {
+  $scope.inbox = Inbox.sortedInbox.sort(function(a,b){return a.bucket - b.bucket});
   Inbox.timeLeft = 5;
 })
 
-.controller('ResponseController', function($scope, $rootScope, Inbox, SendMessageFactory, QueueView) {
-  $scope.inbox = QueueView.getView(Inbox.sortedInbox);
+.controller('ResponseController', function($scope, $rootScope, Inbox, SendMessageFactory) {
+  $scope.inbox = Inbox.sortedInbox.sort(function(a,b){return a.bucket - b.bucket});
   $rootScope.timeLeft = 60;
 
   $scope.send = function(){
@@ -26,14 +26,13 @@ angular.module('myApp.main.crunch', ['ui.router'])
       .then(function(response){
         console.log(response);
       });
-    QueueView.shiftQ();
+    Inbox.shiftQ();
     $('#subject').val('');
     $('#message').val('');
-    return $scope.inbox;
   };
 
   $scope.next = function(){
-    QueueView.shiftQ();
+    Inbox.shiftQ();
     $rootScope.timeLeft = 120;
   };
 })
@@ -49,9 +48,8 @@ angular.module('myApp.main.crunch', ['ui.router'])
   },1000);
 })
 
-.controller('mantra',function($scope, $rootScope, Inbox, QueueView){
-  $scope.inbox = QueueView.getView(Inbox.sortedInbox);
-  console.log($scope.inbox);
+.controller('mantra',function($scope, $rootScope, Inbox){
+  $scope.inbox = Inbox.sortedInbox.sort(function(a,b){return a.bucket - b.bucket});
   $scope.message = "What's done is done."
   if($scope.inbox[0]['bucket'] === 'manage'){
     $scope.message = "Take time to handle this yourself. It's important and pressing."

@@ -8,34 +8,15 @@
 	}};
   })
 
-  .factory('QueueView', function(){
-    var sortedQueue = [];
-    var getView = function(inboxObj){
-      sortedQueue = inboxObj.manage.concat(inboxObj.focus);
-      sortedQueue = sortedQueue.concat(inboxObj.avoid);
-      sortedQueue = sortedQueue.concat(inboxObj.limit);
-      return sortedQueue;
-    }
-    
-    var shiftQ = function(){
-      sortedQueue.shift();
-    }
-
-    return {
-      getView: getView,
-      shiftQ: shiftQ
-    }
-  })
-
   .factory('Inbox', function(){
-    var sortedInbox = {
-      manage: [],
-      focus: [],
-      avoid: [],
-      limit: []
+    var sortedInbox = [];
+    var shiftQ = function(){
+      sortedInbox.shift();
     };
+
     return {
-      sortedInbox: sortedInbox
+      sortedInbox: sortedInbox,
+      shiftQ: shiftQ
     }
   })
 

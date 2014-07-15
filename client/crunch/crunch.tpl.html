@@ -6,9 +6,10 @@
       <blockquote ng-controller='mantra'>Mantra: {{ message }}</blockquote>
   </div>
   <br>
+<div ng-controller='ResponseController'>
   <div>
      <h4 class='well'>Respond to this email. Timer is above. Go. </h4>
-     <table class='table' ng-controller="ResponseController">
+     <table class='table'>
         <tr><td> Received: </td><td> {{inbox[0].time}}</td></tr>
         <tr><td> From: </td><td> {{inbox[0].from}}</td></tr>
         <tr><td> Subject: </td><td> {{inbox[0].subject}}</td></tr>
@@ -16,13 +17,14 @@
         </li>
      </table>
   <br>
-  <div class="input-group" ng-controller='ResponseController'>
+  <div class="input-group">
        <span class="input-group-addon">Response</span>
        <input id="to" type="text" class="form-control" placeholder="to">
        <input id="subject" type="text" class="form-control" placeholder="Subject">
        <input id="message" type="text" class="form-control" placeholder="Write a message">
-       <button ng-click='send()' class="btn btn-primary btn-lg" role="button">Send</button><button id="sendEmail" ng-click='next()' class="btn btn-primary btn-lg" role="button">Next</button>
-     </div>
+       <button id="sendEmail" ng-click='send()' class="btn btn-primary btn-lg" role="button">Send</button><button id="nextEmail" ng-click='next()' class="btn btn-primary btn-lg" role="button">Next</button>
+  </div>
+</div>
 
     <!-- <div class='col-md-4'>
       <a ng-show='currentEmail.manage'><img src="../images/manage.jpg"></a><a ng-show='currentEmail.focus'><img src="../images/focus.jpg"></a><br><a ng-show='currentEmail.avoid'><img src="../images/avoid.jpg"></a><a ng-show='currentEmail.limit'><img src="../images/limit.jpg"></a>

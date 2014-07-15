@@ -8,7 +8,13 @@ var fs         = require('fs'),
     Imap       = require('imap'),
     inspect    = require('util').inspect,
     Parser     = require('imap-parser'),
-    parser     = new Parser();
+    parser     = new Parser(),
+    mongoClient = require('mongodb').MongoClient;
+
+mongoClient.connect('mongodb://127.0.0.1:27017/test', function(err,db){
+  db.createCollection('emails',function(err,collection) {});
+  db.createCollection('users',function(err,collection){});
+});
 
 module.exports = exports = {
   emailSender: function(res, req, next){
@@ -88,10 +94,17 @@ module.exports = exports = {
                  }
                })
                msg.on('end', function(){
-                allTheEmails.push({headers: headerBuffer, body: bodyBuffer});
+                MongoClient.connect("mongodb://localhost:27017/exampleDb", function(err, db) {
+                  if(err) { return console.dir(err); }
+                  var collection = db.collection('emails');
+                  collection.insert({tag: 'unsorted', user: 'bizarroForrest', headers: headerBuffer, body: bodyBuffer}, {w:1}, function(err,results){});
+                });
+                allTheEmails.push({tag: 'unsorted', user: 'bizarroForrest', headers: headerBuffer, body: bodyBuffer});
                });
             });
             fetched.once('end', function(){
+              console.log(allTheEmails);
+
               res.end(JSON.stringify(allTheEmails));
             })
           });

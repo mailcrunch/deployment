@@ -19,16 +19,12 @@
   <br>
   <div class="input-group">
        <span class="input-group-addon">Response</span>
-       <input id="to" type="text" class="form-control" placeholder="to">
-       <input id="subject" type="text" class="form-control" placeholder="Subject">
+       <input id="to" type="text" class="form-control" value="{{inbox[0].from}}">
+       <input id="subject" type="text" class="form-control" value="Re: {{inbox[0].subject}}">
        <input id="message" type="text" class="form-control" placeholder="Write a message">
        <button id="sendEmail" ng-click='send()' class="btn btn-primary btn-lg" role="button">Send</button><button id="nextEmail" ng-click='next()' class="btn btn-primary btn-lg" role="button">Next</button>
   </div>
 </div>
-
-    <!-- <div class='col-md-4'>
-      <a ng-show='currentEmail.manage'><img src="../images/manage.jpg"></a><a ng-show='currentEmail.focus'><img src="../images/focus.jpg"></a><br><a ng-show='currentEmail.avoid'><img src="../images/avoid.jpg"></a><a ng-show='currentEmail.limit'><img src="../images/limit.jpg"></a>
-    </div> -->
   </div>
 </div>
 

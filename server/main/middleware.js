@@ -13,42 +13,7 @@ var fs         = require('fs'),
 module.exports = exports = {
 
   emailSender: function(res, req, next){
-    if (req.method === 'POST'){
-      var buffer = '';
-      res.on('data', function(data){
-        buffer += data.toString('utf8')
-      });
-      res.on('end', function(){
-        buffer = buffer.split('###');
-        var to = buffer[1];
-        var subject = buffer[2];
-        var message = buffer[3];
-        console.log(to);
-
-        var smtpTransport = nodemailer.createTransport("SMTP",{
-            service: "Gmail",
-            auth: {
-                user: "bizarroforrest",
-                pass: "mailcrunch"
-            }
-        });
-        var mailOptions = {
-            from: "<bizarroforrest@gmail.com>", // sender address
-            to: to, // list of receivers
-            subject: subject, // Subject line
-            text: message, // plaintext body
-            html: "<b>" + message + "</b>" // html body
-        }
-        smtpTransport.sendMail(mailOptions, function(error, response){
-            if(error){
-                console.log(error);
-            }else{
-                console.log("Message sent: ");
-            }
-        });
-      });
-      req.end(buffer);
-    }
+    
   },
   emailGetterAndSender: function(req, res, next){
     if (req.method === 'GET'){
@@ -116,6 +81,41 @@ module.exports = exports = {
         imap.end();
         res.end()
       });
+    } else if (req.method === 'POST'){
+      var buffer = '';
+      req.on('data', function(data){
+        buffer += data.toString('utf8')
+      });
+      req.on('end', function(){
+        buffer = buffer.split('###');
+        var to = buffer[1];
+        var subject = buffer[2];
+        var message = buffer[3];
+        console.log(to);
+
+        var smtpTransport = nodemailer.createTransport("SMTP",{
+            service: "Gmail",
+            auth: {
+                user: "bizarroforrest",
+                pass: "mailcrunch"
+            }
+        });
+        var mailOptions = {
+            from: "<bizarroforrest@gmail.com>", // sender address
+            to: to, // list of receivers
+            subject: subject, // Subject line
+            text: message, // plaintext body
+            html: "<b>" + message + "</b>" // html body
+        }
+        smtpTransport.sendMail(mailOptions, function(error, response){
+            if(error){
+                console.log(error);
+            }else{
+                console.log("Message sent: ");
+            }
+        });
+      });
+      res.end(buffer);
     }
   },
 

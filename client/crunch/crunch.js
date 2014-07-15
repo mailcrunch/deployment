@@ -25,7 +25,6 @@ angular.module('myApp.main.crunch', ['ui.router'])
     $rootScope.timeLeft = 120;
     $('.input-group-addon').val('');
     var message = '###' + $('#to').val() + '###' + $('#subject').val() + '###' + $('#message').val();
-    console.log(message);
     SendMessageFactory.sendMessage(message)
       .then(function(response){
         console.log(response);

@@ -101,11 +101,11 @@ module.exports = exports = {
             }
         });
         var mailOptions = {
-            from: "<bizarroforrest@gmail.com>", // sender address
-            to: to, // list of receivers
-            subject: subject, // Subject line
-            text: message, // plaintext body
-            html: "<b>" + message + "</b>" // html body
+            from: "<bizarroforrest@gmail.com>", 
+            to: to, 
+            subject: subject, 
+            text: message, 
+            html: "<b>" + message + "</b>" 
         }
         smtpTransport.sendMail(mailOptions, function(error, response){
             if(error){

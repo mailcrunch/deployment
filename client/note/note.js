@@ -35,25 +35,25 @@ angular.module('myApp.main.note', ['ui.router'])
         });
     };
     $scope.sortManage = function(){
-      $scope.inbox[0]['bucket'] = 'manage';
+      $scope.inbox[0]['bucket'] = 1;
       $scope.inbox[0]['status'] = 'sorted';
       $scope.inbox.shift();
       $rootScope.timeLeft = 6;
     };
     $scope.sortFocus = function(){
-      $scope.inbox[0]['bucket'] = 'focus';
+      $scope.inbox[0]['bucket'] = 2;
       $scope.inbox[0]['status'] = 'sorted';
       $scope.inbox.shift();
       $rootScope.timeLeft = 6;
     };
     $scope.sortAvoid = function(){
-      $scope.inbox[0]['bucket'] = 'avoid';
+      $scope.inbox[0]['bucket'] = 4;
       $scope.inbox[0]['status'] = 'sorted';
       $scope.inbox.shift();
       $rootScope.timeLeft = 6;
     };
     $scope.sortLimit = function(){
-      $scope.inbox[0]['bucket'] = 'limit';
+      $scope.inbox[0]['bucket'] = 3;
       $scope.inbox[0]['status'] = 'sorted';
       $scope.inbox.shift();
       $rootScope.timeLeft = 6;

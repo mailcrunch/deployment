@@ -18,7 +18,7 @@
   <br>
   <div class="input-group" ng-controller='ResponseController'>
        <span class="input-group-addon">Response</span>
-       <input id="to" type="text" class="form-control" value='{{inbox[0].from.slice(inbox[0].from.indexOf("<")+1, inbox[0].from.indexOf(">"))}}'>
+       <input id="to" type="text" class="form-control" placeholder="to">
        <input id="subject" type="text" class="form-control" placeholder="Subject">
        <input id="message" type="text" class="form-control" placeholder="Write a message">
        <button ng-click='send()' class="btn btn-primary btn-lg" role="button">Send</button><button id="sendEmail" ng-click='next()' class="btn btn-primary btn-lg" role="button">Next</button>
@@ -35,8 +35,8 @@
       <!--Sidebar content inside span2-->
        <h4 class='well'>The queue</h4>
        <span ng-controller="CrunchController">
-          <li class="list-group-item disabled" ng-repeat="email in inbox | filter: {status: 'responded'}">{{email.from}}: {{email.subject}} @ {{email.time}}</li>
-          <li class="list-group-item" ng-repeat="email in inbox | filter: {status: 'sorted'}">{{email.from}}: {{email.subject}} @ {{email.time}}</li>
+          <li class="list-group-item disabled" ng-repeat="email in inbox | filter: {status: 'responded'} | orderBy: bucket">{{email.from}}: {{email.subject}} @ {{email.time}}</li>
+          <li class="list-group-item" ng-repeat="email in inbox | filter: {status: 'sorted'} | orderBy: 'bucket'">{{email.from}}: {{email.subject}} @ {{email.time}}</li>
        </span>
     </div>
 </div>

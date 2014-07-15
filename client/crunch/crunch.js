@@ -12,8 +12,6 @@ angular.module('myApp.main.crunch', ['ui.router'])
 
 .controller('CrunchController', function($scope, $rootScope, Inbox) {
 	$scope.inbox = Inbox.sortedInbox;
-  console.log($scope.sortedInbox)
-  
   Inbox.timeLeft = 5;
 })
 

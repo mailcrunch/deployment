@@ -11,9 +11,14 @@ var fs         = require('fs'),
     parser     = new Parser(),
     mongoClient = require('mongodb').MongoClient;
 
-mongoClient.connect('mongodb://127.0.0.1:27017/test', function(err,db){
+mongoClient.connect('mongodb://localhost:27017/mailcrunch2', function(err,db){
   db.createCollection('emails',function(err,collection) {});
   db.createCollection('users',function(err,collection){});
+  db.createIndex('users', {username: 1}, {unique: true}, function(err,res){});
+  db.createIndex('emails',{headersUniqHack:1}, {unique:true},function(err,res){});
+  db.createIndex('emails',{tag:1},{unique:false},function(err,res){});
+  db.close();
+  // db.createIndex('emails',{username:1}, {unique:false}, function(err,res){});
 });
 
 module.exports = exports = {
@@ -101,18 +106,37 @@ module.exports = exports = {
 
                 var message = {body: bodyBuffer.toString('utf8'), headers: headerBuffer};
                 allTheEmails.push(message);
-                 MongoClient.connect("mongodb://localhost:27017/exampleDb", function(err, db) {
+                mongoClient.connect("mongodb://localhost:27017/mailcrunch2", function(err, db) {
                   if(err) { return console.dir(err); }
                   var collection = db.collection('emails');
                   message.tag = 'unsorted';
-                  message.user = 'bizarroForrest'
-                  collection.insert(message, {w:1}, function(err,results){});
+                  message.username = 'bizarroForrest';
+                  message.headersUniqHack = message.username + message.headers['message-id'][0].split('@')[0].slice(1);
+                  collection.insert(message, {w:1}, function(err,results){
+                    if (err){
+                      console.log(err);
+                    }
+                    else
+                      console.log(results);
+                  });
                 });
                });
             });
             fetched.once('end', function(){
               console.log(allTheEmails);
 
+              mongoClient.connect("mongodb://localhost:27017/mailcrunch2", function(err, db) {
+                if(err) { return console.dir(err); }
+                var collection = db.collection('emails');
+                collection.find({username:'bizarroForrest'}).toArray(function(err, res){
+                  if (err) {
+                    console.log(err);
+                    throw (err);
+                  }
+                  console.log('foo:::: ' + JSON.stringify(res));
+                });
+              });
+              // console.log()
               res.end(JSON.stringify(allTheEmails));
             })
           });
@@ -146,9 +170,9 @@ module.exports = exports = {
     next();
   },
   cors: function (req, res, next) {
-    res.header('Access-Controll-Allow-Origin', '*');
-    res.header('Access-Controll-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
-    res.header('Access-Controll-Allow-Header', 'Cotent-tyope, Authorization');
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Header', 'Content-type, Authorization');
 
     if (req.method === 'Options') {
       res.send(200);

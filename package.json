@@ -6,6 +6,7 @@
     "express-session": "^1.6.4",
     "imap": "^0.8.12",
     "imap-parser": "0.0.1",
+    "md5": "^1.0.0",
     "mongodb": "^1.4.7",
     "mongoose": "*",
     "nodemailer": "^0.7.1",

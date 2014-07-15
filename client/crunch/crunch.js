@@ -10,35 +10,30 @@ angular.module('myApp.main.crunch', ['ui.router'])
     });
 })
 
-.controller('CrunchController', function($scope, $rootScope, Inbox) {
-	$scope.inbox = Inbox.sortedInbox;
+.controller('CrunchController', function($scope, $rootScope, Inbox, QueueView) {
+  $scope.inbox = QueueView.getView(Inbox.sortedInbox);
   Inbox.timeLeft = 5;
 })
 
-.controller('ResponseController', function($scope, $rootScope, Inbox, SendMessageFactory) {
-  $scope.inbox = Inbox.sortedInbox;
-  $rootScope.emailIndex = 0;
-  $scope.currentEmail = $scope.inbox[$rootScope.emailIndex];
+.controller('ResponseController', function($scope, $rootScope, Inbox, SendMessageFactory, QueueView) {
+  $scope.inbox = QueueView.getView(Inbox.sortedInbox);
   $rootScope.timeLeft = 60;
 
   $scope.send = function(){
     $rootScope.timeLeft = 120;
-    $('.input-group-addon').val('');
     var message = '###' + $('#to').val() + '###' + $('#subject').val() + '###' + $('#message').val();
     SendMessageFactory.sendMessage(message)
       .then(function(response){
         console.log(response);
       });
-    $scope.inbox.shift();
+    QueueView.shiftQ();
     $('#subject').val('');
     $('#message').val('');
+    return $scope.inbox;
   };
 
   $scope.next = function(){
-    console.log('next function fired')
-    $scope.inbox[$rootScope.emailIndex]['status'] = 'responded';
-    $rootScope.emailIndex++;
-    $scope.currentEmail = $scope.inbox[$rootScope.emailIndex];
+    QueueView.shiftQ();
     $rootScope.timeLeft = 120;
   };
 })
@@ -54,8 +49,9 @@ angular.module('myApp.main.crunch', ['ui.router'])
   },1000);
 })
 
-.controller('mantra',function($scope, $rootScope, Inbox){
-  $scope.inbox = Inbox.sortedInbox;
+.controller('mantra',function($scope, $rootScope, Inbox, QueueView){
+  $scope.inbox = QueueView.getView(Inbox.sortedInbox);
+  console.log($scope.inbox);
   $scope.message = "What's done is done."
   if($scope.inbox[0]['bucket'] === 'manage'){
     $scope.message = "Take time to handle this yourself. It's important and pressing."

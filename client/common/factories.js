@@ -8,8 +8,32 @@
 	}};
   })
 
+  .factory('QueueView', function(){
+    var sortedQueue = [];
+    var getView = function(inboxObj){
+      sortedQueue = inboxObj.manage.concat(inboxObj.focus);
+      sortedQueue = sortedQueue.concat(inboxObj.avoid);
+      sortedQueue = sortedQueue.concat(inboxObj.limit);
+      return sortedQueue;
+    }
+    
+    var shiftQ = function(){
+      sortedQueue.shift();
+    }
+
+    return {
+      getView: getView,
+      shiftQ: shiftQ
+    }
+  })
+
   .factory('Inbox', function(){
-    var sortedInbox = [];
+    var sortedInbox = {
+      manage: [],
+      focus: [],
+      avoid: [],
+      limit: []
+    };
     return {
       sortedInbox: sortedInbox
     }
@@ -34,7 +58,6 @@
   			url: '/main/sort'
   		})
   		.then(function(response){
-        console.log(response)
         for (var i = 0; i < response.data.length; i++){
           if (response.data[i].headers['x-mailer'] === undefined){
             response.data[i].body = response.data[i].body.split('UTF-8')[1];

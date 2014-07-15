@@ -23,6 +23,7 @@ module.exports = exports = {
         var to = buffer[1];
         var subject = buffer[2];
         var message = buffer[3];
+        console.log(to);
 
         var smtpTransport = nodemailer.createTransport("SMTP",{
             service: "Gmail",
@@ -49,7 +50,7 @@ module.exports = exports = {
       req.end(buffer);
     }
   },
-  emailGetter: function(req, res, next){
+  emailGetterAndSender: function(req, res, next){
     if (req.method === 'GET'){
       var imap = new Imap({
         user: 'bizarroforrest',
@@ -66,6 +67,9 @@ module.exports = exports = {
 
       var headers;
       var allTheEmails = [];
+
+      imap.connect();
+
       imap.once('ready', function() {
         openInbox(function(err, box) {
           if (err) throw err;
@@ -95,8 +99,9 @@ module.exports = exports = {
                 allTheEmails.push(message);
                });
             });
-            fetched.once('end', function(){
+            fetched.on('end', function(){
               res.end(JSON.stringify(allTheEmails));
+              imap.end();
             })
           });
         });
@@ -109,9 +114,8 @@ module.exports = exports = {
       imap.once('end', function() {
         console.log('Connection ended');
         imap.end();
+        res.end()
       });
-
-      imap.connect();
     }
   },
 

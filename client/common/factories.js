@@ -2,86 +2,17 @@
   "use strict";
   angular.module('myApp')
 
-  .factory('Inbox', function(){
-    var Inbox =[
-    {from: 'Oscar',
-    to: 'Liam',
-    subject: 'Im a grouch',
-    body: 'Its so cloudy outside',
-    time: '12:15',
-      status: 'pending'
-    },
-    {from: 'Elmo',
-    to: 'Liam',
-    subject: 'Youve been served',
-    body: 'Please come to court on 8/21 @ 9am',
-    time: '01:35',
-      status: 'pending'
-    },
-    {from: 'CookieMonster',
-    to: 'Liam',
-    subject: 'Cooookkkkiieeee!',
-    body: 'Me want cooookkkkiieeee now',
-    time: '10:22',
-      status: 'pending'
-    },
-    {from: 'Vaness',
-    to: 'Liam',
-    subject: 'Hey',
-    body: 'Whats your nick name',
-    time: '13:15',
-      status: 'pending'
-    },
-    {from: 'Elmo',
-    to: 'Liam',
-    subject: 'Whattt',
-    body: 'I dont understand why youd do that',
-    time: '01:37',
-      status: 'pending'
-    },
-    {from: 'Josh',
-    to: 'Liam',
-    subject: 'Just checking in',
-    body: 'Have you been to sushirrito',
-    time: '10:25',
-      status: 'pending'
-    },
-    {from: 'Fred',
-    to: 'Liam',
-    subject: 'Whattt',
-    body: 'I dont understand why youd do that',
-    time: '01:37',
-      status: 'pending'
-    },
-    {from: 'Emilie',
-    to: 'Liam',
-    subject: 'Just checking in',
-    body: 'Have you been to sushirrito',
-    time: '10:25',
-      status: 'pending'
-    },
-    {from: 'Kelly',
-    to: 'Liam',
-    subject: 'Whattt',
-    body: 'I dont understand why youd do that',
-    time: '01:37',
-      status: 'pending'
-    },
-    {from: 'Melissa',
-    to: 'Liam',
-    subject: 'Just checking in',
-    body: 'Have you been to sushirrito',
-    time: '10:25',
-      status: 'pending'
-    }
-  ];
-  return {Inbox: Inbox};
-  })
-
   .factory('sortTimer', function(){
 	return {reset: function(){
 		return timeLeft = 5;
 	}};
+  })
+
+  .factory('Inbox', function(){
+    var sortedInbox = [];
+    return {
+      sortedInbox: sortedInbox
+    }
   })
 
   .factory('crunchTimer', function(bucket){
@@ -103,11 +34,11 @@
   			url: '/main/sort'
   		})
   		.then(function(response){
+        console.log(response)
         for (var i = 0; i < response.data.length; i++){
           if (response.data[i].headers['x-mailer'] === undefined){
-            var msgId = response.data[i].headers['content-type'];
-            msgId = msgId.join('').split('=')[1];
-            response.data[i].body = response.data[i].body.split(msgId)[1];
+            response.data[i].body = response.data[i].body.split('UTF-8')[1];
+            response.data[i].body = response.data[i].body.split('--')[0];
           }
         }
   			return response;

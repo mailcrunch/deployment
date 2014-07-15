@@ -2,10 +2,10 @@
   <br> <br> <br> <br> <br>
   <div id='login'>
   <h1>Login</h1>
-  <form name="loginForm" ng-controller='LoginController' ng-submit='getEmails()' novalidate>
+  <form name="loginForm" ng-controller='LoginController' novalidate>
     <input name="username" type='text' ng-model='user.username' ng-minlength="3" ng-maxlength="10" required>
     <input name="password" type="password" ng-model='user.password' ng-minlength="3" ng-maxlength="10" required>
-    <button ng-click="">login</button>
+    <button>login</button>
     <div>{{ error }}</div>
   </form>
   <a href="#/main/signup">Don't have an account? Signup ...</a>

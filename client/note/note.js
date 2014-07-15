@@ -11,7 +11,7 @@ angular.module('myApp.main.note', ['ui.router'])
 })
 
 //this is dummy data to test the list of inbox emails	
-.controller('NoteController', function($scope, $rootScope, InboxFactory) {
+.controller('NoteController', function($scope, $rootScope, InboxFactory, Inbox) {
 
     $scope.inbox = [];
     $scope.getEmails = function(){
@@ -20,42 +20,42 @@ angular.module('myApp.main.note', ['ui.router'])
           for (var i = 0; i < response.data.length; i++){
             if (response.data[i].headers.from !== undefined){
               $scope.email = {
-                status: 'pending'
+                status: 'pending',
+                bucket: null
               };
+              $scope.email.to = response.data[i].headers.to.toString();
               $scope.email.from = response.data[i].headers.from.toString();
               $scope.email.subject = response.data[i].headers.subject.toString();
               $scope.email.time = response.data[i].headers.date.toString();
+              $scope.email.body = response.data[i].body;
               $scope.inbox.push($scope.email); 
+              Inbox.sortedInbox.push($scope.email);
             }
           }
         });
     };
     $scope.sortManage = function(){
-      $scope.inbox[$scope.emailIndex]['bucket'] = 'manage';
-      $scope.inbox[$scope.emailIndex]['status'] = 'sorted';
-      $scope.emailIndex++;
-      $scope.currentEmail = $scope.inbox[$scope.emailIndex]
+      $scope.inbox[0]['bucket'] = 'manage';
+      $scope.inbox[0]['status'] = 'sorted';
+      $scope.inbox.shift();
       $rootScope.timeLeft = 6;
     };
     $scope.sortFocus = function(){
-      $scope.inbox[$scope.emailIndex]['bucket'] = 'focus';
-      $scope.inbox[$scope.emailIndex]['status'] = 'sorted';
-      $scope.emailIndex++;
-      $scope.currentEmail = $scope.inbox[$scope.emailIndex]
+      $scope.inbox[0]['bucket'] = 'focus';
+      $scope.inbox[0]['status'] = 'sorted';
+      $scope.inbox.shift();
       $rootScope.timeLeft = 6;
     };
     $scope.sortAvoid = function(){
-      $scope.inbox[$scope.emailIndex].bucket = 'avoid';
-      $scope.inbox[$scope.emailIndex]['status'] = 'sorted';
-      $scope.emailIndex++;
-      $scope.currentEmail = $scope.inbox[$scope.emailIndex]
+      $scope.inbox[0]['bucket'] = 'avoid';
+      $scope.inbox[0]['status'] = 'sorted';
+      $scope.inbox.shift();
       $rootScope.timeLeft = 6;
     };
     $scope.sortLimit = function(){
-      $scope.inbox[$scope.emailIndex]['bucket'] = 'avoid';
-      $scope.inbox[$scope.emailIndex]['status'] = 'sorted';
-      $scope.emailIndex++;
-      $scope.currentEmail = $scope.inbox[$scope.emailIndex]
+      $scope.inbox[0]['bucket'] = 'limit';
+      $scope.inbox[0]['status'] = 'sorted';
+      $scope.inbox.shift();
       $rootScope.timeLeft = 6;
     };
 

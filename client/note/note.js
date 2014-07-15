@@ -11,14 +11,28 @@ angular.module('myApp.main.note', ['ui.router'])
 })
 
 //this is dummy data to test the list of inbox emails	
-.controller('NoteController', function($scope, Inbox, $rootScope) {
-    
-    $scope.inbox = Inbox.Inbox;
+.controller('NoteController', function($scope, $rootScope, InboxFactory) {
 
-    $scope.emailIndex = 0;
-    $scope.currentEmail = $scope.inbox[$scope.emailIndex]
-    $rootScope.timeLeft = 5;
-
+    $scope.inbox = [];
+    $scope.getEmails = function(){
+      InboxFactory.getEm()
+        .then(function(response){
+          for (var i = 0; i < response.data.length; i++){
+            if (typeof response.data[i].headers === 'string'){
+              
+            }
+            if (response.data[i].headers.from !== undefined){
+              $scope.currentEmail = {
+                status: 'pending'
+              };
+              $scope.currentEmail.from = response.data[i].headers.from.toString();
+              $scope.currentEmail.subject = response.data[i].headers.subject.toString();
+              $scope.currentEmail.time = response.data[i].headers.date.toString();
+              $scope.inbox.push($scope.currentEmail); 
+            }
+          }
+        });
+    };
     $scope.sortManage = function(){
       $scope.inbox[$scope.emailIndex]['bucket'] = 'manage';
       $scope.inbox[$scope.emailIndex]['status'] = 'sorted';
@@ -50,7 +64,7 @@ angular.module('myApp.main.note', ['ui.router'])
 
 })
 
-.controller('EmailController', function($scope, Inbox){
+.controller('EmailController', function($scope){
   
 })
 

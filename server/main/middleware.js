@@ -17,7 +17,9 @@ mongoClient.connect('mongodb://127.0.0.1:27017/test', function(err,db){
 });
 
 module.exports = exports = {
+
   emailSender: function(res, req, next){
+    if (req.method === 'POST'){
       var buffer = '';
       res.on('data', function(data){
         buffer += data.toString('utf8')
@@ -46,13 +48,15 @@ module.exports = exports = {
             if(error){
                 console.log(error);
             }else{
-                console.log("Message sent: " + response.message);
+                console.log("Message sent: ");
             }
         });
       });
       req.end(buffer);
+    }
   },
   emailGetter: function(req, res, next){
+    console.log(req.method)
     if (req.method === 'GET'){
       var imap = new Imap({
         user: 'bizarroforrest',
@@ -72,9 +76,9 @@ module.exports = exports = {
       imap.once('ready', function() {
         openInbox(function(err, box) {
           if (err) throw err;
-          imap.search([ 'UNSEEN', ['SINCE', 'July 09, 2014'] ], function(err, results){
+          imap.search([ 'UNSEEN' ], function(err, results){
             if (err) throw err;
-             var fetched = imap.fetch(results, { struct: true, bodies: ['HEADER','TEXT'] });
+             var fetched = imap.fetch(results, { struct: true, bodies: ['HEADER', 'TEXT'] });
              fetched.on('message', function(msg, seqno) {
               var bodyBuffer = '';
               var headerBuffer = '';
@@ -83,23 +87,27 @@ module.exports = exports = {
                   stream.on('data', function(data){
                     headerBuffer += data;
                   });
-                }
-                if (info.which === 'TEXT'){
-                  stream.on('data', function(data){
-                    bodyBuffer += data.toString('utf8');
-                  });
                   stream.once('end', function(){
                     headerBuffer = Imap.parseHeader(headerBuffer);
                   })
+                }
+                if (info.which === 'TEXT'){
+                  stream.on('data', function(chunk){
+                    bodyBuffer += chunk;
+                  });
                  }
                })
                msg.on('end', function(){
-                MongoClient.connect("mongodb://localhost:27017/exampleDb", function(err, db) {
+
+                var message = {body: bodyBuffer.toString('utf8'), headers: headerBuffer};
+                allTheEmails.push(message);
+                 MongoClient.connect("mongodb://localhost:27017/exampleDb", function(err, db) {
                   if(err) { return console.dir(err); }
                   var collection = db.collection('emails');
-                  collection.insert({tag: 'unsorted', user: 'bizarroForrest', headers: headerBuffer, body: bodyBuffer}, {w:1}, function(err,results){});
+                  message.tag = 'unsorted';
+                  message.user = 'bizarroForrest'
+                  collection.insert(message, {w:1}, function(err,results){});
                 });
-                allTheEmails.push({tag: 'unsorted', user: 'bizarroForrest', headers: headerBuffer, body: bodyBuffer});
                });
             });
             fetched.once('end', function(){

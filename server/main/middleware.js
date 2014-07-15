@@ -24,44 +24,9 @@ mongoClient.connect('mongodb://localhost:27017/mailcrunch2', function(err,db){
 module.exports = exports = {
 
   emailSender: function(res, req, next){
-    if (req.method === 'POST'){
-      var buffer = '';
-      res.on('data', function(data){
-        buffer += data.toString('utf8')
-      });
-      res.on('end', function(){
-        buffer = buffer.split('###');
-        var to = buffer[1];
-        var subject = buffer[2];
-        var message = buffer[3];
-
-        var smtpTransport = nodemailer.createTransport("SMTP",{
-            service: "Gmail",
-            auth: {
-                user: "bizarroforrest",
-                pass: "mailcrunch"
-            }
-        });
-        var mailOptions = {
-            from: "<bizarroforrest@gmail.com>", // sender address
-            to: to, // list of receivers
-            subject: subject, // Subject line
-            text: message, // plaintext body
-            html: "<b>" + message + "</b>" // html body
-        }
-        smtpTransport.sendMail(mailOptions, function(error, response){
-            if(error){
-                console.log(error);
-            }else{
-                console.log("Message sent: ");
-            }
-        });
-      });
-      req.end(buffer);
-    }
+    
   },
-  emailGetter: function(req, res, next){
-    console.log(req.method)
+  emailGetterAndSender: function(req, res, next){
     if (req.method === 'GET'){
       var imap = new Imap({
         user: 'bizarroforrest',
@@ -78,6 +43,9 @@ module.exports = exports = {
 
       var headers;
       var allTheEmails = [];
+
+      imap.connect();
+
       imap.once('ready', function() {
         openInbox(function(err, box) {
           if (err) throw err;
@@ -136,8 +104,8 @@ module.exports = exports = {
                   console.log('foo:::: ' + JSON.stringify(res));
                 });
               });
-              // console.log()
               res.end(JSON.stringify(allTheEmails));
+              imap.end();
             })
           });
         });
@@ -149,9 +117,44 @@ module.exports = exports = {
 
       imap.once('end', function() {
         console.log('Connection ended');
+        imap.end();
+        res.end()
       });
+    } else if (req.method === 'POST'){
+      var buffer = '';
+      req.on('data', function(data){
+        buffer += data.toString('utf8')
+      });
+      req.on('end', function(){
+        buffer = buffer.split('###');
+        var to = buffer[1];
+        var subject = buffer[2];
+        var message = buffer[3];
+        console.log(to);
 
-      imap.connect();
+        var smtpTransport = nodemailer.createTransport("SMTP",{
+            service: "Gmail",
+            auth: {
+                user: "bizarroforrest",
+                pass: "mailcrunch"
+            }
+        });
+        var mailOptions = {
+            from: "<bizarroforrest@gmail.com>", // sender address
+            to: to, // list of receivers
+            subject: subject, // Subject line
+            text: message, // plaintext body
+            html: "<b>" + message + "</b>" // html body
+        }
+        smtpTransport.sendMail(mailOptions, function(error, response){
+            if(error){
+                console.log(error);
+            }else{
+                console.log("Message sent: ");
+            }
+        });
+      });
+      res.end(buffer);
     }
   },
 

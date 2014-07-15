@@ -9,17 +9,16 @@
   <div>
      <h4 class='well'>Respond to this email. Timer is above. Go. </h4>
      <table class='table' ng-controller="CrunchController">
-        <tr><td> Received: </td><td> {{currentEmail.time}}</td></tr>
-        <tr><td> To: </td><td> {{currentEmail.to}}</td></tr> 
-        <tr><td> From: </td><td> {{currentEmail.from}}</td></tr>
-        <tr><td> Subject: </td><td> {{currentEmail.subject}}</td></tr>
-        <tr><td> Body: </td><td> {{currentEmail.body}}</td></tr>
+        <tr><td> Received: </td><td> {{inbox[0].time}}</td></tr>
+        <tr><td> From: </td><td> {{inbox[0].from}}</td></tr>
+        <tr><td> Subject: </td><td> {{inbox[0].subject}}</td></tr>
+        <tr><td> Body: </td><td> {{inbox[0].body}}</td></tr>
         </li>
      </table>
   <br>
   <div class="input-group" ng-controller='ResponseController'>
        <span class="input-group-addon">Response</span>
-       <input id="to" type="text" class="form-control" placeholder="To">
+       <input id="to" type="text" class="form-control" value='{{inbox[0].from.slice(inbox[0].from.indexOf("<")+1, inbox[0].from.indexOf(">"))}}'>
        <input id="subject" type="text" class="form-control" placeholder="Subject">
        <input id="message" type="text" class="form-control" placeholder="Write a message">
        <button ng-click='send()' class="btn btn-primary btn-lg" role="button">Send</button><button id="sendEmail" ng-click='next()' class="btn btn-primary btn-lg" role="button">Next</button>
@@ -31,7 +30,7 @@
   </div>
 </div>
 
-  <div class="container-fluid, col-md-4, pull-right">
+  <div class="container-fixed col-md-4 pull-right">
    <div>   
       <!--Sidebar content inside span2-->
        <h4 class='well'>The queue</h4>

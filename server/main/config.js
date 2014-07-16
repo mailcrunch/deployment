@@ -19,10 +19,9 @@ module.exports = exports = function (app, express, passport, GoogleStrategy) {
   app.use(middle.cors);
   app.use(express.static(__dirname + '/../../client/')); //this line sends the entire application (only if the user has an auth cookie)
 
-  // required for passport
-  // app.use(session({ secret: 'ilovescotchscotchyscotchscotch' })); // session secret
+  app.use(session({ secret: 'iheartpizza' })); // session secret
   app.use(passport.initialize());
-  // app.use(passport.session()); // persistent login sessions
+  app.use(passport.session()); // persistent login sessions
   // app.use(flash()); // use connect-flash for flash messages stored in session
   
   //call passport oauth google strategy
@@ -36,7 +35,6 @@ module.exports = exports = function (app, express, passport, GoogleStrategy) {
   app.get('/auth/google', 
     passport.authenticate('google', { failureRedirect: '/public/login' }),
     function(req, res) {
-      console.log('<==========inside get: /auth/google==========>');
       res.redirect('/auth/google/data');
     });
 
@@ -46,7 +44,7 @@ module.exports = exports = function (app, express, passport, GoogleStrategy) {
   //   login page.  Otherwise, the primary route function function will be called,
   //   which, in this example, will redirect the user to the home page.
   app.get('/auth/google/return', 
-    passport.authenticate('google', { failureRedirect: '/public/login' }),
+    passport.authenticate('google', { failureRedirect: '/#/public/login' }),
     function(req, res) {
       res.redirect('/#/main/home');
     });
@@ -56,7 +54,5 @@ module.exports = exports = function (app, express, passport, GoogleStrategy) {
     res.redirect('/public/login');
   });
 
-
-
-
 };
+

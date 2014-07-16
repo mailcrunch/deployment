@@ -49,6 +49,8 @@
           url: '/main/sort'
         })
         .then(function(response){
+          // On getting a succesful response, the email body needs to be 
+          // formatted. Take a look at the raw response to see why...
           for (var i = 0; i < response.data.length; i++){
             if (response.data[i].headers['x-mailer'] === undefined){
               if (response.data[i].headers['x-failed-recipients']){
@@ -59,6 +61,7 @@
               }
             }
           }
+          // After formatting, return response to client/note/note.js
           return response;
           
         });
@@ -67,7 +70,7 @@
         getEm: getEm
       };
     })
-
+  // TODO: Liev will comment this out...
   .factory('UpdateEmailTag', function($http){
     var update = function(message){
       console.log(message);
@@ -85,7 +88,11 @@
     };
   })
 
+  // This factory is used to send messages and mark them as read 
+  // from client/crunch/crunch.js
   .factory('SendMessageFactory', function($http){
+    // This function sends the messages via SMTP/Nodemailer
+    // See server/crunch/crunch_routes.js and server/crunch/crunch_controllers.js
   	var sendMessage = function(message){
   		return $http({
   			method: 'POST',
@@ -93,10 +100,13 @@
   			data: message,
   		})
   		.then(function(response){
-  			return response;
+  			console.log(response);
   		});
   	};
 
+    // This function marks the email that was sent as read, so we don't
+    // retrieve it again when we call InboxFactory.getEm()
+    // See server/crunch/crunch_routes.js and server/crunch/crunch_controllers.js
     var markingAsRead = function(ID){
       return $http({
         method: 'POST',

@@ -12,8 +12,13 @@ angular.module('myApp.main.crunch', ['ui.router'])
 
 .controller('CrunchController', function($scope, $interval, Inbox, SendMessageFactory, PointFactory) {
   $scope.inbox = [];
+  // This function is in common/factories.js
   Inbox.getSortedInbox()
     .then(function(response){
+      // The promise returned is the email data
+      // This data must be formatted to use in our app
+      // Take a look at the response to see how it is currently formatted
+      // and then take a look to see what we are adding below
       for (var i = 0; i < response.data.length; i++){
         if (response.data[i].headers.from !== undefined){
           $scope.email = {
@@ -39,15 +44,27 @@ angular.module('myApp.main.crunch', ['ui.router'])
           $scope.inbox.push($scope.email); 
         }
       }
-      var timerId;
-      $scope.timer = 0;
 
+      var timerId; // This will be the timerId associated with the current email
+      $scope.timer = 0; // The timer starts at 0 so that it is not undefined and 
+      // throw an error on page load. It will be changed below.
+
+      // This function calls the point incrementer based on whether the user
+      // has crunched the email in the alotted time
       var updatePoints = function(){
         if ($scope.timer !== 0 && $scope.timer !== '0'){
           PointFactory.incrementPoints(100);
         }
       };
     
+/*
+=======================================================================
+=======================================================================
+  These are the timer functions for each email sorting category
+  v         v          v          v          v          v      
+=======================================================================
+=======================================================================
+*/
       var manageTimer = function(){
         if ($scope.timer !== 300){
           $scope.timer = 300;
@@ -62,6 +79,7 @@ angular.module('myApp.main.crunch', ['ui.router'])
           }
         },1000);
       };
+
 
       var focusTimer = function(){
         if ($scope.timer !== 240){
@@ -107,6 +125,14 @@ angular.module('myApp.main.crunch', ['ui.router'])
           }
         },1000);
       };
+/*
+=======================================================================
+=======================================================================
+  ^          ^          ^          ^           ^           ^
+  These are the timer functions for each email sorting category
+=======================================================================
+=======================================================================
+*/
     
       var bucketChecker = function(){
         if($scope.inbox[0].bucket === '1'){
@@ -122,10 +148,7 @@ angular.module('myApp.main.crunch', ['ui.router'])
 
       $scope.send = function(){
         var message = '###' + $('#to').val() + '###' + $('#subject').val() + '###' + $('#message').val();
-        SendMessageFactory.sendMessage(message)
-          .then(function(response){
-            // console.log(response);
-          });
+        SendMessageFactory.sendMessage(message);
         $scope.inbox.shift();
         $interval.cancel(timerId);
         updatePoints();

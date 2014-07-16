@@ -1,6 +1,6 @@
 (function (angular) {
   "use strict";
-  angular.module('myApp.main', ['ui.router', 'myApp.main.crunch', 'myApp.main.note', 'myApp.main.home', 'myApp.main.signup', 'myApp.main.login'])
+  angular.module('myApp.main', ['ui.router', 'myApp.main.crunch', 'myApp.main.note', 'myApp.main.home'])
   .config(function ($stateProvider){
     $stateProvider
       .state('myApp.main', {
@@ -13,4 +13,3 @@
     $state.transitionTo('myApp.main.home');
   })
 }(angular));
-  

@@ -11,7 +11,9 @@ angular.module('myApp.main.crunch', ['ui.router'])
 })
 
 .controller('CrunchController', function($scope, $interval, Inbox, SendMessageFactory) {
-  $scope.inbox = Inbox.sortedInbox.sort(function(a,b){return a.bucket - b.bucket});
+  Inbox.getSortedInbox(function(emails){
+    $scope.inbox = emails;
+  });
   var timerId;
   $scope.timer = 0;
   
@@ -115,13 +117,7 @@ angular.module('myApp.main.crunch', ['ui.router'])
     var messageID = $scope.inbox[0].id;
     SendMessageFactory.markingAsRead(messageID);
   };
-
-  // var timerReset = function(timerId){
-  //   console.log('got into timerReset f(n)', timerId)
-  //   $interval.cancel(timerId);
-  // };
-
-
+  
   bucketChecker();
 
 })

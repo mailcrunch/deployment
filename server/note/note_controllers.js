@@ -6,7 +6,9 @@ var Note        = require('./note_model.js'),
     inspect     = require('util').inspect,
     Parser      = require('imap-parser'),
     parser      = new Parser(),
-    mongoClient = require('mongodb').MongoClient;
+    mongoClient = require('mongodb').MongoClient,
+    ObjectId = require('mongodb').ObjectID;
+
 
 mongoClient.connect('mongodb://localhost:27017/mailcrunch2', function(err,db){
   db.createCollection('emails',function(err,collection) {});
@@ -74,7 +76,7 @@ module.exports = exports = {
               var message = {body: bodyBuffer.toString('utf8'), headers: headerBuffer, uid: UID};
               allTheEmails.push(message);
               mongoClient.connect("mongodb://localhost:27017/mailcrunch2", function(err, db) {
-                if(err) { return console.dir(err); }
+                if(err) { throw (err); }
                 var collection = db.collection('emails');
                 message.tag = 'unsorted';
                 message.username = 'bizarroForrest';
@@ -92,16 +94,17 @@ module.exports = exports = {
             console.log(allTheEmails);
 
             mongoClient.connect("mongodb://localhost:27017/mailcrunch2", function(err, db) {
-              if(err) { return console.dir(err); }
+              if(err) { throw err; }
               var collection = db.collection('emails');
-              collection.find({username:'bizarroForrest'}).toArray(function(err, res){
+              collection.find({username:'bizarroForrest', tag:'unsorted'}).toArray(function(err, emails){
                 if (err) {
                   console.log(err);
                   throw (err);
                 }
+                res.end(JSON.stringify(emails));
               });
             });
-            res.end(JSON.stringify(allTheEmails));
+            // res.end(JSON.stringify(allTheEmails));
             imap.end();
           })
         });
@@ -129,5 +132,44 @@ module.exports = exports = {
       .fail(function (reason) {
         next(reason);
       });
-  }
+  },
+
+  getSortedInbox: function(req,res,next){
+    mongoClient.connect("mongodb://localhost:27017/mailcrunch2", function(err, db) {
+      if (err) throw err;
+      var collection = db.collection('emails');
+      collection.find({username:'bizarroForrest', tag:'sorted'}).sort({bucket:1}).toArray(function(err,emails){
+        if (err) throw err;
+        res.end(JSON.stringify(emails));
+      });
+    });
+  },
+
+  //This function updates the email Tag (and optionally a bucket) on an email
+  //TODO FOR SECURITY: make sure username is same on email as current user before allowing user to update tag (avoid attacks!!!)
+  updateEmailTag: function(req,res,next){
+   var buffer = '';
+    req.on('data', function(data){
+      buffer += data.toString('utf8')
+    });
+    req.on('end', function(){
+      console.log(buffer);
+      buffer = buffer.split('###');
+      var id = buffer[0];
+      var tag = buffer[1];
+      var bucket = buffer[2];
+      mongoClient.connect("mongodb://localhost:27017/mailcrunch2", function(err, db) {
+        if(err) { throw err; }
+        var collection = db.collection('emails');   
+        collection.update({_id:new ObjectId(id)}, {$set: {tag:tag, bucket:bucket}}, function(err, res){
+          if (err){
+            throw err;
+          }
+          console.log(res);
+          console.log('id ' + id + '###' + tag);
+        });
+      });
+    });
+    res.end();
+  },
 };

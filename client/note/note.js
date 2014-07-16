@@ -11,7 +11,7 @@ angular.module('myApp.main.note', ['ui.router'])
 })
 
 //this is dummy data to test the list of inbox emails	
-.controller('NoteController', function($scope, $rootScope, InboxFactory, Inbox) {
+.controller('NoteController', function($scope, $rootScope, InboxFactory, Inbox, UpdateEmailTag) {
 
     $scope.inbox = [];
     $scope.getEmails = function(){
@@ -37,6 +37,7 @@ angular.module('myApp.main.note', ['ui.router'])
               $scope.email.from = response.data[i].headers.from.toString();
               $scope.email.time = response.data[i].headers.date.toString();
               $scope.email.id = response.data[i].uid.toString();
+              $scope.email._id = response.data[i]._id;
               $scope.inbox.push($scope.email); 
             }
           }
@@ -45,24 +46,41 @@ angular.module('myApp.main.note', ['ui.router'])
     $scope.sortManage = function(){
       $scope.inbox[0]['bucket'] = 1;
       $scope.inbox[0]['status'] = 'sorted';
+      var id = $scope.inbox[0]['_id'];
+      var tag = 'sorted';
+      var bucket = 1;
+      console.log('d' + id + '###' + tag);
+      UpdateEmailTag.update(id + '###' + tag + '###' + bucket);
       Inbox.sortedInbox.push($scope.inbox.shift());
       $rootScope.timeLeft = 6;
     };
     $scope.sortFocus = function(){
       $scope.inbox[0]['bucket'] = 2;
       $scope.inbox[0]['status'] = 'sorted';
+      var id = $scope.inbox[0]['_id'];
+      var tag = 'sorted';
+      var bucket = 2
+      UpdateEmailTag.update(id + '###' + tag + '###' + bucket);
       Inbox.sortedInbox.push($scope.inbox.shift());
       $rootScope.timeLeft = 6;
     };
     $scope.sortAvoid = function(){
       $scope.inbox[0]['bucket'] = 3;
       $scope.inbox[0]['status'] = 'sorted';
+      var id = $scope.inbox[0]['_id'];
+      var tag = 'sorted';
+      var bucket = 3;     
+      UpdateEmailTag.update(id + '###' + tag + '###' + bucket);
       Inbox.sortedInbox.push($scope.inbox.shift());
       $rootScope.timeLeft = 6;
     };
     $scope.sortLimit = function(){
       $scope.inbox[0]['bucket'] = 4;
       $scope.inbox[0]['status'] = 'sorted';
+      var id = $scope.inbox[0]['_id'];
+      var tag = 'soted';
+      var bucket = 4;
+      UpdateEmailTag.update(id + '###' + tag + '###' + bucket);
       Inbox.sortedInbox.push($scope.inbox.shift());
       $rootScope.timeLeft = 6;
     };

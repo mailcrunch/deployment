@@ -134,6 +134,17 @@ module.exports = exports = {
       });
   },
 
+  getSortedInbox: function(req,res,next){
+    mongoClient.connect("mongodb://localhost:27017/mailcrunch2", function(err, db) {
+      if (err) throw err;
+      var collection = db.collection('emails');
+      collection.find({username:'bizarroForrest', tag:'sorted'}).sort({bucket:1}).toArray(function(err,emails){
+        if (err) throw err;
+        res.end(JSON.stringify(emails));
+      });
+    });
+  },
+
   //This function updates the email Tag (and optionally a bucket) on an email
   //TODO FOR SECURITY: make sure username is same on email as current user before allowing user to update tag (avoid attacks!!!)
   updateEmailTag: function(req,res,next){

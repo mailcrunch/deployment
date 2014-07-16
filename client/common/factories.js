@@ -8,13 +8,23 @@
 	}};
   })
 
-  .factory('Inbox', function(){
+  .factory('Inbox', function($http){
+    var getSortedInbox = function(callback){
+      return $http({
+        method: 'POST',
+        url: '/main/sort/getSortedInbox',
+      })
+      .then(function(response){
+        callback(response);
+      });      
+    }
     var sortedInbox = [];
     var shiftQ = function(){
       sortedInbox.shift();
     };
 
     return {
+      getSortedInbox: getSortedInbox,
       sortedInbox: sortedInbox,
       shiftQ: shiftQ
     }

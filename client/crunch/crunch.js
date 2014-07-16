@@ -16,7 +16,10 @@ angular.module('myApp.main.crunch', ['ui.router'])
 })
 
 .controller('ResponseController', function($scope, $rootScope, Inbox, SendMessageFactory) {
-  $scope.inbox = Inbox.sortedInbox.sort(function(a,b){return a.bucket - b.bucket});
+  Inbox.getSortedInbox(function(emails){
+    $scope.inbox = emails;
+  });
+  // $scope.inbox = Inbox.sortedInbox.sort(function(a,b){return a.bucket - b.bucket});
   $rootScope.timeLeft = 60;
 
   $scope.send = function(){

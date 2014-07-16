@@ -134,7 +134,12 @@ angular.module('myApp.main.crunch', ['ui.router'])
         $interval.cancel(timerId);
         updatePoints();
         bucketChecker();
-        $('#subject').val('');
+        if ($scope.inbox.length > 0){
+          $('#subject').val('RE: '+ $scope.inbox[0].subject);
+        }
+        else{
+          $('#subject').val('');
+        }
         $('#message').val('');
       };
 

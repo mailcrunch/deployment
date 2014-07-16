@@ -39,31 +39,31 @@
   })
 
   .factory('InboxFactory', function($http){
-  	var getEm = function(){
-      console.log('got to the factory')
-  		return $http({
-  			method: 'GET',
-  			url: '/main/sort'
-  		})
-  		.then(function(response){
-        for (var i = 0; i < response.data.length; i++){
-          if (response.data[i].headers['x-mailer'] === undefined){
-            if (response.data[i].headers['x-failed-recipients']){
-              response.data[i].body = 'Message delivery failed';
-            } else {
-              response.data[i].body = response.data[i].body.split('UTF-8')[1];
-              response.data[i].body = response.data[i].body.split('--')[0]; 
+      var getEm = function(){
+        console.log('got to the factory')
+        return $http({
+          method: 'GET',
+          url: '/main/sort'
+        })
+        .then(function(response){
+          for (var i = 0; i < response.data.length; i++){
+            if (response.data[i].headers['x-mailer'] === undefined){
+              if (response.data[i].headers['x-failed-recipients']){
+                response.data[i].body = 'Message delivery failed';
+              } else {
+                response.data[i].body = response.data[i].body.split('UTF-8')[1];
+                response.data[i].body = response.data[i].body.split('--')[0]; 
+              }
             }
           }
-        }
-  			return response;
-  			
-  		});
-  	};
-  	return {
-  		getEm: getEm
-  	};
-  })
+          return response;
+          
+        });
+      };
+      return {
+        getEm: getEm
+      };
+    })
 
   .factory('UpdateEmailTag', function($http){
     var update = function(message){

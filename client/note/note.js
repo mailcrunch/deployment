@@ -11,9 +11,10 @@ angular.module('myApp.main.note', ['ui.router'])
 })
 
 //this is dummy data to test the list of inbox emails	
-.controller('NoteController', function($scope, $rootScope, InboxFactory, Inbox) {
+.controller('NoteController', function($scope, $interval, InboxFactory, Inbox) {
 
     $scope.inbox = [];
+    $scope.time = 10;
     $scope.getEmails = function(){
       InboxFactory.getEm()
         .then(function(response){
@@ -40,46 +41,43 @@ angular.module('myApp.main.note', ['ui.router'])
               $scope.inbox.push($scope.email); 
             }
           }
+          $scope.timerStart();
         });
     };
     $scope.sortManage = function(){
       $scope.inbox[0]['bucket'] = 1;
       $scope.inbox[0]['status'] = 'sorted';
       Inbox.sortedInbox.push($scope.inbox.shift());
-      $rootScope.timeLeft = 6;
+      
     };
     $scope.sortFocus = function(){
       $scope.inbox[0]['bucket'] = 2;
       $scope.inbox[0]['status'] = 'sorted';
       Inbox.sortedInbox.push($scope.inbox.shift());
-      $rootScope.timeLeft = 6;
+      
     };
     $scope.sortAvoid = function(){
       $scope.inbox[0]['bucket'] = 3;
       $scope.inbox[0]['status'] = 'sorted';
       Inbox.sortedInbox.push($scope.inbox.shift());
-      $rootScope.timeLeft = 6;
+      
     };
     $scope.sortLimit = function(){
       $scope.inbox[0]['bucket'] = 4;
       $scope.inbox[0]['status'] = 'sorted';
       Inbox.sortedInbox.push($scope.inbox.shift());
-      $rootScope.timeLeft = 6;
+      
     };
-
-})
-
-.controller('EmailController', function($scope){
-  
-})
-
-//this controller decrements the timeLeft variable once per second
-//TODO: add in a function that switches emails when timeLeft = 0;
-.controller('timeLeft',function($scope,$interval, Inbox, $rootScope){
-  $interval(function(){
-    if($rootScope.timeLeft > 0){
-  	  $rootScope.timeLeft--;
-      $scope.timeLeft = $rootScope.timeLeft;
+    $scope.timerStart = function(){
+      $interval(function(){
+        if ($scope.time === 0){
+          $scope.time = '0';
+        } else if ($scope.time === '0'){
+          $scope.time = 0;
+        } else {
+          $scope.time--;
+        }
+      },1000);
     }
-  },1000);
-})
+
+});

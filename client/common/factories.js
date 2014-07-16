@@ -40,7 +40,6 @@
   			url: '/main/sort'
   		})
   		.then(function(response){
-        console.log(response)
         for (var i = 0; i < response.data.length; i++){
           if (response.data[i].headers['x-mailer'] === undefined){
             if (response.data[i].headers['x-failed-recipients']){

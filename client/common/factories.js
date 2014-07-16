@@ -71,8 +71,20 @@
   			return response;
   		});
   	};
+
+    var markingAsRead = function(ID){
+      return $http({
+        method: 'POST',
+        url: '/main/crunch/markEmail',
+        data: ID,
+      })
+      .then(function(response){
+        console.log('message marked as read');
+      })
+    }
   	return {
-  		sendMessage: sendMessage
+  		sendMessage: sendMessage,
+      markingAsRead: markingAsRead
   	};
   })
 }(angular));

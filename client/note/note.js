@@ -36,6 +36,7 @@ angular.module('myApp.main.note', ['ui.router'])
               $scope.email.to = response.data[i].headers.to.toString();
               $scope.email.from = response.data[i].headers.from.toString();
               $scope.email.time = response.data[i].headers.date.toString();
+              $scope.email.id = response.data[i].uid.toString();
               $scope.inbox.push($scope.email); 
             }
           }

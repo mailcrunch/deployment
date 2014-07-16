@@ -48,6 +48,7 @@ module.exports = exports = {
            fetched.on('message', function(msg, seqno) {
             var bodyBuffer = '';
             var headerBuffer = '';
+            var UID;
              msg.on('body', function(stream, info) {
               if (info.which === 'HEADER'){
                 stream.on('data', function(data){
@@ -63,9 +64,12 @@ module.exports = exports = {
                 });
                }
              })
+             msg.once('attributes', function(attrs){
+              UID = attrs.uid;
+             })
              msg.on('end', function(){
 
-              var message = {body: bodyBuffer.toString('utf8'), headers: headerBuffer};
+              var message = {body: bodyBuffer.toString('utf8'), headers: headerBuffer, uid: UID};
               allTheEmails.push(message);
               mongoClient.connect("mongodb://localhost:27017/mailcrunch2", function(err, db) {
                 if(err) { return console.dir(err); }
@@ -77,8 +81,6 @@ module.exports = exports = {
                   if (err){
                     console.log(err);
                   }
-                  else
-                    console.log(results);
                 });
               });
              });
@@ -94,7 +96,6 @@ module.exports = exports = {
                   console.log(err);
                   throw (err);
                 }
-                console.log('foo:::: ' + JSON.stringify(res));
               });
             });
             res.end(JSON.stringify(allTheEmails));

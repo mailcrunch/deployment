@@ -24,7 +24,7 @@ angular.module('myApp.main.crunch', ['ui.router'])
     var message = '###' + $('#to').val() + '###' + $('#subject').val() + '###' + $('#message').val();
     SendMessageFactory.sendMessage(message)
       .then(function(response){
-        console.log(response);
+        // console.log(response);
       });
     Inbox.shiftQ();
     $('#subject').val('');
@@ -35,6 +35,11 @@ angular.module('myApp.main.crunch', ['ui.router'])
     Inbox.shiftQ();
     $rootScope.timeLeft = 120;
   };
+
+  $scope.markAsRead = function(){
+    var messageID = $scope.inbox[0].id;
+    SendMessageFactory.markingAsRead(messageID);
+  }
 })
 
 // this controller decrements the timeLeft variable once per second

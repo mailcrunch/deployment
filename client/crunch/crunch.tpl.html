@@ -19,10 +19,10 @@
   <br>
   <div class="input-group">
        <span class="input-group-addon">Response</span>
-       <input id="to" type="text" class="form-control" value="{{inbox[0].from}}">
+       <input id="to" type="text" class="form-control" value="{{inbox[0].from.slice(inbox[0].from.indexOf('<')+1, inbox[0].from.indexOf('>'))}}">
        <input id="subject" type="text" class="form-control" value="Re: {{inbox[0].subject}}">
        <input id="message" type="text" class="form-control" placeholder="Write a message">
-       <button id="sendEmail" ng-click='send()' class="btn btn-primary btn-lg" role="button">Send</button><button id="nextEmail" ng-click='next()' class="btn btn-primary btn-lg" role="button">Next</button>
+       <button id="sendEmail" ng-click='send(); markAsRead();' class="btn btn-primary btn-lg" role="button">Send</button><button id="nextEmail" ng-click='next(); markAsRead();' class="btn btn-primary btn-lg" role="button">Next</button>
   </div>
 </div>
   </div>

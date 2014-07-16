@@ -47,9 +47,10 @@ angular.module('myApp.main.note', ['ui.router'])
       $scope.inbox[0]['bucket'] = 1;
       $scope.inbox[0]['status'] = 'sorted';
       var id = $scope.inbox[0]['_id'];
-      var tag = 'manage';
+      var tag = 'sorted';
+      var bucket = 1;
       console.log('d' + id + '###' + tag);
-      UpdateEmailTag.update(id + '###' + tag);
+      UpdateEmailTag.update(id + '###' + tag + '###' + bucket);
       Inbox.sortedInbox.push($scope.inbox.shift());
       $rootScope.timeLeft = 6;
     };
@@ -57,8 +58,9 @@ angular.module('myApp.main.note', ['ui.router'])
       $scope.inbox[0]['bucket'] = 2;
       $scope.inbox[0]['status'] = 'sorted';
       var id = $scope.inbox[0]['_id'];
-      var tag = 'focus';
-      UpdateEmailTag.update(id + '###' + tag);
+      var tag = 'sorted';
+      var bucket = 2
+      UpdateEmailTag.update(id + '###' + tag + '###' + bucket);
       Inbox.sortedInbox.push($scope.inbox.shift());
       $rootScope.timeLeft = 6;
     };
@@ -66,8 +68,9 @@ angular.module('myApp.main.note', ['ui.router'])
       $scope.inbox[0]['bucket'] = 3;
       $scope.inbox[0]['status'] = 'sorted';
       var id = $scope.inbox[0]['_id'];
-      var tag = 'avoid';     
-      UpdateEmailTag.update(id + '###' + tag);
+      var tag = 'sorted';
+      var bucket = 3;     
+      UpdateEmailTag.update(id + '###' + tag + '###' + bucket);
       Inbox.sortedInbox.push($scope.inbox.shift());
       $rootScope.timeLeft = 6;
     };
@@ -75,8 +78,9 @@ angular.module('myApp.main.note', ['ui.router'])
       $scope.inbox[0]['bucket'] = 4;
       $scope.inbox[0]['status'] = 'sorted';
       var id = $scope.inbox[0]['_id'];
-      var tag = 'limit';
-      UpdateEmailTag.update(id + '###' + tag);
+      var tag = 'soted';
+      var bucket = 4;
+      UpdateEmailTag.update(id + '###' + tag + '###' + bucket);
       Inbox.sortedInbox.push($scope.inbox.shift());
       $rootScope.timeLeft = 6;
     };

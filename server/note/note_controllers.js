@@ -134,6 +134,8 @@ module.exports = exports = {
       });
   },
 
+  //This function updates the email Tag (and optionally a bucket) on an email
+  //TODO FOR SECURITY: make sure username is same on email as current user before allowing user to update tag (avoid attacks!!!)
   updateEmailTag: function(req,res,next){
    var buffer = '';
     req.on('data', function(data){
@@ -144,10 +146,11 @@ module.exports = exports = {
       buffer = buffer.split('###');
       var id = buffer[0];
       var tag = buffer[1];
+      var bucket = buffer[2];
       mongoClient.connect("mongodb://localhost:27017/mailcrunch2", function(err, db) {
         if(err) { throw err; }
         var collection = db.collection('emails');   
-        collection.update({_id:new ObjectId(id)}, {$set: {tag:tag}}, function(err, res){
+        collection.update({_id:new ObjectId(id)}, {$set: {tag:tag, bucket:bucket}}, function(err, res){
           if (err){
             throw err;
           }

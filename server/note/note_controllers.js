@@ -7,9 +7,11 @@ var Note        = require('./note_model.js'),
     Parser      = require('imap-parser'),
     parser      = new Parser(),
     mongoClient = require('mongodb').MongoClient,
+    //require this to use mongodb's ObjectID function for retrieval of BSON encoded ids
     ObjectId = require('mongodb').ObjectID;
 
 
+//set up initial db configuration and indexes
 mongoClient.connect('mongodb://localhost:27017/mailcrunch2', function(err,db){
   db.createCollection('emails',function(err,collection) {});
   db.createCollection('users',function(err,collection){});
@@ -38,7 +40,6 @@ module.exports = exports = {
         imap.openBox('INBOX', true, cb);
       }
       var headers;
-      var allTheEmails = [];
       imap.connect();
       imap.once('ready', function() {
         openInbox(function(err, box) {
@@ -71,7 +72,7 @@ module.exports = exports = {
                msg.on('end', function(){
 
                 var message = {body: bodyBuffer.toString('utf8'), headers: headerBuffer, uid: UID};
-                allTheEmails.push(message);
+
                 mongoClient.connect("mongodb://localhost:27017/mailcrunch2", function(err, db) {
                   if(err) { throw (err); }
                   var collection = db.collection('emails');
@@ -88,7 +89,6 @@ module.exports = exports = {
                });
             });
             fetched.once('end', function(){
-              console.log(allTheEmails);
 
               mongoClient.connect("mongodb://localhost:27017/mailcrunch2", function(err, db) {
                 if(err) { throw err; }
@@ -101,7 +101,6 @@ module.exports = exports = {
                   res.end(JSON.stringify(emails));
                 });
               });
-              // res.end(JSON.stringify(allTheEmails));
               imap.end();
             })
           });

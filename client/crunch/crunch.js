@@ -11,37 +11,35 @@ angular.module('myApp.main.crunch', ['ui.router'])
 })
 
 .controller('CrunchController', function($scope, $rootScope, Inbox) {
-	$scope.inbox = Inbox.sortedInbox;
+  $scope.inbox = Inbox.sortedInbox.sort(function(a,b){return a.bucket - b.bucket});
   Inbox.timeLeft = 5;
 })
 
 .controller('ResponseController', function($scope, $rootScope, Inbox, SendMessageFactory) {
-  $scope.inbox = Inbox.sortedInbox;
-  $rootScope.emailIndex = 0;
-  $scope.currentEmail = $scope.inbox[$rootScope.emailIndex];
+  $scope.inbox = Inbox.sortedInbox.sort(function(a,b){return a.bucket - b.bucket});
   $rootScope.timeLeft = 60;
 
   $scope.send = function(){
     $rootScope.timeLeft = 120;
-    $('.input-group-addon').val('');
     var message = '###' + $('#to').val() + '###' + $('#subject').val() + '###' + $('#message').val();
-    console.log(message);
     SendMessageFactory.sendMessage(message)
       .then(function(response){
-        console.log(response);
+        // console.log(response);
       });
-    $scope.inbox.shift();
+    Inbox.shiftQ();
     $('#subject').val('');
     $('#message').val('');
   };
 
   $scope.next = function(){
-    console.log('next function fired')
-    $scope.inbox[$rootScope.emailIndex]['status'] = 'responded';
-    $rootScope.emailIndex++;
-    $scope.currentEmail = $scope.inbox[$rootScope.emailIndex];
+    Inbox.shiftQ();
     $rootScope.timeLeft = 120;
   };
+
+  $scope.markAsRead = function(){
+    var messageID = $scope.inbox[0].id;
+    SendMessageFactory.markingAsRead(messageID);
+  }
 })
 
 // this controller decrements the timeLeft variable once per second
@@ -56,7 +54,7 @@ angular.module('myApp.main.crunch', ['ui.router'])
 })
 
 .controller('mantra',function($scope, $rootScope, Inbox){
-  $scope.inbox = Inbox.sortedInbox;
+  $scope.inbox = Inbox.sortedInbox.sort(function(a,b){return a.bucket - b.bucket});
   $scope.message = "What's done is done."
   if($scope.inbox[0]['bucket'] === 'manage'){
     $scope.message = "Take time to handle this yourself. It's important and pressing."

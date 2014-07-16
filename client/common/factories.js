@@ -10,8 +10,13 @@
 
   .factory('Inbox', function(){
     var sortedInbox = [];
+    var shiftQ = function(){
+      sortedInbox.shift();
+    };
+
     return {
-      sortedInbox: sortedInbox
+      sortedInbox: sortedInbox,
+      shiftQ: shiftQ
     }
   })
 
@@ -29,6 +34,7 @@
 
   .factory('InboxFactory', function($http){
   	var getEm = function(){
+      console.log('got to the factory')
   		return $http({
   			method: 'GET',
   			url: '/main/sort'
@@ -37,8 +43,12 @@
         console.log(response)
         for (var i = 0; i < response.data.length; i++){
           if (response.data[i].headers['x-mailer'] === undefined){
-            response.data[i].body = response.data[i].body.split('UTF-8')[1];
-            response.data[i].body = response.data[i].body.split('--')[0];
+            if (response.data[i].headers['x-failed-recipients']){
+              response.data[i].body = 'Message delivery failed';
+            } else {
+              response.data[i].body = response.data[i].body.split('UTF-8')[1];
+              response.data[i].body = response.data[i].body.split('--')[0]; 
+            }
           }
         }
   			return response;
@@ -61,8 +71,20 @@
   			return response;
   		});
   	};
+
+    var markingAsRead = function(ID){
+      return $http({
+        method: 'POST',
+        url: '/main/crunch/markEmail',
+        data: ID,
+      })
+      .then(function(response){
+        console.log('message marked as read');
+      })
+    }
   	return {
-  		sendMessage: sendMessage
+  		sendMessage: sendMessage,
+      markingAsRead: markingAsRead
   	};
   })
 }(angular));

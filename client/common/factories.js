@@ -17,13 +17,13 @@
   })
 
   .factory('Inbox', function($http){
-    var getSortedInbox = function(callback){
+    var getSortedInbox = function(){
       return $http({
         method: 'POST',
         url: '/main/sort/getSortedInbox',
       })
       .then(function(response){
-        callback(response);
+        return response;
       });      
     }
     var sortedInbox = [];

@@ -34,7 +34,7 @@
       <!--Sidebar content inside span2-->
        <h4 class='well'>The queue</h4>
        <span>
-          <li class="list-group-item disabled" ng-repeat="email in inbox | filter: {status: 'responded'} | orderBy: bucket">{{email.from}}: {{email.subject}} @ {{email.time}}</li>
+          <li class="list-group-item disabled" ng-repeat="email in inbox">{{email.from}}: {{email.subject}} @ {{email.time}}</li>
           <li class="list-group-item" ng-repeat="email in inbox | filter: {status: 'sorted'} | orderBy: 'bucket'">{{email.from}}: {{email.subject}} @ {{email.time}}</li>
        </span>
     </div>

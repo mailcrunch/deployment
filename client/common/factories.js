@@ -2,10 +2,18 @@
   "use strict";
   angular.module('myApp')
 
-  .factory('sortTimer', function(){
-	return {reset: function(){
-		return timeLeft = 5;
-	}};
+  .factory('PointFactory', function(){
+    var pointTotal = 0;
+    var incrementPoints = function(num){
+      pointTotal += num;
+    }
+    var getPoints = function(){
+      return pointTotal;
+    };
+    return {
+      getPoints: getPoints,
+      incrementPoints: incrementPoints
+    }
   })
 
   .factory('Inbox', function(){

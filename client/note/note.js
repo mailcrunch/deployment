@@ -11,10 +11,11 @@ angular.module('myApp.main.note', ['ui.router'])
 })
 
 //this is dummy data to test the list of inbox emails	
-.controller('NoteController', function($scope, $interval, InboxFactory, Inbox) {
+.controller('NoteController', function($scope, $interval, InboxFactory, Inbox, PointFactory) {
 
     $scope.inbox = [];
     $scope.timer = 10;
+
     var result;
     $scope.getEmails = function(){
       InboxFactory.getEm()
@@ -45,28 +46,41 @@ angular.module('myApp.main.note', ['ui.router'])
           $scope.timerStart();
         });
     };
+    $scope.timerReset = function(){
+      $interval.cancel(result);
+      $scope.timerStart();
+    };
+    $scope.updatePoints = function(){
+      if ($scope.timer !== 0){
+        PointFactory.incrementPoints(100);
+      }
+    }
     $scope.sortManage = function(){
       $scope.inbox[0]['bucket'] = 1;
       $scope.inbox[0]['status'] = 'sorted';
       Inbox.sortedInbox.push($scope.inbox.shift());
+      $scope.updatePoints();
       $scope.timerReset();
     };
     $scope.sortFocus = function(){
       $scope.inbox[0]['bucket'] = 2;
       $scope.inbox[0]['status'] = 'sorted';
       Inbox.sortedInbox.push($scope.inbox.shift());
+      $scope.updatePoints();
       $scope.timerReset();
     };
     $scope.sortAvoid = function(){
       $scope.inbox[0]['bucket'] = 3;
       $scope.inbox[0]['status'] = 'sorted';
       Inbox.sortedInbox.push($scope.inbox.shift());
+      $scope.updatePoints();
       $scope.timerReset();
     };
     $scope.sortLimit = function(){
       $scope.inbox[0]['bucket'] = 4;
       $scope.inbox[0]['status'] = 'sorted';
       Inbox.sortedInbox.push($scope.inbox.shift());
+      $scope.updatePoints();
       $scope.timerReset();
       
     };
@@ -84,10 +98,6 @@ angular.module('myApp.main.note', ['ui.router'])
         }
       },1000);
       console.log(result);
-    }
-    $scope.timerReset = function(){
-      $interval.cancel(result);
-      $scope.timerStart();
-    }
+    };
 
 });

@@ -4,6 +4,7 @@
     'ui.router',
     'ngAnimate',
     'fx.animations',
+    'myApp.public',
     'myApp.main'])
   .config(function($stateProvider) {
     $stateProvider
@@ -13,7 +14,7 @@
       });
   })
   .run(function ($state) {
-    $state.transitionTo('myApp.main');
+    $state.transitionTo('myApp.public');
   });
 }(angular));
 

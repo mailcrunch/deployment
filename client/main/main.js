@@ -10,7 +10,7 @@
       })
   })
   .controller('MainController', function($state) {
-    $state.transitionTo('myApp.main.login');
+    $state.transitionTo('myApp.main.home');
   })
 }(angular));
   

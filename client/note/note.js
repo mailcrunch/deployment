@@ -11,7 +11,7 @@ angular.module('myApp.main.note', ['ui.router'])
 })
 
 //this is dummy data to test the list of inbox emails	
-.controller('NoteController', function($scope, $interval, InboxFactory, Inbox, PointFactory) {
+.controller('NoteController', function($scope, $interval, InboxFactory, Inbox, PointFactory, UpdateEmailTag) {
 
     $scope.inbox = [];
     $scope.timer = 10;
@@ -44,6 +44,7 @@ angular.module('myApp.main.note', ['ui.router'])
               $scope.inbox.push($scope.email); 
             }
           }
+          $scope.timerStart();
         });
     };
     $scope.timerReset = function(){
@@ -97,6 +98,7 @@ angular.module('myApp.main.note', ['ui.router'])
       var bucket = 4;
       UpdateEmailTag.update(id + '###' + tag + '###' + bucket);
       Inbox.sortedInbox.push($scope.inbox.shift());
+      $scope.updatePoints();
       $scope.timerReset();
       
     };

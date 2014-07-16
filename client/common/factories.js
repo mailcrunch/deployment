@@ -17,16 +17,17 @@
   })
 
   .factory('Inbox', function($http){
+    var sortedInbox = [];
     var getSortedInbox = function(){
       return $http({
         method: 'POST',
         url: '/main/sort/getSortedInbox',
       })
       .then(function(response){
+        sortedInbox = response.data;
         return response;
       });      
     }
-    var sortedInbox = [];
     var shiftQ = function(){
       sortedInbox.shift();
     };

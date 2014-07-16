@@ -11,9 +11,9 @@ angular.module('myApp.main.crunch', ['ui.router'])
 })
 
 .controller('CrunchController', function($scope, $interval, Inbox, SendMessageFactory, PointFactory) {
+  $scope.inbox = [];
   Inbox.getSortedInbox()
     .then(function(response){
-      $scope.inbox = [];
       for (var i = 0; i < response.data.length; i++){
         if (response.data[i].headers.from !== undefined){
           $scope.email = {
@@ -39,7 +39,6 @@ angular.module('myApp.main.crunch', ['ui.router'])
           $scope.inbox.push($scope.email); 
         }
       }
-      console.log($scope.inbox)
       var timerId;
       $scope.timer = 0;
 
@@ -50,7 +49,6 @@ angular.module('myApp.main.crunch', ['ui.router'])
       };
     
       var manageTimer = function(){
-        console.log(' i am here')
         if ($scope.timer !== 300){
           $scope.timer = 300;
         }
@@ -63,7 +61,6 @@ angular.module('myApp.main.crunch', ['ui.router'])
             $scope.timer--;
           }
         },1000);
-      console.log(timerId)
       };
 
       var focusTimer = function(){
@@ -79,7 +76,6 @@ angular.module('myApp.main.crunch', ['ui.router'])
             $scope.timer--;
           }
         },1000);
-        console.log(timerId)
       };
 
       var avoidTimer = function(){
@@ -95,7 +91,6 @@ angular.module('myApp.main.crunch', ['ui.router'])
             $scope.timer--;
           }
         },1000);
-        console.log(timerId)
       };
 
       var limitTimer = function(){
@@ -111,13 +106,10 @@ angular.module('myApp.main.crunch', ['ui.router'])
             $scope.timer--;
           }
         },1000);
-        console.log(timerId)
       };
     
       var bucketChecker = function(){
-        console.log('made it to the bucketChecker', $scope.inbox[0])
         if($scope.inbox[0].bucket === '1'){
-          console.log('should call the manageTimer')
             manageTimer();
         }else if($scope.inbox[0].bucket === '2'){
             focusTimer();
@@ -134,7 +126,7 @@ angular.module('myApp.main.crunch', ['ui.router'])
           .then(function(response){
             // console.log(response);
           });
-        Inbox.shiftQ();
+        $scope.inbox.shift();
         $interval.cancel(timerId);
         updatePoints();
         bucketChecker();
@@ -143,7 +135,7 @@ angular.module('myApp.main.crunch', ['ui.router'])
       };
 
       $scope.next = function(){
-        Inbox.shiftQ();
+        $scope.inbox.shift();
         $interval.cancel(timerId);
         updatePoints();
         bucketChecker();
@@ -159,17 +151,19 @@ angular.module('myApp.main.crunch', ['ui.router'])
 })
 
 .controller('mantra',function($scope, Inbox){
-  Inbox.getSortedInbox(function(emails){
-    $scope.inbox = emails;
-    $scope.message = "What's done is done."
-    if($scope.inbox[0]['bucket'] === 1){
-      $scope.message = "Take time to handle this yourself. It's important and pressing."
-    }else if($scope.inbox[0]['bucket'] === 2){
-      $scope.message = "Schedule time to come back to this. It's an investment in the future."  
-    }else if($scope.inbox[0]['bucket'] === 3){
-      $scope.message = "How can you delegate this task?"
-    }else if($scope.inbox[0]['bucket'] === 4){
-      $scope.message = "Read this only for your entertainment, and spend the minimum amount of time on it possible."
-    }
-  });
+  Inbox.getSortedInbox()
+    .then(function(response){
+      $scope.inbox = response.data;
+      console.log($scope.inbox);
+      $scope.message = "What's done is done."
+      if($scope.inbox[0]['bucket'] === '1'){
+        $scope.message = "Take time to handle this yourself. It's important and pressing."
+      }else if($scope.inbox[0]['bucket'] === '2'){
+        $scope.message = "Schedule time to come back to this. It's an investment in the future."  
+      }else if($scope.inbox[0]['bucket'] === '3'){
+        $scope.message = "How can you delegate this task?"
+      }else if($scope.inbox[0]['bucket'] === '4'){
+        $scope.message = "Read this only for your entertainment, and spend the minimum amount of time on it possible."
+      }
+    });
 })

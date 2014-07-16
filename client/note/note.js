@@ -14,7 +14,8 @@ angular.module('myApp.main.note', ['ui.router'])
 .controller('NoteController', function($scope, $interval, InboxFactory, Inbox) {
 
     $scope.inbox = [];
-    $scope.time = 10;
+    $scope.timer = 10;
+    var result;
     $scope.getEmails = function(){
       InboxFactory.getEm()
         .then(function(response){
@@ -38,7 +39,6 @@ angular.module('myApp.main.note', ['ui.router'])
               $scope.email.from = response.data[i].headers.from.toString();
               $scope.email.time = response.data[i].headers.date.toString();
               $scope.email.id = response.data[i].uid.toString();
-              $scope.email.timer = 10;
               $scope.inbox.push($scope.email); 
             }
           }
@@ -49,37 +49,45 @@ angular.module('myApp.main.note', ['ui.router'])
       $scope.inbox[0]['bucket'] = 1;
       $scope.inbox[0]['status'] = 'sorted';
       Inbox.sortedInbox.push($scope.inbox.shift());
-      $scope.timerStart();
+      $scope.timerReset();
     };
     $scope.sortFocus = function(){
       $scope.inbox[0]['bucket'] = 2;
       $scope.inbox[0]['status'] = 'sorted';
       Inbox.sortedInbox.push($scope.inbox.shift());
-      $scope.timerStart();
+      $scope.timerReset();
     };
     $scope.sortAvoid = function(){
       $scope.inbox[0]['bucket'] = 3;
       $scope.inbox[0]['status'] = 'sorted';
       Inbox.sortedInbox.push($scope.inbox.shift());
-      $scope.timerStart();
+      $scope.timerReset();
     };
     $scope.sortLimit = function(){
       $scope.inbox[0]['bucket'] = 4;
       $scope.inbox[0]['status'] = 'sorted';
       Inbox.sortedInbox.push($scope.inbox.shift());
-      $scope.timerStart();
+      $scope.timerReset();
       
     };
     $scope.timerStart = function(){
-      $interval(function(){
-        if ($scope.inbox[0].timer === 0){
-          $scope.inbox[0].timer = '0';
-        } else if ($scope.inbox[0].timer === '0'){
-          $scope.inbox[0].timer = 0;
+      if ($scope.timer !== 10){
+        $scope.timer = 10;
+      }
+      result = $interval(function(){
+        if ($scope.timer === 0){
+          $scope.timer = '0';
+        } else if ($scope.timer === '0'){
+          $scope.timer = 0;
         } else {
-          $scope.inbox[0].timer--;
+          $scope.timer--;
         }
       },1000);
+      console.log(result);
+    }
+    $scope.timerReset = function(){
+      $interval.cancel(result);
+      $scope.timerStart();
     }
 
 });

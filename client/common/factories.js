@@ -60,6 +60,23 @@
   	};
   })
 
+  .factory('UpdateEmailTag', function($http){
+    var update = function(message){
+      console.log(message);
+      return $http({
+        method: 'POST',
+        url: '/main/sort/updateEmailTag',
+        data: message,
+      })
+      .then(function(response){
+        return response;
+      });
+    }
+    return{
+      update:update
+    };
+  })
+
   .factory('SendMessageFactory', function($http){
   	var sendMessage = function(message){
   		return $http({

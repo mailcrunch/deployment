@@ -1,78 +1,46 @@
-// config/passport.js
+// passport.js
 
-// load all the things we need
-var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+var express = require('express')
+  , passport = require('passport')
+  , util = require('util')
+  , GoogleStrategy = require('passport-google').Strategy;
 
-// load up the user model - will hard code related values in for now, refactor now
-var User       = require('../app/models/user');
 
-// load the auth variables
-var configAuth = require('./auth');
+// Passport session setup.
+//   To support persistent login sessions, Passport needs to be able to
+//   serialize users into and deserialize users out of the session.  Typically,
+//   this will be as simple as storing the user ID when serializing, and finding
+//   the user by ID when deserializing.  However, since this example does not
+//   have a database of user records, the complete Google profile is serialized
+//   and deserialized.
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
 
-module.exports = function(passport) {
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
+});
 
-	// used to serialize the user for the session
-    passport.serializeUser(function(user, done) {
-        done(null, user.id);
+// Use the GoogleStrategy within Passport.
+//   Strategies in passport require a `validate` function, which accept
+//   credentials (in this case, an OpenID identifier and profile), and invoke a
+//   callback with a user object.
+passport.use(new GoogleStrategy({
+    returnURL: 'http://localhost:3000/auth/google/return',
+    realm: 'http://localhost:3000/'
+  },
+  function(identifier, profile, done) {
+    // asynchronous verification, for effect...
+    process.nextTick(function () {
+
+      console.log(profile)
+      
+      // To keep the example simple, the user's Google profile is returned to
+      // represent the logged-in user.  In a typical application, you would want
+      // to associate the Google account with a user record in your database,
+      // and return that user instead.
+      profile.identifier = identifier;
+      return done(null, profile);
     });
-
-    // used to deserialize the user
-    passport.deserializeUser(function(id, done) {
-        User.findById(id, function(err, user) {
-            done(err, user);
-        });
-    });
-    
-	// code for login (use('local-login', new LocalStategy))
-	// code for signup (use('local-signup', new LocalStategy))
-	// code for facebook (use('facebook', new FacebookStrategy))
-	// code for twitter (use('twitter', new TwitterStrategy))
-
-	// =========================================================================
-    // GOOGLE ==================================================================
-    // =========================================================================
-    passport.use(new GoogleStrategy({
-
-        clientID        : configAuth.googleAuth.clientID,
-        clientSecret    : configAuth.googleAuth.clientSecret,
-        callbackURL     : configAuth.googleAuth.callbackURL,
-
-    },
-    function(token, refreshToken, profile, done) {
-
-		// make the code asynchronous
-		// User.findOne won't fire until we have all our data back from Google
-		process.nextTick(function() {
-
-	        // try to find the user based on their google id
-	        User.findOne({ 'google.id' : profile.id }, function(err, user) {
-	            if (err)
-	                return done(err);
-
-	            if (user) {
-
-	                // if a user is found, log them in
-	                return done(null, user);
-	            } else {
-	                // if the user isnt in our database, create a new user
-	                var newUser          = new User();
-
-	                // set all of the relevant information
-	                newUser.google.id    = profile.id;
-	                newUser.google.token = token;
-	                newUser.google.name  = profile.displayName;
-	                newUser.google.email = profile.emails[0].value; // pull the first email
-
-	                // save the user
-	                newUser.save(function(err) {
-	                    if (err)
-	                        throw err;
-	                    return done(null, newUser);
-	                });
-	            }
-	        });
-	    });
-
-    }));
-
-};
+  }
+));

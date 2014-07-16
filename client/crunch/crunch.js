@@ -10,7 +10,7 @@ angular.module('myApp.main.crunch', ['ui.router'])
     });
 })
 
-.controller('CrunchController', function($scope, $interval, Inbox, SendMessageFactory) {
+.controller('CrunchController', function($scope, $interval, Inbox, SendMessageFactory, PointFactory) {
   Inbox.getSortedInbox()
     .then(function(response){
       $scope.inbox = [];
@@ -42,6 +42,12 @@ angular.module('myApp.main.crunch', ['ui.router'])
       console.log($scope.inbox)
       var timerId;
       $scope.timer = 0;
+
+      var updatePoints = function(){
+        if ($scope.timer !== 0 && $scope.timer !== '0'){
+          PointFactory.incrementPoints(100);
+        }
+      };
     
       var manageTimer = function(){
         console.log(' i am here')
@@ -109,14 +115,15 @@ angular.module('myApp.main.crunch', ['ui.router'])
       };
     
       var bucketChecker = function(){
-        console.log('made it to the bucketChecker')
-        if($scope.inbox[0].bucket === 1){
+        console.log('made it to the bucketChecker', $scope.inbox[0])
+        if($scope.inbox[0].bucket === '1'){
+          console.log('should call the manageTimer')
             manageTimer();
-        }else if($scope.inbox[0].bucket === 2){
+        }else if($scope.inbox[0].bucket === '2'){
             focusTimer();
-        }else if ($scope.inbox[0].bucket === 3){
+        }else if ($scope.inbox[0].bucket === '3'){
             avoidTimer();
-        }else if ($scope.inbox[0].bucket === 4){
+        }else if ($scope.inbox[0].bucket === '4'){
             limitTimer();
         }
       };
@@ -129,6 +136,7 @@ angular.module('myApp.main.crunch', ['ui.router'])
           });
         Inbox.shiftQ();
         $interval.cancel(timerId);
+        updatePoints();
         bucketChecker();
         $('#subject').val('');
         $('#message').val('');
@@ -137,6 +145,7 @@ angular.module('myApp.main.crunch', ['ui.router'])
       $scope.next = function(){
         Inbox.shiftQ();
         $interval.cancel(timerId);
+        updatePoints();
         bucketChecker();
       };
 

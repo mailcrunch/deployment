@@ -1,17 +1,20 @@
 "use strict";
 
 var express = require('express');
-var app = express();
-var routers = {};
-var NoteRouter = express.Router();
-var CrunchRouter = express.Router();
-routers.NoteRouter = NoteRouter;
-routers.CrunchRouter = CrunchRouter;
+var app = express(),
+    passport = require('passport'),
+    GoogleStrategy = require('passport-google-oauth').Strategy;
 
-require('./config.js')(app, express, routers);
+require('./config.js')(app, express, passport, GoogleStrategy);
 
-require('../note/note_routes.js')(NoteRouter);
+// // required for passport
+// app.use(session({ secret: 'ilovescotchscotchyscotchscotch' })); // session secret
+// app.use(passport.initialize());
+// app.use(passport.session()); // persistent login sessions
+// app.use(flash()); // use connect-flash for flash messages stored in session
 
-require('../crunch/crunch_routes.js')(CrunchRouter);
+// require('../note/note_routes.js')(NoteRouter);
+
+// require('../crunch/crunch_routes.js')(CrunchRouter);
 
 module.exports = exports = app;

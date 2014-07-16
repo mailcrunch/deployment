@@ -10,7 +10,7 @@ angular.module('myApp.main.crunch', ['ui.router'])
     });
 })
 
-.controller('CrunchController', function($scope, $interval, Inbox, SendMessageFactory, PointFactory) {
+.controller('CrunchController', function($scope, $interval, Inbox, SendMessageFactory, PointFactory, UpdateEmailTag) {
   Inbox.getSortedInbox()
     .then(function(response){
       $scope.inbox = [];
@@ -134,6 +134,10 @@ angular.module('myApp.main.crunch', ['ui.router'])
           .then(function(response){
             // console.log(response);
           });
+        var id = $scope.inbox[0]._id;
+        var tag = 'replied';
+        var bucket = $scope.inbox[0].bucket;
+        UpdateEmailTag.update(id + '###' + tag + '###' + bucket);
         Inbox.shiftQ();
         $interval.cancel(timerId);
         updatePoints();

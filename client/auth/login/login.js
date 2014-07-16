@@ -10,12 +10,7 @@ angular.module('myApp.main.login', ['ui.router'])
     });
 })
 
-.controller('LoginController', function($scope, InboxFactory) {
-    $scope.getEmails = function(){
-    	InboxFactory.getEm()
-    	  .then(function(response){
-    	  	console.log(response);
-    	  });
-    }
+.controller('LoginController', function($scope) {
+    
 });
 

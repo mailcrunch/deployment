@@ -10,41 +10,36 @@ angular.module('myApp.main.crunch', ['ui.router'])
     });
 })
 
-//this is dummy data to test the list of inbox emails	
-.controller('CrunchController', function($scope, Inbox, $rootScope) {
-	$scope.inbox = Inbox.Inbox;
-  $rootScope.emailIndex = 0;
-  $scope.currentEmail = $scope.inbox[$rootScope.emailIndex];
+.controller('CrunchController', function($scope, $rootScope, Inbox) {
+  $scope.inbox = Inbox.sortedInbox.sort(function(a,b){return a.bucket - b.bucket});
   Inbox.timeLeft = 5;
 })
 
-.controller('ResponseController', function($scope, Inbox, $rootScope, SendMessageFactory) {
-  $scope.inbox = Inbox.Inbox;
-  $rootScope.emailIndex = 0;
-  $scope.currentEmail = $scope.inbox[$rootScope.emailIndex];
+.controller('ResponseController', function($scope, $rootScope, Inbox, SendMessageFactory) {
+  $scope.inbox = Inbox.sortedInbox.sort(function(a,b){return a.bucket - b.bucket});
   $rootScope.timeLeft = 60;
 
   $scope.send = function(){
-    console.log('send function fired')
-    $scope.inbox[$rootScope.emailIndex]['status'] = 'responded';
-    $rootScope.emailIndex++;
-    $scope.currentEmail = $scope.inbox[$rootScope.emailIndex];
     $rootScope.timeLeft = 120;
-    $('.input-group-addon').val('');
-    var message = '###' + $('#to').val() + '###' + $('#subject').val() + '###' + $('#message').val()
+    var message = '###' + $('#to').val() + '###' + $('#subject').val() + '###' + $('#message').val();
     SendMessageFactory.sendMessage(message)
       .then(function(response){
-        console.log(response);
-      })
+        // console.log(response);
+      });
+    Inbox.shiftQ();
+    $('#subject').val('');
+    $('#message').val('');
   };
 
   $scope.next = function(){
-    console.log('next function fired')
-    $scope.inbox[$rootScope.emailIndex]['status'] = 'responded';
-    $rootScope.emailIndex++;
-    $scope.currentEmail = $scope.inbox[$rootScope.emailIndex];
+    Inbox.shiftQ();
     $rootScope.timeLeft = 120;
   };
+
+  $scope.markAsRead = function(){
+    var messageID = $scope.inbox[0].id;
+    SendMessageFactory.markingAsRead(messageID);
+  }
 })
 
 // this controller decrements the timeLeft variable once per second
@@ -59,15 +54,15 @@ angular.module('myApp.main.crunch', ['ui.router'])
 })
 
 .controller('mantra',function($scope, $rootScope, Inbox){
-  $scope.inbox = Inbox.Inbox;
+  $scope.inbox = Inbox.sortedInbox.sort(function(a,b){return a.bucket - b.bucket});
   $scope.message = "What's done is done."
-  if($scope.inbox[$rootScope.emailIndex]['bucket'] === 'manage'){
+  if($scope.inbox[0]['bucket'] === 'manage'){
     $scope.message = "Take time to handle this yourself. It's important and pressing."
-  }else if($scope.inbox[$rootScope.emailIndex]['bucket'] === 'focus'){
+  }else if($scope.inbox[0]['bucket'] === 'focus'){
     $scope.message = "Schedule time to come back to this. It's an investment in the future."  
-  }else if($scope.inbox[$rootScope.emailIndex]['bucket'] === 'avoid'){
+  }else if($scope.inbox[0]['bucket'] === 'avoid'){
     $scope.message = "How can you delegate this task?"
-  }else if($scope.inbox[$rootScope.emailIndex]['bucket'] === 'limit'){
+  }else if($scope.inbox[0]['bucket'] === 'limit'){
     $scope.message = "Read this only for your entertainment, and spend the minimum amount of time on it possible."
   }
 })

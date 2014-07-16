@@ -17,6 +17,7 @@ mongoClient.connect('mongodb://localhost:27017/mailcrunch2', function(err,db){
   db.createIndex('users', {username: 1}, {unique: true}, function(err,res){});
   db.createIndex('emails',{headersUniqHack:1}, {unique:true},function(err,res){});
   db.createIndex('emails',{tag:1},{unique:false},function(err,res){});
+  db.createIndex('emails',{createdAt:1},{unique:false},function(err,res){});
   db.close();
   // db.createIndex('emails',{username:1}, {unique:false}, function(err,res){});
 });
@@ -80,6 +81,7 @@ module.exports = exports = {
                   message.tag = 'unsorted';
                   message.username = 'bizarroForrest';
                   message.headersUniqHack = message.username + message.headers['message-id'][0].split('@')[0].slice(1);
+                  message.createdAt = message.headers['date'][0];
                   collection.insert(message, {w:1}, function(err,results){
                     if (err){
                       console.log(err);

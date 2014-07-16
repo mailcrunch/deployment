@@ -43,7 +43,6 @@ angular.module('myApp.main.note', ['ui.router'])
               $scope.inbox.push($scope.email); 
             }
           }
-          $scope.timerStart();
         });
     };
     $scope.timerReset = function(){
@@ -51,7 +50,7 @@ angular.module('myApp.main.note', ['ui.router'])
       $scope.timerStart();
     };
     $scope.updatePoints = function(){
-      if ($scope.timer !== 0){
+      if ($scope.timer !== 0 && $scope.timer !== '0'){
         PointFactory.incrementPoints(100);
       }
     }
@@ -97,7 +96,6 @@ angular.module('myApp.main.note', ['ui.router'])
           $scope.timer--;
         }
       },1000);
-      console.log(result);
     };
 
 });

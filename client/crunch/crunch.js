@@ -10,59 +10,132 @@ angular.module('myApp.main.crunch', ['ui.router'])
     });
 })
 
-.controller('CrunchController', function($scope, $rootScope, Inbox) {
+.controller('CrunchController', function($scope, $interval, Inbox, SendMessageFactory) {
   $scope.inbox = Inbox.sortedInbox.sort(function(a,b){return a.bucket - b.bucket});
-  Inbox.timeLeft = 5;
-})
+  var timerId;
+  $scope.timer = 0;
+  
+  var manageTimer = function(){
+    console.log(' i am here')
+    if ($scope.timer !== 300){
+      $scope.timer = 300;
+    }
+    timerId = $interval(function(){
+      if ($scope.timer === 0){
+        $scope.timer = '0';
+      } else if ($scope.timer === '0'){
+        $scope.timer = 0;
+      } else {
+        $scope.timer--;
+      }
+    },1000);
+    console.log(timerId)
+  };
 
-.controller('ResponseController', function($scope, $rootScope, Inbox, SendMessageFactory) {
-  $scope.inbox = Inbox.sortedInbox.sort(function(a,b){return a.bucket - b.bucket});
-  $rootScope.timeLeft = 60;
+  var focusTimer = function(){
+    if ($scope.timer !== 240){
+      $scope.timer = 240;
+    }
+    timerId = $interval(function(){
+      if ($scope.timer === 0){
+        $scope.timer = '0';
+      } else if ($scope.timer === '0'){
+        $scope.timer = 0;
+      } else {
+        $scope.timer--;
+      }
+    },1000);
+    console.log(timerId)
+  };
+
+  var avoidTimer = function(){
+    if ($scope.timer !== 120){
+      $scope.timer = 120;
+    }
+    timerId = $interval(function(){
+      if ($scope.timer === 0){
+        $scope.timer = '0';
+      } else if ($scope.timer === '0'){
+        $scope.timer = 0;
+      } else {
+        $scope.timer--;
+      }
+    },1000);
+    console.log(timerId)
+  };
+
+  var limitTimer = function(){
+    if ($scope.timer !== 60){
+      $scope.timer = 60;
+    }
+    timerId = $interval(function(){
+      if ($scope.timer === 0){
+        $scope.timer = '0';
+      } else if ($scope.timer === '0'){
+        $scope.timer = 0;
+      } else {
+        $scope.timer--;
+      }
+    },1000);
+    console.log(timerId)
+  };
+  
+  var bucketChecker = function(){
+    if($scope.inbox[0].bucket === 1){
+        manageTimer();
+    }else if($scope.inbox[0].bucket === 2){
+        focusTimer();
+    }else if ($scope.inbox[0].bucket === 3){
+        avoidTimer();
+    }else if ($scope.inbox[0].bucket === 4){
+        limitTimer();
+    }
+  }
 
   $scope.send = function(){
-    $rootScope.timeLeft = 120;
     var message = '###' + $('#to').val() + '###' + $('#subject').val() + '###' + $('#message').val();
     SendMessageFactory.sendMessage(message)
       .then(function(response){
         // console.log(response);
       });
     Inbox.shiftQ();
+    $interval.cancel(timerId);
+    bucketChecker();
     $('#subject').val('');
     $('#message').val('');
   };
 
   $scope.next = function(){
     Inbox.shiftQ();
-    $rootScope.timeLeft = 120;
+    $interval.cancel(timerId);
+    bucketChecker();
   };
 
   $scope.markAsRead = function(){
     var messageID = $scope.inbox[0].id;
     SendMessageFactory.markingAsRead(messageID);
-  }
+  };
+
+  // var timerReset = function(timerId){
+  //   console.log('got into timerReset f(n)', timerId)
+  //   $interval.cancel(timerId);
+  // };
+
+
+  bucketChecker();
+
 })
 
-// this controller decrements the timeLeft variable once per second
-// TODO: add in a function that switches emails when timeLeft = 0;
-.controller('crunchTimeLeft',function($scope,$interval, $rootScope){
-  $interval(function(){
-  	if($rootScope.timeLeft > 0){
-  	  $rootScope.timeLeft--;
-      $scope.timeLeft = $rootScope.timeLeft;
-    }
-  },1000);
-})
-
-.controller('mantra',function($scope, $rootScope, Inbox){
+.controller('mantra',function($scope, Inbox){
   $scope.inbox = Inbox.sortedInbox.sort(function(a,b){return a.bucket - b.bucket});
   $scope.message = "What's done is done."
-  if($scope.inbox[0]['bucket'] === 'manage'){
+  if($scope.inbox[0]['bucket'] === 1){
     $scope.message = "Take time to handle this yourself. It's important and pressing."
-  }else if($scope.inbox[0]['bucket'] === 'focus'){
+  }else if($scope.inbox[0]['bucket'] === 2){
     $scope.message = "Schedule time to come back to this. It's an investment in the future."  
-  }else if($scope.inbox[0]['bucket'] === 'avoid'){
+  }else if($scope.inbox[0]['bucket'] === 3){
     $scope.message = "How can you delegate this task?"
-  }else if($scope.inbox[0]['bucket'] === 'limit'){
+  }else if($scope.inbox[0]['bucket'] === 4){
     $scope.message = "Read this only for your entertainment, and spend the minimum amount of time on it possible."
   }
 })

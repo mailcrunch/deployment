@@ -35,6 +35,7 @@ angular.module('myApp.main.crunch', ['ui.router'])
           $scope.email.time = response.data[i].headers.date.toString();
           $scope.email.id = response.data[i].uid.toString();
           $scope.email._id = response.data[i]._id;
+          $scope.email.bucket = response.data[i].bucket;
           $scope.inbox.push($scope.email); 
         }
       }
@@ -108,6 +109,7 @@ angular.module('myApp.main.crunch', ['ui.router'])
       };
     
       var bucketChecker = function(){
+        console.log('made it to the bucketChecker')
         if($scope.inbox[0].bucket === 1){
             manageTimer();
         }else if($scope.inbox[0].bucket === 2){

@@ -4,7 +4,7 @@ angular.module('myApp.public.login', ['ui.router'])
 
   $stateProvider
     .state('myApp.public.login', {
-      url: '/public/login',
+      url: '/login',
       templateUrl: 'login/login.tpl.html',
       controller: 'LoginController'
     });

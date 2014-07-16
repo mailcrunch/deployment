@@ -38,6 +38,7 @@ angular.module('myApp.main.note', ['ui.router'])
               $scope.email.from = response.data[i].headers.from.toString();
               $scope.email.time = response.data[i].headers.date.toString();
               $scope.email.id = response.data[i].uid.toString();
+              $scope.email.timer = 10;
               $scope.inbox.push($scope.email); 
             }
           }
@@ -48,34 +49,35 @@ angular.module('myApp.main.note', ['ui.router'])
       $scope.inbox[0]['bucket'] = 1;
       $scope.inbox[0]['status'] = 'sorted';
       Inbox.sortedInbox.push($scope.inbox.shift());
-      
+      $scope.timerStart();
     };
     $scope.sortFocus = function(){
       $scope.inbox[0]['bucket'] = 2;
       $scope.inbox[0]['status'] = 'sorted';
       Inbox.sortedInbox.push($scope.inbox.shift());
-      
+      $scope.timerStart();
     };
     $scope.sortAvoid = function(){
       $scope.inbox[0]['bucket'] = 3;
       $scope.inbox[0]['status'] = 'sorted';
       Inbox.sortedInbox.push($scope.inbox.shift());
-      
+      $scope.timerStart();
     };
     $scope.sortLimit = function(){
       $scope.inbox[0]['bucket'] = 4;
       $scope.inbox[0]['status'] = 'sorted';
       Inbox.sortedInbox.push($scope.inbox.shift());
+      $scope.timerStart();
       
     };
     $scope.timerStart = function(){
       $interval(function(){
-        if ($scope.time === 0){
-          $scope.time = '0';
-        } else if ($scope.time === '0'){
-          $scope.time = 0;
+        if ($scope.inbox[0].timer === 0){
+          $scope.inbox[0].timer = '0';
+        } else if ($scope.inbox[0].timer === '0'){
+          $scope.inbox[0].timer = 0;
         } else {
-          $scope.time--;
+          $scope.inbox[0].timer--;
         }
       },1000);
     }

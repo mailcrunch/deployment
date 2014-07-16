@@ -55,7 +55,7 @@ angular.module('myApp.main.note', ['ui.router'])
       if ($scope.timer !== 0 && $scope.timer !== '0'){
         PointFactory.incrementPoints(100);
       }
-    }
+    };
     $scope.sortManage = function(){
       $scope.inbox[0]['bucket'] = 1;
       $scope.inbox[0]['status'] = 'sorted';
@@ -64,7 +64,7 @@ angular.module('myApp.main.note', ['ui.router'])
       var bucket = 1;
       console.log('d' + id + '###' + tag);
       UpdateEmailTag.update(id + '###' + tag + '###' + bucket);
-      Inbox.sortedInbox.push($scope.inbox.shift());;
+      $scope.inbox.shift();
       $scope.updatePoints();
       $scope.timerReset();
     };
@@ -75,7 +75,7 @@ angular.module('myApp.main.note', ['ui.router'])
       var tag = 'sorted';
       var bucket = 2
       UpdateEmailTag.update(id + '###' + tag + '###' + bucket);
-      Inbox.sortedInbox.push($scope.inbox.shift());
+      $scope.inbox.shift();
       $scope.updatePoints();
       $scope.timerReset();
     };
@@ -86,7 +86,7 @@ angular.module('myApp.main.note', ['ui.router'])
       var tag = 'sorted';
       var bucket = 3;     
       UpdateEmailTag.update(id + '###' + tag + '###' + bucket);
-      Inbox.sortedInbox.push($scope.inbox.shift());
+      $scope.inbox.shift();
       $scope.updatePoints();
       $scope.timerReset();
     };
@@ -97,7 +97,7 @@ angular.module('myApp.main.note', ['ui.router'])
       var tag = 'soted';
       var bucket = 4;
       UpdateEmailTag.update(id + '###' + tag + '###' + bucket);
-      Inbox.sortedInbox.push($scope.inbox.shift());
+      $scope.inbox.shift();
       $scope.updatePoints();
       $scope.timerReset();
       

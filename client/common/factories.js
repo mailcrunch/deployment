@@ -56,6 +56,7 @@
               if (response.data[i].headers['x-failed-recipients']){
                 response.data[i].body = 'Message delivery failed';
               } else {
+                console.log(response.data[i].body);
                 response.data[i].body = response.data[i].body.split('UTF-8')[1];
                 response.data[i].body = response.data[i].body.split('--')[0]; 
               }

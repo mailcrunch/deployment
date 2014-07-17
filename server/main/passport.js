@@ -33,7 +33,7 @@ passport.use(new GoogleStrategy({
     callbackURL: '/auth/google/callback',
   },
   function(accessToken, refreshToken, profile, done) {
-    // console.log('acc:' + accessToken + '  refreshToken:' + refreshToken + '  prof:');
+    console.log('acc:' + accessToken + '  refreshToken:' + refreshToken + '  prof:');
     for (var key in profile){
       console.log(key + ':' + profile[key]);
     }

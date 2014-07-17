@@ -21,7 +21,6 @@ mongoClient.connect('mongodb://localhost:27017/mailcrunch2', function(err,db){
   db.createIndex('emails',{createdAt:1},{unique:false},function(err,res){});
 
   db.close();
-  // db.createIndex('emails',{username:1}, {unique:false}, function(err,res){});
 });
 
 module.exports = exports = {

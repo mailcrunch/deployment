@@ -4,7 +4,8 @@ var express = require('express')
   , passport = require('passport')
   , util = require('util')
   , GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
-  , authCredentials = require('./auth.js');
+  , authCredentials = require('./auth.js')
+  , userDB = require('./userDB.js');
 
 // passport.authenticate('google', {scope: 'https://www.googleapis.com/auth/plus.login'});
 
@@ -31,13 +32,23 @@ passport.deserializeUser(function(obj, done) {
 passport.use(new GoogleStrategy({
     clientID: authCredentials.googleAuth.clientID,
     clientSecret: authCredentials.googleAuth.clientSecret,
-    callbackURL: 'http://localhost:3000/auth/google/callback',
+    callbackURL: '/auth/google/callback',
   },
   function(accessToken, refreshToken, profile, done) {
-    console.log('acc:' + accessToken + '  refreshToken:' + refreshToken);
-    // User.findOrCreate({ googleId: profile.id }, function (err, user) {
-    //   return done(err, user);
-    // });
-    return done(profile);
+    // console.log('acc:' + accessToken + '  refreshToken:' + refreshToken + '  prof:');
+
+
+    // store tokens in user database:
+    //and start session...
+    try{
+    userDB.store(profile, accessToken, refreshToken);
+    }
+    catch(e){
+      console.log(e);
+      return done(e);
+    }
+    finally{
+      return done(null, profile);
+    }
   }
 ));

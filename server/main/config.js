@@ -40,7 +40,6 @@ module.exports = exports = function (app, express, passport, GoogleStrategy) {
   app.get('/auth/google', 
     passport.authenticate('google', {
       scope: [
-            'https://www.googleapis.com/auth/plus.login', 
             'https://www.googleapis.com/auth/userinfo.profile',
             'https://www.googleapis.com/auth/userinfo.email'],
       accessType: 'offline', approvalPrompt: 'force' ,
@@ -59,7 +58,7 @@ module.exports = exports = function (app, express, passport, GoogleStrategy) {
     passport.authenticate('google', { 
  failureRedirect: '/#/public/login' }),
     function(req, res) {
-      res.redirect('http://localhost:3000/#/main/home');
+      res.redirect('/#/main/home');
     });
 
 

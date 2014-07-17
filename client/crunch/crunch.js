@@ -133,7 +133,8 @@ angular.module('myApp.main.crunch', ['ui.router'])
 =======================================================================
 =======================================================================
 */
-    
+      // This function checks what 'bucket' or category the email has been
+      // sorted into and calls the corresponding timer function
       var bucketChecker = function(){
         if($scope.inbox[0].bucket === '1'){
             manageTimer();
@@ -146,30 +147,44 @@ angular.module('myApp.main.crunch', ['ui.router'])
         }
       };
 
+      // The function is called when the send button is clicked
+      // See client/crunch/crunch.tpl.html
       $scope.send = function(){
-        var message = '###' + $('#to').val() + '###' + $('#subject').val() + '###' + $('#message').val();
-
-        SendMessageFactory.sendMessage(message)
-          .then(function(response){
-            // console.log(response);
-          });
+        // This is the message data that will be sent to our server
+        // It is constructed this way so that the server can parse it and
+        // put the right values in the right places
+        // See server/crunch/crunch_controllers.js --the 'post' function
+        var message = $('#to').val() + '###' + $('#subject').val() + '###' + $('#message').val();
+        // See client/common/factories.js
+        SendMessageFactory.sendMessage(message);
+        // These are variables needed for the UpdateEmailTag function
         var id = $scope.inbox[0]._id;
         var tag = 'replied';
         var bucket = $scope.inbox[0].bucket;
+        // See client/common/factories.js
         UpdateEmailTag.update(id + '###' + tag + '###' + bucket);
+        // This removes the first email from the queue
         $scope.inbox.shift();
+        // This cancels the timer for this particular email
         $interval.cancel(timerId);
         updatePoints();
         bucketChecker();
-        if ($scope.inbox.length > 0){
+
+        // This sets out message reply to be blank
+        $('#message').val('');
+
+        if ($scope.inbox.length > 0) {
+          // If there are emails in the queue, this updates the subject
           $('#subject').val('RE: '+ $scope.inbox[0].subject);
-        }
-        else{
+        } else {
+          // Otherwise, this is the subject
           $('#subject').val('');
         }
-        $('#message').val('');
-      };
 
+      };
+      
+      // This function is called when the 'next' button is clicked
+      // See client/crunch/crunch.tpl.html
       $scope.next = function(){
         $scope.inbox.shift();
         $interval.cancel(timerId);
@@ -177,6 +192,7 @@ angular.module('myApp.main.crunch', ['ui.router'])
         bucketChecker();
       };
 
+      // This function marks emails as read. See client/common/factories.js
       $scope.markAsRead = function(){
         var messageID = $scope.inbox[0].id;
         SendMessageFactory.markingAsRead(messageID);
@@ -187,10 +203,10 @@ angular.module('myApp.main.crunch', ['ui.router'])
 })
 
 .controller('mantra',function($scope, Inbox){
+  // This function gets the emails and builds the inbox for this controller
   Inbox.getSortedInbox()
     .then(function(response){
       $scope.inbox = response.data;
-      console.log($scope.inbox);
       $scope.message = "What's done is done."
       if($scope.inbox[0]['bucket'] === '1'){
         $scope.message = "Take time to handle this yourself. It's important and pressing."

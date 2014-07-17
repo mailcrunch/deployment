@@ -9,6 +9,7 @@ var mongoose    = require('mongoose'),
 /*
  * Include all your global env variables here.
 */
+// And here is where we configure our routes and assets
 module.exports = exports = function (app, express) {
   var noteRouter = express.Router();
   var crunchRouter = express.Router();

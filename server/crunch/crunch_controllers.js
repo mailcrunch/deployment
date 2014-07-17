@@ -28,9 +28,9 @@ module.exports = exports = {
     });
     req.on('end', function(){
       buffer = buffer.split('###');
-      var to = buffer[1];
-      var subject = buffer[2];
-      var message = buffer[3];
+      var to = buffer[0];
+      var subject = buffer[1];
+      var message = buffer[2];
 
       var smtpTransport = nodemailer.createTransport("SMTP",{
           service: "Gmail",

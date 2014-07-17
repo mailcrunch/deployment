@@ -1,5 +1,6 @@
 "use strict";
 
+// This file sets up express for the other files
 var express = require('express');
 var app = express();
 

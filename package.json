@@ -2,6 +2,8 @@
   "name": "package",
   "version": "0.0.0",
   "dependencies": {
+    "body-parser": "*",
+    "cookie-parser": "*",
     "express": "*",
     "express-session": "^1.6.4",
     "imap": "^0.8.12",
@@ -9,15 +11,14 @@
     "md5": "^1.0.0",
     "mongodb": "^1.4.7",
     "mongoose": "*",
+    "morgan": "*",
     "nodemailer": "^0.7.1",
     "passport": "^0.2.0",
     "passport-google-oauth": "^0.1.5",
     "passport-local": "^1.0.0",
-    "morgan": "*",
-    "body-parser": "*",
-    "cookie-parser": "*",
+    "q": "*",
     "tiny-lr": "*",
-    "q": "*"
+    "xoauth2": "^0.1.8"
   },
   "devDependencies": {
     "gulp": "*",

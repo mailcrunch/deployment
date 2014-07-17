@@ -4,10 +4,10 @@ var express = require('express')
   , passport = require('passport')
   , util = require('util')
   , GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
-  , authCredentials = require('./auth.js')
   , userDB = require('./userDB.js');
+  , authCredentials = require('./auth.js'),
+  xoauth2 = require('xoauth2');
 
-// passport.authenticate('google', {scope: 'https://www.googleapis.com/auth/plus.login'});
 
 
 // Passport session setup.

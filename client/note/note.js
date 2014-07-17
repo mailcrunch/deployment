@@ -10,7 +10,6 @@ angular.module('myApp.main.note', ['ui.router'])
     });
 })
 
-//this is dummy data to test the list of inbox emails	
 .controller('NoteController', function($scope, $interval, InboxFactory, Inbox, PointFactory, UpdateEmailTag) {
 
     $scope.inbox = [];
@@ -18,6 +17,7 @@ angular.module('myApp.main.note', ['ui.router'])
 
     var result;
     $scope.getEmails = function(){
+      // This function works the same as in client/crunch/crunch.js
       InboxFactory.getEm()
         .then(function(response){
           for (var i = 0; i < response.data.length; i++){
@@ -47,22 +47,39 @@ angular.module('myApp.main.note', ['ui.router'])
           $scope.timerStart();
         });
     };
+
+    // This function resets the timer after the user sorts the email
     $scope.timerReset = function(){
       $interval.cancel(result);
       $scope.timerStart();
     };
+
+    // This function updates the points for the user
     $scope.updatePoints = function(){
       if ($scope.timer !== 0 && $scope.timer !== '0'){
         PointFactory.incrementPoints(100);
       }
     };
+/*
+=======================================================================
+=======================================================================
+  These are the sorting functions for each email
+  At a high level, when an image is clicked on,
+  the email's 'bucket' property is updated to the
+  corresponding category
+  v         v          v          v          v          
+=======================================================================
+=======================================================================
+*/
+
     $scope.sortManage = function(){
+      // This updates the email's 'bucket' property
       $scope.inbox[0]['bucket'] = 1;
+      // This updates the email's 'status' property
       $scope.inbox[0]['status'] = 'sorted';
       var id = $scope.inbox[0]['_id'];
       var tag = 'sorted';
       var bucket = 1;
-      console.log('d' + id + '###' + tag);
       UpdateEmailTag.update(id + '###' + tag + '###' + bucket);
       $scope.inbox.shift();
       $scope.updatePoints();
@@ -100,8 +117,17 @@ angular.module('myApp.main.note', ['ui.router'])
       $scope.inbox.shift();
       $scope.updatePoints();
       $scope.timerReset();
-      
     };
+
+/*
+=======================================================================
+=======================================================================
+  ^          ^          ^          ^           ^           
+  These are the sorting functions for each email 
+=======================================================================
+=======================================================================
+*/
+    // And here is the timer
     $scope.timerStart = function(){
       if ($scope.timer !== 10){
         $scope.timer = 10;

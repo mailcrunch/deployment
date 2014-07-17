@@ -3,7 +3,7 @@
 /*
  * MiddleWare for the entire app
 */
-// Here we have our error logging and handling and our cors headers
+
 var fs = require('fs');
 
 module.exports = exports = {
@@ -32,5 +32,6 @@ module.exports = exports = {
     } else {
       return next();
     }
+    // I think the passport authentication needs to go here
   }
 };

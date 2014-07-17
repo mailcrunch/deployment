@@ -13,7 +13,6 @@ mongoose.connect(process.env.DB_URL || 'mongodb://localhost/myApp');
 /*
  * Include all your global env variables here.
 */
-
 module.exports = exports = function (app, express, passport, GoogleStrategy) {
   var noteRouter = express.Router();
   var crunchRouter = express.Router();
@@ -40,6 +39,7 @@ module.exports = exports = function (app, express, passport, GoogleStrategy) {
   //   user back to this application at /auth/google/return
   app.get('/auth/google', 
     passport.authenticate('google', {
+      accessType: 'offline',
       scope: 'https://www.googleapis.com/auth/plus.login',
        failureRedirect: '/public/login' 
      }),
@@ -72,4 +72,3 @@ module.exports = exports = function (app, express, passport, GoogleStrategy) {
   require('../note/note_routes.js')(noteRouter);
   require('../crunch/crunch_routes.js')(crunchRouter);
 };
-

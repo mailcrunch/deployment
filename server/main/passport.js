@@ -4,7 +4,8 @@ var express = require('express')
   , passport = require('passport')
   , util = require('util')
   , GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
-  , authCredentials = require('./auth.js');
+  , authCredentials = require('./auth.js'),
+  xoauth2 = require('xoauth2');
 
 // passport.authenticate('google', {scope: 'https://www.googleapis.com/auth/plus.login'});
 
@@ -38,6 +39,19 @@ passport.use(new GoogleStrategy({
     // User.findOrCreate({ googleId: profile.id }, function (err, user) {
     //   return done(err, user);
     // });
+    var xoauth2gen = xoauth2.createXOAuth2Generator({
+      user: "bizarroforrest",
+      clientId: authCredentials.googleAuth.clientID,
+      clientSecret: authCredentials.googleAuth.clientSecret,
+      refreshToken: '1/m1y5tHN2WDV6uJ4uMM1MMZQws9DY2YLie9oxjQHMsNM',
+      accessToken: accessToken
+    });
+    xoauth2gen.getToken(function(err, token){
+    if(err){
+        return console.log(err);
+    }
+      console.log("AUTH XOAUTH2 " + token);
+    });
     return done(profile);
   }
 ));

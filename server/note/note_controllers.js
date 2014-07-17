@@ -29,11 +29,11 @@ module.exports = exports = {
       try {
       console.log('got to the right express route')
       var imap = new Imap({
-        user: 'bizarroforrest',
-        password: 'mailcrunch',
+        xoauth2: 'dXNlcj1iaXphcnJvZm9ycmVzdAFhdXRoPUJlYXJlciB5YTI5LlJRQ005OUNOWmZXcDNFZ0FBQUQxbWpuRUhQa3k1WGlCaVBidjdXXy13eVhIZld0RXdQTzlUVTdqUHh2LXBjSTRyMWRPUEJQNWY5eFVuZ1JxNjA5SEJjLTdMWnVzSEtKNzZLVW10RDBpSzJXWkdDa0ZlNjlCbjFPa0JBNWhFQQEB',
         host: 'imap.gmail.com',
         port: 993,
-        tls: true
+        tls: true,
+        authTimeout: 10000
       });
 
       var openInbox = function(cb) {

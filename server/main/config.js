@@ -39,9 +39,13 @@ module.exports = exports = function (app, express, passport, GoogleStrategy) {
   //   user back to this application at /auth/google/return
   app.get('/auth/google', 
     passport.authenticate('google', {
-      scope: 'https://www.googleapis.com/auth/plus.login',
-       failureRedirect: '/public/login' 
-     }),
+      scope: [
+            'https://www.googleapis.com/auth/plus.login', 
+            'https://www.googleapis.com/auth/userinfo.profile',
+            'https://www.googleapis.com/auth/userinfo.email'],
+      accessType: 'offline', approvalPrompt: 'force' ,
+      failureRedirect: '/public/login' 
+    }),
     function(req, res) {
       res.redirect('/auth/google/data');
     });

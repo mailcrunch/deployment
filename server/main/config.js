@@ -30,26 +30,26 @@ module.exports = exports = function (app, express, passport, GoogleStrategy) {
   // app.use(flash()); // use connect-flash for flash messages stored in session
   
   //call passport oauth google strategy
-  var strategy = require('./passport.js');
+  // var strategy = require('./passport.js');
 
-  // GET /auth/google
-  //   Use passport.authenticate() as route middleware to authenticate the
-  //   request.  The first step in Google authentication will involve redirecting
-  //   the user to google.com.  After authenticating, Google will redirect the
-  //   user back to this application at /auth/google/return
-  app.get('/auth/google', 
-    passport.authenticate('google'));
+  // // GET /auth/google
+  // //   Use passport.authenticate() as route middleware to authenticate the
+  // //   request.  The first step in Google authentication will involve redirecting
+  // //   the user to google.com.  After authenticating, Google will redirect the
+  // //   user back to this application at /auth/google/return
+  // app.get('/auth/google', 
+  //   passport.authenticate('google'));
 
-  // GET /auth/google/return
-  //   Use passport.authenticate() as route middleware to authenticate the
-  //   request.  If authentication fails, the user will be redirected back to the
-  //   login page.  Otherwise, the primary route function function will be called,
-  //   which, in this example, will redirect the user to the home page.
-  app.get('/auth/google/return', 
-    passport.authenticate('google', { failureRedirect: '/#/public/login' }),
-    function(req, res) {
-      res.redirect('/#/main/home');
-    });
+  // // GET /auth/google/return
+  // //   Use passport.authenticate() as route middleware to authenticate the
+  // //   request.  If authentication fails, the user will be redirected back to the
+  // //   login page.  Otherwise, the primary route function function will be called,
+  // //   which, in this example, will redirect the user to the home page.
+  // app.get('/auth/google/return', 
+  //   passport.authenticate('google', { failureRedirect: '/#/public/login' }),
+  //   function(req, res) {
+  //     res.redirect('/#/main/home');
+  //   });
 
   app.get('/logout', function(req, res){
     req.logout();

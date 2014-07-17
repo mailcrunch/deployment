@@ -7,7 +7,6 @@ var express = require('express')
   , authCredentials = require('./auth.js'),
   xoauth2 = require('xoauth2');
 
-// passport.authenticate('google', {scope: 'https://www.googleapis.com/auth/plus.login'});
 
 
 // Passport session setup.
@@ -32,25 +31,30 @@ passport.deserializeUser(function(obj, done) {
 passport.use(new GoogleStrategy({
     clientID: authCredentials.googleAuth.clientID,
     clientSecret: authCredentials.googleAuth.clientSecret,
-    callbackURL: 'http://localhost:3000/auth/google/callback',
+
+    callbackURL: authCredentials.googleAuth.callbackURL
   },
-  function(accessToken, refreshToken, profile, done) {
-    console.log('acc:' + accessToken + '  refreshToken:' + refreshToken);
-    // User.findOrCreate({ googleId: profile.id }, function (err, user) {
-    //   return done(err, user);
-    // });
-    var xoauth2gen = xoauth2.createXOAuth2Generator({
-      user: "bizarroforrest",
-      clientId: authCredentials.googleAuth.clientID,
-      clientSecret: authCredentials.googleAuth.clientSecret,
-      refreshToken: '1/m1y5tHN2WDV6uJ4uMM1MMZQws9DY2YLie9oxjQHMsNM',
-      accessToken: accessToken
-    });
-    xoauth2gen.getToken(function(err, token){
-    if(err){
-        return console.log(err);
-    }
-      console.log("AUTH XOAUTH2 " + token);
+  function(access, refresh, profile, done) {
+    // asynchronous verification, for effect...
+    process.nextTick(function () {
+
+      console.log("<============inside the callback: ===========>")
+      console.log("access property: ");
+      console.dir(access);
+      console.log("refresh property: ");
+      console.dir(refresh);
+      console.log("profile property: ");
+      console.dir(profile);
+      console.log("done property: ");
+      console.dir(done);
+
+      // To keep the example simple, the user's Google profile is returned to
+      // represent the logged-in user.  In a typical application, you would want
+      // to associate the Google account with a user record in your database,
+      // and return that user instead.
+      // profile.identifier = identifier;
+      return done(null, profile);
+
     });
     return done(profile);
   }

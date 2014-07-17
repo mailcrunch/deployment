@@ -35,12 +35,18 @@ module.exports = exports = {
       var smtpTransport = nodemailer.createTransport("SMTP",{
           service: "Gmail",
           auth: {
-              user: "bizarroforrest",
-              pass: "mailcrunch"
+            XOAuth2: {
+              user: // Get from DB,
+              clientId: // Get from DB,
+              clientSecret: // Get from DB,
+              refreshToken: // Get from DB,
+              accessToken: // Get from DB,
+              timeout: 3600
+            }
           }
       });
       var mailOptions = {
-          from: "<bizarroforrest@gmail.com>", 
+          from: // Get user email from DB, 
           to: to, 
           subject: subject, 
           text: message, 
@@ -63,10 +69,22 @@ module.exports = exports = {
       buffer += chunk.toString('utf8');
     });
     req.on('end', function(){
-      console.log('buffer: ', buffer)
+      var xouath2Token;
+      var xoauth2gen = xoauth2.createXOAuth2Generator({
+          user: // get this info from DB,
+          clientId: // DB,
+          clientSecret: // DB,
+          refreshToken: // DB
+      });
+      xoauth2gen.getToken(function(err, token){
+          if(err){
+              return console.log(err);
+          }
+          console.log("AUTH XOAUTH2 " + token);
+          xoauth2Token = token;
+      });
       var imap = new Imap({
-        user: 'bizarroforrest',
-        password: 'mailcrunch',
+        xoauth2: xoauth2Token,
         host: 'imap.gmail.com',
         port: 993,
         tls: true

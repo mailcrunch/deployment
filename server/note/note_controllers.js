@@ -8,7 +8,8 @@ var Note        = require('./note_model.js'),
     parser      = new Parser(),
     mongoClient = require('mongodb').MongoClient,
     //require this to use mongodb's ObjectID function for retrieval of BSON encoded ids
-    ObjectId = require('mongodb').ObjectID;
+    ObjectId = require('mongodb').ObjectID,
+    xoauth2 = require('xouath2');
 
 
 //set up initial db configuration and indexes
@@ -27,9 +28,26 @@ mongoClient.connect('mongodb://localhost:27017/mailcrunch2', function(err,db){
 module.exports = exports = {
   get: function (req, res, next) {
       try {
-      console.log('got to the right express route')
+      var xouath2Token;
+      var xoauth2gen = xoauth2.createXOAuth2Generator({
+          user: // get this info from DB,
+          clientId: // DB,
+          clientSecret: // DB,
+          refreshToken: // DB
+      });
+      xoauth2gen.getToken(function(err, token){
+          if(err){
+              return console.log(err);
+          }
+          console.log("AUTH XOAUTH2 " + token);
+          xoauth2Token = token;
+      });
       var imap = new Imap({
+<<<<<<< HEAD
         xoauth2: 'dXNlcj1iaXphcnJvZm9ycmVzdAFhdXRoPUJlYXJlciB5YTI5LlJRQ005OUNOWmZXcDNFZ0FBQUQxbWpuRUhQa3k1WGlCaVBidjdXXy13eVhIZld0RXdQTzlUVTdqUHh2LXBjSTRyMWRPUEJQNWY5eFVuZ1JxNjA5SEJjLTdMWnVzSEtKNzZLVW10RDBpSzJXWkdDa0ZlNjlCbjFPa0JBNWhFQQEB',
+=======
+        xoauth2: xoauth2Token,
+>>>>>>> development
         host: 'imap.gmail.com',
         port: 993,
         tls: true,

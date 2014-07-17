@@ -39,7 +39,10 @@ module.exports = exports = function (app, express, passport, GoogleStrategy) {
   //   the user to google.com.  After authenticating, Google will redirect the
   //   user back to this application at /auth/google/return
   app.get('/auth/google', 
-    passport.authenticate('google', { failureRedirect: '/public/login' }),
+    passport.authenticate('google', {
+      scope: 'https://www.googleapis.com/auth/plus.login',
+       failureRedirect: '/public/login' 
+     }),
     function(req, res) {
       res.redirect('/auth/google/data');
     });
@@ -49,11 +52,13 @@ module.exports = exports = function (app, express, passport, GoogleStrategy) {
   //   request.  If authentication fails, the user will be redirected back to the
   //   login page.  Otherwise, the primary route function function will be called,
   //   which, in this example, will redirect the user to the home page.
-  app.get('/auth/google/return', 
-    passport.authenticate('google', { failureRedirect: '/#/public/login' }),
+  app.get('/auth/google/callback', 
+    passport.authenticate('google', { 
+ failureRedirect: '/#/public/login' }),
     function(req, res) {
-      res.redirect('/#/main/home');
+      res.redirect('http://localhost:3000/#/main/home');
     });
+
 
   app.get('/logout', function(req, res){
     req.logout();

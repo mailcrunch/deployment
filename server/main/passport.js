@@ -3,8 +3,10 @@
 var express = require('express')
   , passport = require('passport')
   , util = require('util')
-  , GoogleStrategy = require('passport-google').Strategy
+  , GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
   , authCredentials = require('./auth.js');
+
+// passport.authenticate('google', {scope: 'https://www.googleapis.com/auth/plus.login'});
 
 
 // Passport session setup.
@@ -29,27 +31,13 @@ passport.deserializeUser(function(obj, done) {
 passport.use(new GoogleStrategy({
     clientID: authCredentials.googleAuth.clientID,
     clientSecret: authCredentials.googleAuth.clientSecret,
-    returnURL: 'http://localhost:3000/auth/google/return',
-    realm: 'http://localhost:3000/'
+    callbackURL: 'http://localhost:3000/auth/google/callback',
   },
-  function(identifier, profile, done) {
-    // asynchronous verification, for effect...
-    process.nextTick(function () {
-
-      console.log("<============inside the callback: ===========>")
-      console.log("identifier property: ");
-      console.dir(identifier);
-      console.log("profile property: ");
-      console.dir(profile);
-      console.log("done property: ");
-      console.dir(done);
-
-      // To keep the example simple, the user's Google profile is returned to
-      // represent the logged-in user.  In a typical application, you would want
-      // to associate the Google account with a user record in your database,
-      // and return that user instead.
-      profile.identifier = identifier;
-      return done(null, profile);
-    });
+  function(accessToken, refreshToken, profile, done) {
+    console.log('acc:' + accessToken + '  refreshToken:' + refreshToken);
+    // User.findOrCreate({ googleId: profile.id }, function (err, user) {
+    //   return done(err, user);
+    // });
+    return done(profile);
   }
 ));

@@ -3,12 +3,8 @@
 /*
  * MiddleWare for the entire app
 */
-var fs         = require('fs'),
-    nodemailer = require('nodemailer'),
-    Imap       = require('imap'),
-    inspect    = require('util').inspect,
-    Parser     = require('imap-parser'),
-    parser     = new Parser();
+
+var fs = require('fs');
 
 module.exports = exports = {
 
@@ -27,9 +23,9 @@ module.exports = exports = {
     next();
   },
   cors: function (req, res, next) {
-    res.header('Access-Controll-Allow-Origin', '*');
-    res.header('Access-Controll-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
-    res.header('Access-Controll-Allow-Header', 'Cotent-tyope, Authorization');
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Header', 'Content-type, Authorization');
 
     if (req.method === 'Options') {
       res.send(200);

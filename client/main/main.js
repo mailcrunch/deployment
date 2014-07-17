@@ -12,4 +12,10 @@
   .controller('MainController', function($state) {
     $state.transitionTo('myApp.main.home');
   })
+  .controller('PointController', function($scope, $interval, PointFactory){
+    $scope.points = 0;
+    $interval(function(){
+      $scope.points = PointFactory.getPoints();
+    }, 1000)
+  })
 }(angular));

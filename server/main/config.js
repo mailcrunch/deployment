@@ -1,5 +1,6 @@
 "use strict";
 
+
 var mongoose    = require('mongoose'),
     morgan      = require('morgan'),
     cookieParser  = require('cookie-parser'),
@@ -8,15 +9,19 @@ var mongoose    = require('mongoose'),
     middle      = require('./middleware');
 
 mongoose.connect(process.env.DB_URL || 'mongodb://localhost/myApp');
+
 /*
  * Include all your global env variables here.
 */
 module.exports = exports = function (app, express, passport, GoogleStrategy) {
+  var noteRouter = express.Router();
+  var crunchRouter = express.Router();
   app.set('port', process.env.PORT || 3000);
   app.set('base url', process.env.URL || 'http://localhost');
   // set up our express application
   app.use(morgan('dev')); // log every request to the console
   app.use(middle.cors);
+
   app.use(express.static(__dirname + '/../../client/')); //this line sends the entire application (only if the user has an auth cookie)
 
   app.use(session({ secret: 'iheartpizza' })); // session secret
@@ -54,5 +59,11 @@ module.exports = exports = function (app, express, passport, GoogleStrategy) {
     res.redirect('/public/login');
   });
 
+  app.use('/main/sort', noteRouter);
+  app.use('/main/crunch', crunchRouter);
+  app.use(middle.logError);
+  app.use(middle.handleError);
+  require('../note/note_routes.js')(noteRouter);
+  require('../crunch/crunch_routes.js')(crunchRouter);
 };
 

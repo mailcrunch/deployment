@@ -1,6 +1,7 @@
 (function (angular) {
   "use strict";
   angular.module('myApp', [
+    'ngFx',
     'ui.router',
     'ngAnimate',
     'fx.animations',

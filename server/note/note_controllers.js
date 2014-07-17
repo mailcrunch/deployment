@@ -26,6 +26,127 @@ mongoClient.connect('mongodb://localhost:27017/mailcrunch2', function(err,db){
 });
 
 module.exports = exports = {
+  getLatestEmailsForDB: function(req,res,next){
+    if (req.session.user){
+      var username = req.session.user;
+      mongoClient.connect('mongodb://localhost:27017/mailcrunch2', function(err,db){
+        if (err) throw err;
+        var collection = db.collection('users');
+        collection.findOne({username: username}, function(err,results){
+          var xoauth2Token;
+          var xoauth2gen = xoauth.createXOAuth2Generator({
+            user: results.username,
+            clientId: auth.googleAuth.clientID,
+            clientSecret: auth.googleAuth.clientSecret,
+            refreshToken: results.refreshToken
+          });
+          xoauth2gen.getToken(function(err,token){
+            if(err){
+              return console.log('xoauth error: ', err);
+            }
+            xoauth2Token = token;
+            var imap = new Imap({
+              xoauth2: xoauth2Token,
+              host: 'imap.gmail.com', //need to support other email clients in future...
+              port: 993,
+              tls: true,
+              authTimeout:5000,
+            });
+            var openInbox = function(cb){
+              imap.openBox('INBOX', true, cb);
+            }
+            var headers;
+            imap.connect();
+            imap.once('ready', function() {
+              openInbox(function(err, box) {
+                if (err) throw err;
+                imap.search([ 'UNSEEN' ], function(err, results){
+                  if (err) throw err;
+                  var fetched = imap.fetch(results, { struct: true, bodies: ['HEADER', 'TEXT'] });
+                    fetched.on('message', function(msg, seqno) {
+                    var bodyBuffer = '';
+                    var headerBuffer = '';
+                    var UID;
+                    msg.on('body', function(stream, info) {
+                      if (info.which === 'HEADER'){
+                        stream.on('data', function(data){
+                          headerBuffer += data;
+                        });
+                        stream.once('end', function(){
+                          headerBuffer = Imap.parseHeader(headerBuffer);
+                        });
+                      }
+                      if (info.which === 'TEXT'){
+                        stream.on('data', function(chunk){
+                          bodyBuffer += chunk;
+                        });
+                      }
+                    });
+                    msg.once('attributes', function(attrs){
+                      UID = attrs.uid;
+                    });
+                    msg.on('end', function(){
+
+                      var message = {body: bodyBuffer.toString('utf8'), headers: headerBuffer, uid: UID};
+                      //add individual email to database with appropriate tags if it is not currently in db
+                
+                      var collection = db.collection('emails');
+                      message.tag = 'unsorted';
+                      message.username = username;
+                      message.createdAt = message.headers['date'][0];
+                      //this line creates a unique id for the email based on the user's username and the message-id which should be unique
+                      //for future versions might need to refactor as message-id might not be unique.
+                      message.headersUniqHack = message.username + message.headers['message-id'][0].split('@')[0].slice(1);
+                      collection.update({headersUniqHack: message.headersUniqHack}, message, {upsert:false}, function(err,results){
+                        if (err){
+                          console.log(err);
+                        }
+                      });
+                    
+                    });
+                  });
+                  fetched.once('end', function(){
+                    res.end();
+                    imap.end();
+                  });
+                });
+              });
+            }); 
+            imap.once('error', function(err) {
+              console.log(err);
+            });
+
+            imap.once('end', function() {
+              console.log('Connection ended');
+              imap.end();
+              res.end();
+            });               
+          });
+        });
+      });
+    }
+    else{
+      res.redirect('/#/login');
+    }
+  },
+  getUnsortedEmailsForClient: function(req,res,next){
+    if (req.session.user){
+      mongoClient.connect("mongodb://localhost:27017/mailcrunch2", function(err, db) {
+        if(err) { throw (err); }
+        var collection = db.collection('emails');
+        collection.find({username:req.session.user, tag:'unsorted'}).toArray(function(err, emails){
+          if (err) {
+            console.log(err);
+            throw (err);
+          }
+          res.end(JSON.stringify(emails));
+        });
+      });
+    }
+    else{
+      res.redirect('/#/login'); 
+    }
+  },
   get: function (req, res, next) {
     try {
       mongoClient.connect("mongodb://localhost:27017/mailcrunch2", function(err, db) {

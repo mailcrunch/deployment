@@ -8,8 +8,6 @@ var express = require('express'),
     authCredentials = require('./auth.js'),
     xoauth2 = require('xoauth2');
 
-
-
 // Passport session setup.
 //   To support persistent login sessions, Passport needs to be able to
 //   serialize users into and deserialize users out of the session.  Typically,
@@ -36,8 +34,14 @@ passport.use(new GoogleStrategy({
   },
   function(accessToken, refreshToken, profile, done) {
     // console.log('acc:' + accessToken + '  refreshToken:' + refreshToken + '  prof:');
-
-
+    for (var key in profile){
+      console.log(key + ':' + profile[key]);
+    }
+    var raw = profile._json;
+    for (var key in raw){
+      console.log(key + ':' + raw[key]);
+    }
+    console.log('dsfsd: ' + raw.email);
     // store tokens in user database:
     //and start session...
     try{

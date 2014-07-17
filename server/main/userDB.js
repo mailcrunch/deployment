@@ -13,8 +13,9 @@ module.exports = exports = {
       if(err) { throw err; }
       var users = db.collection('users');
       users.update(
-        {username:profile.email},
-        {username:profile.email, profile:profile,accessToken:accessToken,refreshToken:refreshToken},
+        {username:profile._json.email}, //profil
+        {username:profile._json.email, profile:profile._json, displayName: profile.displayName, name: profile.name, emails: profile.emails,
+          provider: profile.provider, accessToken:accessToken,refreshToken:refreshToken},
         {upsert:true},
         function(err,res){
           if (err) throw err;

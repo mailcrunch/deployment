@@ -1,6 +1,5 @@
 <div ng-controller="NoteController">
 <div class='row-fixed'><br><br><br><br></div>
-
 <div class="container-fixed"> 
     <div class="col-md-4 pull-right"> 
       <!--Sidebar content inside span2-->
@@ -16,6 +15,25 @@
 <div class="container-fixed">
   <span class='row'>
     <div class='col-md-8'>
+      <br>
+      <div class="container-fixed">
+        <div class='col-md-6 col-md-offset-3'>
+          <span class="well">
+            We suggest you sort this email in {{timer}} seconds
+          </span> 
+        </div>
+      </div>
+      <br>
+      <br>
+      <br>
+      <div class="container-fixed">
+        <div>
+          <span>
+            <button ui-sref="myApp.main.crunch" class="btn-lg btn-primary btn-block">Crunch 'Em</button>
+          </span>
+        </div>
+      </div>
+      <br>
       <h3 class='well'>Sort this email. Click an image. Go. 
         <a ng-click='sortManage()'>
           <img src="../images/manage.jpg">
@@ -31,21 +49,9 @@
         </a>
       </h3>
       <br>
-      <div class="container-fixed">
-        <div class='col-md-6 col-md-offset-2'>
-          <span class="well">
-            We suggest you sort this email in {{timer}} seconds
-          </span> 
-        </div>
+      <div class="dots col-md-offset-6" ng-if="">
+        Loading...
       </div>
-      <div class="container-fixed">
-        <div class='col-md-offset-5'>
-          <span>
-            <button ui-sref="myApp.main.crunch" class="btn-lg btn-primary">Crunch 'Em</button>
-          </span>
-        </div>
-      </div>
-      <br>
       <table class='table'>
         <tr><td> Received: </td><td> {{inbox[0].time}}</td></tr>
         <tr><td> From: </td><td> {{inbox[0].from}}</td></tr>

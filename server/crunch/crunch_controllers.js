@@ -12,18 +12,6 @@ var Crunch      = require('./crunch_model.js'),
     auth = require('../main/auth.js');
 
 module.exports = exports = {
-  get: function (req, res, next) {
-    var $promise = Q.nbind(Crunch.find, Crunch);
-    $promise()
-      .then(function (crunch) {
-        res.json(crunch);
-      })
-       .fail(function (reason) {
-        next(reason);
-      });
-  },
-
-
 
 post: function (req, res, next) {
 

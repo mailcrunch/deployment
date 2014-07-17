@@ -1,12 +1,12 @@
 // passport.js
 
-var express = require('express')
-  , passport = require('passport')
-  , util = require('util')
-  , GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
-  , userDB = require('./userDB.js');
-  , authCredentials = require('./auth.js'),
-  xoauth2 = require('xoauth2');
+var express = require('express'),
+    passport = require('passport'),
+    util = require('util'),
+    GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
+    userDB = require('./userDB.js'),
+    authCredentials = require('./auth.js'),
+    xoauth2 = require('xoauth2');
 
 
 

@@ -6,7 +6,8 @@ var Crunch      = require('./crunch_model.js'),
     Imap        = require('imap'),
     inspect     = require('util').inspect,
     Parser      = require('imap-parser'),
-    parser      = new Parser();
+    parser      = new Parser(),
+    xoauth2 = require('xoauth2');
 
 module.exports = exports = {
   get: function (req, res, next) {
@@ -32,21 +33,21 @@ module.exports = exports = {
       var subject = buffer[1];
       var message = buffer[2];
 
-      var smtpTransport = nodemailer.createTransport("SMTP",{
-          service: "Gmail",
-          auth: {
-            XOAuth2: {
-              user: // Get from DB,
-              clientId: // Get from DB,
-              clientSecret: // Get from DB,
-              refreshToken: // Get from DB,
-              accessToken: // Get from DB,
-              timeout: 3600
-            }
-          }
-      });
+      // var smtpTransport = nodemailer.createTransport("SMTP",{
+      //     service: "Gmail",
+      //     auth: {
+      //       XOAuth2: {
+      //         user: // Get from DB,
+      //         clientId: // Get from DB,
+      //         clientSecret: // Get from DB,
+      //         refreshToken: // Get from DB,
+      //         accessToken: // Get from DB,
+      //         timeout: 3600
+      //       }
+      //     }
+      // });
       var mailOptions = {
-          from: // Get user email from DB, 
+          // from: // Get user email from DB, 
           to: to, 
           subject: subject, 
           text: message, 
@@ -70,12 +71,12 @@ module.exports = exports = {
     });
     req.on('end', function(){
       var xouath2Token;
-      var xoauth2gen = xoauth2.createXOAuth2Generator({
-          user: // get this info from DB,
-          clientId: // DB,
-          clientSecret: // DB,
-          refreshToken: // DB
-      });
+      // var xoauth2gen = xoauth2.createXOAuth2Generator({
+      //     user: // get this info from DB,
+      //     clientId: // DB,
+      //     clientSecret: // DB,
+      //     refreshToken: // DB
+      // });
       xoauth2gen.getToken(function(err, token){
           if(err){
               return console.log(err);

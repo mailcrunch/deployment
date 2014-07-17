@@ -9,10 +9,12 @@ var Note        = require('./note_model.js'),
     mongoClient = require('mongodb').MongoClient,
     //require this to use mongodb's ObjectID function for retrieval of BSON encoded ids
     ObjectId = require('mongodb').ObjectID,
-    xoauth2 = require('xouath2');
+    xoauth2 = require('xoauth2'),
+    auth = require('../main/auth.js');
 
 
 //set up initial db configuration and indexes
+var userObj;
 mongoClient.connect('mongodb://localhost:27017/mailcrunch2', function(err,db){
   db.createCollection('emails',function(err,collection) {});
   db.createCollection('users',function(err,collection){});
@@ -20,33 +22,39 @@ mongoClient.connect('mongodb://localhost:27017/mailcrunch2', function(err,db){
   db.createIndex('emails',{headersUniqHack:1}, {unique:true},function(err,res){});
   db.createIndex('emails',{tag:1},{unique:false},function(err,res){});
   db.createIndex('emails',{createdAt:1},{unique:false},function(err,res){});
-
+  var collection = db.collection('users'); 
+  collection.find({username: 'bizarroforrest@gmail.com'}, function(err, result){
+    if (err) throw err;
+    userObj = result;
+  })
   db.close();
 });
 
 module.exports = exports = {
   get: function (req, res, next) {
       try {
-      var xouath2Token;
+        console.log('user: ', userObj.email,
+          'clientId: ', auth.googleAuth.clientID,
+          'clientSecret: ', auth.googleAuth.clientSecret,
+          'refreshToken: ', userObj.refreshToken)
+
+      var xoauth2Token;
       var xoauth2gen = xoauth2.createXOAuth2Generator({
-          user: // get this info from DB,
-          clientId: // DB,
-          clientSecret: // DB,
-          refreshToken: // DB
+          user: 'bizarroforrest@gmail.com',
+          clientId: auth.googleAuth.clientID,
+          clientSecret: auth.googleAuth.clientSecret,
+          refreshToken: userObj.refreshToken
       });
       xoauth2gen.getToken(function(err, token){
           if(err){
-              return console.log(err);
+              return console.log('xoauth error: ', err);
           }
           console.log("AUTH XOAUTH2 " + token);
           xoauth2Token = token;
       });
       var imap = new Imap({
-<<<<<<< HEAD
-        xoauth2: 'dXNlcj1iaXphcnJvZm9ycmVzdAFhdXRoPUJlYXJlciB5YTI5LlJRQ005OUNOWmZXcDNFZ0FBQUQxbWpuRUhQa3k1WGlCaVBidjdXXy13eVhIZld0RXdQTzlUVTdqUHh2LXBjSTRyMWRPUEJQNWY5eFVuZ1JxNjA5SEJjLTdMWnVzSEtKNzZLVW10RDBpSzJXWkdDa0ZlNjlCbjFPa0JBNWhFQQEB',
-=======
+
         xoauth2: xoauth2Token,
->>>>>>> development
         host: 'imap.gmail.com',
         port: 993,
         tls: true,

@@ -14,6 +14,8 @@ var express = require('express')
 //   the user by ID when deserializing.  However, since this example does not
 //   have a database of user records, the complete Google profile is serialized
 //   and deserialized.
+
+//TODO - we'll need to define the serializeUser function before invocation 
 passport.serializeUser(function(user, done) {
   done(null, user);
 });
@@ -22,6 +24,19 @@ passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
 
+
+// Anthony's code:
+// passport.serializeUser(function(user, done) {
+//   done(null, user.id);
+// });
+
+// passport.deserializeUser(function(id, done) {
+//   User.findById(id, function(err, user) {
+//     done(err, user);
+//   });
+// });
+
+
 // Use the GoogleStrategy within Passport.
 //   Strategies in passport require a `validate` function, which accept
 //   credentials (in this case, an OpenID identifier and profile), and invoke a
@@ -29,18 +44,22 @@ passport.deserializeUser(function(obj, done) {
 passport.use(new GoogleStrategy({
     clientID: authCredentials.googleAuth.clientID,
     clientSecret: authCredentials.googleAuth.clientSecret,
-    returnURL: 'http://localhost:3000/auth/google/return',
-    realm: 'http://localhost:3000/'
+    callbackURL: "http://127.0.0.1:3000/auth/google/callback"
   },
-  function(identifier, profile, done) {
+  function(accessToken, refreshToken, profile, done){
     // asynchronous verification, for effect...
-    process.nextTick(function () {
+    // process.nextTick(function () {
 
       console.log("<============inside the callback: ===========>")
-      console.log("identifier property: ");
-      console.dir(identifier);
-      console.log("profile property: ");
+      console.log("accessToken: ");
+      console.dir(accessToken);
+
+      console.log("refreshToken: ");
+      console.dir(refreshToken);
+
+      console.log("profile: ");
       console.dir(profile);
+      
       console.log("done property: ");
       console.dir(done);
 
@@ -50,6 +69,6 @@ passport.use(new GoogleStrategy({
       // and return that user instead.
       profile.identifier = identifier;
       return done(null, profile);
-    });
+    // });
   }
 ));

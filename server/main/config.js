@@ -38,10 +38,7 @@ module.exports = exports = function (app, express, passport, GoogleStrategy) {
   //   the user to google.com.  After authenticating, Google will redirect the
   //   user back to this application at /auth/google/return
   app.get('/auth/google', 
-    passport.authenticate('google', { failureRedirect: '/public/login' }),
-    function(req, res) {
-      res.redirect('/auth/google/data');
-    });
+    passport.authenticate('google'));
 
   // GET /auth/google/return
   //   Use passport.authenticate() as route middleware to authenticate the

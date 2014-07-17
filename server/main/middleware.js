@@ -8,7 +8,6 @@ var fs = require('fs');
 
 module.exports = exports = {
 
-
   logError: function (err, req, res, next) {
     if (err) {
       console.error(err);

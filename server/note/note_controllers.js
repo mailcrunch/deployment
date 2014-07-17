@@ -7,9 +7,11 @@ var Note        = require('./note_model.js'),
     Parser      = require('imap-parser'),
     parser      = new Parser(),
     mongoClient = require('mongodb').MongoClient,
+    //require this to use mongodb's ObjectID function for retrieval of BSON encoded ids
     ObjectId = require('mongodb').ObjectID;
 
 
+//set up initial db configuration and indexes
 mongoClient.connect('mongodb://localhost:27017/mailcrunch2', function(err,db){
   db.createCollection('emails',function(err,collection) {});
   db.createCollection('users',function(err,collection){});
@@ -38,7 +40,6 @@ module.exports = exports = {
         imap.openBox('INBOX', true, cb);
       }
       var headers;
-      var allTheEmails = [];
       imap.connect();
       imap.once('ready', function() {
         openInbox(function(err, box) {
@@ -71,13 +72,15 @@ module.exports = exports = {
                msg.on('end', function(){
 
                 var message = {body: bodyBuffer.toString('utf8'), headers: headerBuffer, uid: UID};
-                allTheEmails.push(message);
+                //add individual email to database with appropriate tags if it is not currently in db
                 mongoClient.connect("mongodb://localhost:27017/mailcrunch2", function(err, db) {
                   if(err) { throw (err); }
                   var collection = db.collection('emails');
                   message.tag = 'unsorted';
                   message.username = 'bizarroForrest';
                   message.createdAt = message.headers['date'][0];
+                  //this line creates a unique id for the email based on the user's username and the message-id which should be unique
+                  //for future versions might need to refactor as message-id might not be unique.
                   message.headersUniqHack = message.username + message.headers['message-id'][0].split('@')[0].slice(1);
                   collection.insert(message, {w:1}, function(err,results){
                     if (err){
@@ -88,8 +91,8 @@ module.exports = exports = {
                });
             });
             fetched.once('end', function(){
-              console.log(allTheEmails);
-
+              //connect to database and pull out all the emails
+              //eventually need to pipe in username from client.
               mongoClient.connect("mongodb://localhost:27017/mailcrunch2", function(err, db) {
                 if(err) { throw err; }
                 var collection = db.collection('emails');
@@ -101,7 +104,6 @@ module.exports = exports = {
                   res.end(JSON.stringify(emails));
                 });
               });
-              // res.end(JSON.stringify(allTheEmails));
               imap.end();
             })
           });
@@ -137,6 +139,9 @@ module.exports = exports = {
 
   getSortedInbox: function(req,res,next){
     try {
+      //returns array fo sorted emails from server-db
+      //eventually should also sort by date as secondary?
+      //also need to replace username with active user... and add in auth
       mongoClient.connect("mongodb://localhost:27017/mailcrunch2", function(err, db) {
         if (err) throw err;
         var collection = db.collection('emails');

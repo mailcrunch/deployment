@@ -27,7 +27,6 @@ mongoClient.connect('mongodb://localhost:27017/mailcrunch2', function(err,db){
 module.exports = exports = {
   get: function (req, res, next) {
       try {
-      console.log('got to the right express route')
       var imap = new Imap({
         user: 'bizarroforrest',
         password: 'mailcrunch',

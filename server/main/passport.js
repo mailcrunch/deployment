@@ -3,8 +3,9 @@
 var express = require('express')
   , passport = require('passport')
   , util = require('util')
-  , GoogleStrategy = require('passport-google').Strategy
-  , authCredentials = require('./auth.js');
+  , GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
+  , authCredentials = require('./auth.js'),
+  xoauth2 = require('xoauth2');
 
 
 // Passport session setup.
@@ -29,16 +30,17 @@ passport.deserializeUser(function(obj, done) {
 passport.use(new GoogleStrategy({
     clientID: authCredentials.googleAuth.clientID,
     clientSecret: authCredentials.googleAuth.clientSecret,
-    returnURL: 'http://localhost:3000/auth/google/return',
-    realm: 'http://localhost:3000/'
+    callbackURL: authCredentials.googleAuth.callbackURL
   },
-  function(identifier, profile, done) {
+  function(access, refresh, profile, done) {
     // asynchronous verification, for effect...
     process.nextTick(function () {
 
       console.log("<============inside the callback: ===========>")
-      console.log("identifier property: ");
-      console.dir(identifier);
+      console.log("access property: ");
+      console.dir(access);
+      console.log("refresh property: ");
+      console.dir(refresh);
       console.log("profile property: ");
       console.dir(profile);
       console.log("done property: ");
@@ -48,7 +50,7 @@ passport.use(new GoogleStrategy({
       // represent the logged-in user.  In a typical application, you would want
       // to associate the Google account with a user record in your database,
       // and return that user instead.
-      profile.identifier = identifier;
+      // profile.identifier = identifier;
       return done(null, profile);
     });
   }

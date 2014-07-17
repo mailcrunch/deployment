@@ -24,11 +24,16 @@ module.exports = exports = function (app, express, passport, GoogleStrategy) {
 
   app.use(express.static(__dirname + '/../../client/')); //this line sends the entire application (only if the user has an auth cookie)
 
-  app.use(session({ secret: 'iheartpizza' })); // session secret
   app.use(passport.initialize());
-  app.use(passport.session()); // persistent login sessions
-  // app.use(flash()); // use connect-flash for flash messages stored in session
+  app.use(session({
+    genid: function(req) {
+      // return genuuid(); // use UUIDs for session IDs
+    },
+    secret: 'bloodhound666',
+    cookie: { secure: true }
+  }))
   
+
   //call passport oauth google strategy
   // var strategy = require('./passport.js');
 

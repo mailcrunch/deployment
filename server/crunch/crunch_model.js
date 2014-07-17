@@ -1,14 +1,14 @@
-"use strict";
+// "use strict";
 
-var mongoose = require('mongoose');
+// var mongoose = require('mongoose');
 
-var CrunchSchema = new mongoose.Schema({
-  content: String,
+// var CrunchSchema = new mongoose.Schema({
+//   content: String,
 
-  title: {
-    type: String,
-    required: true
-  }
-});
+//   title: {
+//     type: String,
+//     required: true
+//   }
+// });
 
-module.exports = exports = mongoose.model('crunch', CrunchSchema);
+// module.exports = exports = mongoose.model('crunch', CrunchSchema);

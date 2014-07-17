@@ -18,7 +18,7 @@ angular.module('myApp.main.note', ['ui.router'])
     var result;
     $scope.getEmails = function(){
       // This function works the same as in client/crunch/crunch.js
-      $scope.clicked = true;
+      $scope.spinner = true;
       InboxFactory.getEm()
         .then(function(response){
           for (var i = 0; i < response.data.length; i++){
@@ -44,8 +44,8 @@ angular.module('myApp.main.note', ['ui.router'])
               $scope.email._id = response.data[i]._id;
               $scope.inbox.push($scope.email); 
             }
-            $scope.clicked = false;
           }
+          $scope.spinner = false;
           $scope.timerStart();
         });
     };
@@ -62,7 +62,7 @@ angular.module('myApp.main.note', ['ui.router'])
         PointFactory.incrementPoints(100);
       }
       if ($scope.inbox.length === 0){
-        PointFactory.incrementPoints(100); 
+        PointFactory.incrementPoints(1000); 
       }
     };
 /*

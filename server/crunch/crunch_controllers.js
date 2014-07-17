@@ -1,19 +1,15 @@
+
 "use strict";
 
-var Crunch      = require('./crunch_model.js'),
-    Q           = require('q'),
-    nodemailer  = require('nodemailer'),
-    Imap        = require('imap'),
-    inspect     = require('util').inspect,
-    Parser      = require('imap-parser'),
-    parser      = new Parser(),
-    xoauth2 = require('xoauth2'),
-    mongoClient = require('mongodb').MongoClient,
-    auth = require('../main/auth.js');
+var nodemailer = require('nodemailer'),
+  Imap = require('imap'),
+  xoauth2 = require('xoauth2'),
+  mongoClient = require('mongodb').MongoClient,
+  auth = require('../main/auth.js');
 
 module.exports = exports = {
 
-post: function (req, res, next) {
+  post: function (req, res, next) {
 
     var buffer = '';
     req.on('data', function (data) {
@@ -68,70 +64,70 @@ post: function (req, res, next) {
     });
   },
 
- 
-postUpdate: function (req, res, next) {
+
+  postUpdate: function (req, res, next) {
     var buffer = '';
     req.on('data', function (chunk) {
       buffer += chunk.toString('utf8');
     });
     req.on('end', function () {
-        mongoClient.connect("mongodb://localhost:27017/mailcrunch2", function (err, db) {
-          if (err) {
-            throw (err);
-          }
-          var collection = db.collection('users');
-          collection.findOne({
-            username: 'bizarroforrest@gmail.com'
-          }, function (err, results) {
-            var xoauth2Token;
-            var xoauth2gen = xoauth2.createXOAuth2Generator({
-              user: results.username,
-              clientId: auth.googleAuth.clientID,
-              clientSecret: auth.googleAuth.clientSecret,
-              refreshToken: results.refreshToken
+      mongoClient.connect("mongodb://localhost:27017/mailcrunch2", function (err, db) {
+        if (err) {
+          throw (err);
+        }
+        var collection = db.collection('users');
+        collection.findOne({
+          username: 'bizarroforrest@gmail.com'
+        }, function (err, results) {
+          var xoauth2Token;
+          var xoauth2gen = xoauth2.createXOAuth2Generator({
+            user: results.username,
+            clientId: auth.googleAuth.clientID,
+            clientSecret: auth.googleAuth.clientSecret,
+            refreshToken: results.refreshToken
+          });
+          xoauth2gen.getToken(function (err, token) {
+            if (err) {
+              return console.log('xoauth error: ', err);
+            }
+
+            xoauth2Token = token;
+
+            var imap = new Imap({
+              xoauth2: xoauth2Token,
+              host: 'imap.gmail.com',
+              port: 993,
+              tls: true,
+              authTimeout: 5000
             });
-            xoauth2gen.getToken(function (err, token) {
-              if (err) {
-                return console.log('xoauth error: ', err);
-              }
 
-              xoauth2Token = token;
-
-              var imap = new Imap({
-                xoauth2: xoauth2Token,
-                host: 'imap.gmail.com',
-                port: 993,
-                tls: true,
-                authTimeout: 5000
-              });
-
-              var openInbox = function (cb) {
-                imap.openBox('INBOX', false, cb);
-              };
-              imap.connect();
-              imap.once('ready', function () {
-                openInbox(function (err, box) {
+            var openInbox = function (cb) {
+              imap.openBox('INBOX', false, cb);
+            };
+            imap.connect();
+            imap.once('ready', function () {
+              openInbox(function (err, box) {
+                if (err) throw err;
+                imap.search([buffer], function (err, results) {
                   if (err) throw err;
-                  imap.search([buffer], function (err, results) {
-                    if (err) throw err;
-                    imap.addFlags(results, 'SEEN');
-                  });
+                  imap.addFlags(results, 'SEEN');
                 });
               });
-
-              imap.once('error', function (err) {
-                console.log('imap error: ', err);
-              });
-
-              imap.once('end', function () {
-                console.log('Connection ended');
-                imap.end();
-              });
             });
-            res.end();
+
+            imap.once('error', function (err) {
+              console.log('imap error: ', err);
+            });
+
+            imap.once('end', function () {
+              console.log('Connection ended');
+              imap.end();
+            });
           });
+          res.end();
         });
       });
+    });
 
-    }
-  };
+  }
+};

@@ -45,9 +45,7 @@ module.exports = exports = {
             }
 
             xoauth2Token = token;
-            console.log(xoauth2Token)
-
-            console.log(xoauth2Token)
+            
             var imap = new Imap({
               xoauth2: xoauth2Token,
               host: 'imap.gmail.com',

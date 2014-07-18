@@ -148,52 +148,47 @@ module.exports = exports = {
     }
   },
   get: function (req, res, next) {
-      console.log('<===================Inside HTTP Request====================>');
-      console.dir(req.session.user)
-      console.log('<================================================>')
-    try {
-      mongoClient.connect("mongodb://localhost:27017/mailcrunch2", function(err, db) {
-        if(err) { throw (err); }
+    if (req.session.user){
+      var username = req.session.user;
+      mongoClient.connect('mongodb://localhost:27017/mailcrunch2', function(err,db){
+        if (err) throw err;
         var collection = db.collection('users');
-          collection.findOne({username: 'bizarroforrest@gmail.com'}, function(err,results){
-            var xoauth2Token;
-            var xoauth2gen = xoauth2.createXOAuth2Generator({
-              user: results.username,
-              clientId: auth.googleAuth.clientID,
-              clientSecret: auth.googleAuth.clientSecret,
-              refreshToken: results.refreshToken
-            });
-            xoauth2gen.getToken(function(err, token){
-            if(err){
+        collection.findOne({username:username}, function(err,results){
+          var xoauth2Token;
+          var xoauth2gen = xoauth2.createXOAuth2Generator({
+            user: results.username,
+            clientId: auth.googleAuth.clientID,
+            clientSecret: auth.googleAuth.clientSecret,
+            refreshToken: results.refreshToken
+          });
+          xoauth2gen.getToken(function(err,token){
+            if (err){
               return console.log('xoauth error: ', err);
             }
-
             xoauth2Token = token;
-            
             var imap = new Imap({
               xoauth2: xoauth2Token,
               host: 'imap.gmail.com',
               port: 993,
               tls: true,
-              authTimeout: 5000
+              authTimeout: 20000
             });
-
-            var openInbox = function(cb) {
+            var openInbox = function(cb){
               imap.openBox('INBOX', true, cb);
             }
             var headers;
             imap.connect();
-            imap.once('ready', function() {
-              openInbox(function(err, box) {
+            imap.once('ready', function(){
+              openInbox(function(err,box){
                 if (err) throw err;
-                imap.search([ 'UNSEEN' ], function(err, results){
+                imap.search(['UNSEEN'], function(err,results){
                   if (err) throw err;
-                  var fetched = imap.fetch(results, { struct: true, bodies: ['HEADER', 'TEXT'] });
-                    fetched.on('message', function(msg, seqno) {
+                  var fetched = imap.fetch(results,{ struct: true, bodies:['HEADER', 'TEXT']});
+                  fetched.on('message', function(msg,seqno){
                     var bodyBuffer = '';
                     var headerBuffer = '';
                     var UID;
-                    msg.on('body', function(stream, info) {
+                    msg.on('body', function(stream,info){
                       if (info.which === 'HEADER'){
                         stream.on('data', function(data){
                           headerBuffer += data;
@@ -212,60 +207,46 @@ module.exports = exports = {
                       UID = attrs.uid;
                     });
                     msg.on('end', function(){
-
-                      var message = {body: bodyBuffer.toString('utf8'), headers: headerBuffer, uid: UID};
-                      //add individual email to database with appropriate tags if it is not currently in db
-                
+                      console.log('in message end....')
+                      var message = {body:bodyBuffer.toString('utf8'), headers: headerBuffer, uid: UID};
                       var collection = db.collection('emails');
                       message.tag = 'unsorted';
-                      message.username = 'bizarroForrest';
+                      message.username = username;
                       message.createdAt = message.headers['date'][0];
                       //this line creates a unique id for the email based on the user's username and the message-id which should be unique
                       //for future versions might need to refactor as message-id might not be unique.
                       message.headersUniqHack = message.username + message.headers['message-id'][0].split('@')[0].slice(1);
-                      collection.update({headersUniqHack: message.headersUniqHack}, message, {upsert:false}, function(err,results){
+                      collection.update({headersUniqHack: message.headersUniqHack}, message, {upsert:true}, function(err,results){
                         if (err){
                           console.log(err);
-                        }
-                      });
-                    
+                        }        
+                        // console.log(results);  
+                      });    
                     });
-                  });
-                  fetched.once('end', function(){
                     //connect to database and pull out all the emails
-                    //eventually need to pipe in username from client.
-                   
-                    var collection = db.collection('emails');
-                    collection.find({username:'bizarroForrest', tag:'unsorted'}).toArray(function(err, emails){
-                      if (err) {
-                        console.log(err);
-                        throw (err);
-                      }
-                      res.end(JSON.stringify(emails));
+                    fetched.once('end', function(){
+                      var collection = db.collection('emails');
+                      collection.find({username:username,tag:'unsorted'}).toArray(function(err,emails){
+                        if (err) throw err;
+                        res.end(JSON.stringify(emails));
+                        imap.end();
+                      });
                     });
-                    imap.end();
                   });
                 });
               });
-            });
+              imap.once('error', function(err) {
+                console.log('imap err  ', err);
+              });
 
-            imap.once('error', function(err) {
-              console.log(err);
-            });
-
-            imap.once('end', function() {
-              console.log('Connection ended');
-              imap.end();
-              res.end();
+              imap.once('end', function() {
+                console.log('Connection ended');
+                imap.end();
+              });
             });
           });
-
         });
       });
-    }
-
-    catch (e){
-      console.log(e);
     }
   },
 
@@ -282,6 +263,10 @@ module.exports = exports = {
   },
 
   getSortedInbox: function(req,res,next){
+    if (!req.session.user){
+      res.redirect('/#/login');
+    }
+    var username = req.session.user;
     try {
       //returns array fo sorted emails from server-db
       //eventually should also sort by date as secondary?
@@ -289,7 +274,7 @@ module.exports = exports = {
       mongoClient.connect("mongodb://localhost:27017/mailcrunch2", function(err, db) {
         if (err) throw err;
         var collection = db.collection('emails');
-        collection.find({username:'bizarroForrest', tag:'sorted'}).sort({bucket:1}).toArray(function(err,emails){
+        collection.find({username:username, tag:'sorted'}).sort({bucket:1}).toArray(function(err,emails){
           if (err) throw err;
           res.end(JSON.stringify(emails));
         });
@@ -301,8 +286,11 @@ module.exports = exports = {
   },
 
   //This function updates the email Tag (and optionally a bucket) on an email
-  //TODO FOR SECURITY: make sure username is same on email as current user before allowing user to update tag (avoid attacks!!!)
   updateEmailTag: function(req,res,next){
+   if (!req.session.user){
+    res.redirect('/#/login');
+   }
+   var username = req.session.user;
    var buffer = '';
     req.on('data', function(data){
       buffer += data.toString('utf8')
@@ -317,7 +305,8 @@ module.exports = exports = {
         mongoClient.connect("mongodb://localhost:27017/mailcrunch2", function(err, db) {
           if(err) { throw err; }
           var collection = db.collection('emails');   
-          collection.update({_id:new ObjectId(id)}, {$set: {tag:tag, bucket:bucket}}, function(err, res){
+          //update items with matching id (with checking username for security!)
+          collection.update({_id:new ObjectId(id), username:username}, {$set: {tag:tag, bucket:bucket}}, function(err, res){
             if (err){
               throw err;
             }

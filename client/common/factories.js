@@ -2,117 +2,113 @@
   "use strict";
   angular.module('myApp')
 
-  .factory('Inbox', function(){
-    var Inbox =[
-	  {from: 'Oscar',
-	  to: 'Liam',
-	  subject: 'Im a grouch',
-	  body: 'Its so cloudy outside',
-	  time: '12:15',
-      status: 'pending'
-	  },
-	  {from: 'Elmo',
-	  to: 'Liam',
-	  subject: 'Youve been served',
-	  body: 'Please come to court on 8/21 @ 9am',
-	  time: '01:35',
-      status: 'pending'
-	  },
-	  {from: 'CookieMonster',
-	  to: 'Liam',
-	  subject: 'Cooookkkkiieeee!',
-	  body: 'Me want cooookkkkiieeee now',
-	  time: '10:22',
-      status: 'pending'
-	  },
-	  {from: 'Vaness',
-	  to: 'Liam',
-	  subject: 'Hey',
-	  body: 'Whats your nick name',
-	  time: '13:15',
-      status: 'pending'
-	  },
-	  {from: 'Elmo',
-	  to: 'Liam',
-	  subject: 'Whattt',
-	  body: 'I dont understand why youd do that',
-	  time: '01:37',
-      status: 'pending'
-	  },
-	  {from: 'Josh',
-	  to: 'Liam',
-	  subject: 'Just checking in',
-	  body: 'Have you been to sushirrito',
-	  time: '10:25',
-      status: 'pending'
-	  },
-	  {from: 'Fred',
-	  to: 'Liam',
-	  subject: 'Whattt',
-	  body: 'I dont understand why youd do that',
-	  time: '01:37',
-      status: 'pending'
-	  },
-	  {from: 'Emilie',
-	  to: 'Liam',
-	  subject: 'Just checking in',
-	  body: 'Have you been to sushirrito',
-	  time: '10:25',
-      status: 'pending'
-	  },
-	  {from: 'Kelly',
-	  to: 'Liam',
-	  subject: 'Whattt',
-	  body: 'I dont understand why youd do that',
-	  time: '01:37',
-      status: 'pending'
-	  },
-	  {from: 'Melissa',
-	  to: 'Liam',
-	  subject: 'Just checking in',
-	  body: 'Have you been to sushirrito',
-	  time: '10:25',
-      status: 'pending'
-	  }
-	];
-	return {Inbox: Inbox};
+  .factory('SpinnerFactory', function(){
+    var spinner = true;
+    var spinnerFunc = function(){
+      return !spinner;
+    };
+    return {
+      spinnerFunc: spinnerFunc
+    }
+  })
+  // This factory keeps track of the points a user has
+  .factory('PointFactory', function(){
+    var pointTotal = 0;
+    // This function is called any time a user sorts or crunches an email
+    // in the allotted time
+    var incrementPoints = function(num){
+      pointTotal += num;
+    };
+    // This function is called in client/main/main.js
+    var getPoints = function(){
+      return pointTotal;
+    };
+    return {
+      getPoints: getPoints,
+      incrementPoints: incrementPoints
+    }
   })
 
-  .factory('sortTimer', function(){
-	return {reset: function(){
-		return timeLeft = 5;
-	}};
+  // This factory is used to ...
+  // TODO: Liev will comment this out
+  .factory('Inbox', function($http){
+    var sortedInbox = [];
+    var getSortedInbox = function(){
+      return $http({
+        method: 'POST',
+        url: '/main/sort/getSortedInbox',
+      })
+      .then(function(response){
+        sortedInbox = response.data;
+        return response;
+      });      
+    };
+
+    var inbox = [];
+
+    return {
+      getSortedInbox: getSortedInbox,
+      inbox: inbox
+    }
   })
 
-  .factory('crunchTimer', function(bucket){
-	    if(bucket === 'manage'){
-          return timeLeft = 120;
-	    }else if(bucket === 'focus'){
-          return timeLeft = 240;
-	    }else if (bucket === 'avoid'){
-          return timeLeft = 60;
-	    }else if (bucket === 'limit'){
-          return timeLeft = 60;
-	    }
-   })
-
+  // This factory sends a GET request to the server to retrieve emails via IMAP
+  // See server/note/note_routes.js then server/note/note_controllers.js
   .factory('InboxFactory', function($http){
-  	var getEm = function(){
-  		return $http({
-  			method: 'GET',
-  			url: '/main/login'
-  		})
-  		.then(function(response){
-  			console.log((response));
-  			
-  		});
-  	};
-  	return {
-  		getEm: getEm
-  	};
+      var getEm = function(){
+        return $http({
+          method: 'GET',
+          url: '/main/sort'
+        })
+        .then(function(response){
+          // On getting a succesful response, the email body needs to be 
+          // formatted. Take a look at the raw response to see why...
+          for (var i = 0; i < response.data.length; i++){
+            if (response.data[i].headers['x-mailer'] === undefined){
+              if (response.data[i].headers['x-failed-recipients']){
+                response.data[i].body = 'Message delivery failed';
+              } else {
+                // console.log(response.data[i].body);
+                // response.data[i].body = response.data[i].body.split('UTF-8')[1];
+                // response.data[i].body = response.data[i].body.split('--')[0]; 
+                //make body pretty later.... might use these two strings but make it work better...
+                response.data[i].body = response.data[i].body;
+
+              }
+            }
+          }
+          // After formatting, return response to client/note/note.js
+          return response;
+          
+        });
+      };
+      return {
+        getEm: getEm
+      };
+    })
+  // TODO: Liev will comment this out...
+  .factory('UpdateEmailTag', function($http){
+    var update = function(message){
+      console.log(message);
+      return $http({
+        method: 'POST',
+        url: '/main/sort/updateEmailTag',
+        data: message,
+      })
+      .then(function(response){
+        return response;
+      });
+    }
+    return{
+      update:update
+    };
   })
 
+  // This factory is used to send messages and mark them as read 
+  // from client/crunch/crunch.js
   .factory('SendMessageFactory', function($http){
+    // This function sends the messages via SMTP/Nodemailer
+    // See server/crunch/crunch_routes.js and server/crunch/crunch_controllers.js
   	var sendMessage = function(message){
   		return $http({
   			method: 'POST',
@@ -120,11 +116,26 @@
   			data: message,
   		})
   		.then(function(response){
-  			return response;
+  			console.log(response);
   		});
   	};
+
+    // This function marks the email that was sent as read, so we don't
+    // retrieve it again when we call InboxFactory.getEm()
+    // See server/crunch/crunch_routes.js and server/crunch/crunch_controllers.js
+    var markingAsRead = function(ID){
+      return $http({
+        method: 'POST',
+        url: '/main/crunch/markEmail',
+        data: ID,
+      })
+      .then(function(response){
+        console.log('message marked as read');
+      })
+    }
   	return {
-  		sendMessage: sendMessage
+  		sendMessage: sendMessage,
+      markingAsRead: markingAsRead
   	};
   })
 }(angular));

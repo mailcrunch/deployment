@@ -1,17 +1,11 @@
 "use strict";
 
 var express = require('express');
-var app = express();
-var routers = {};
-var NoteRouter = express.Router();
-var CrunchRouter = express.Router();
-routers.NoteRouter = NoteRouter;
-routers.CrunchRouter = CrunchRouter;
+var app = express(),
+    passport = require('passport'),
+    GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
-require('./config.js')(app, express, routers);
-
-require('../note/note_routes.js')(NoteRouter);
-
-require('../crunch/crunch_routes.js')(CrunchRouter);
+require('./config.js')(app, express, passport, GoogleStrategy);
+passport.authenticate('google', {scope: 'https://www.googleapis.com/auth/plus.login'});
 
 module.exports = exports = app;

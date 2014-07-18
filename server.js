@@ -8,7 +8,8 @@
  *
 */
 
-var app   = require('./main/app.js'),
+// This file sets up the server
+var app   = require('./server/main/app.js'),
     port  = app.get('port'),
     log   = 'Listening on ' + app.get('base url') + ':' + port;
 

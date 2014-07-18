@@ -1,44 +1,43 @@
 <br><br><br><br>
+<div ng-controller="CrunchController">
 <div class="container-fixed, col-md-8">
   <div>
-      <span ng-controller='crunchTimeLeft' class='well'>We suggest you use {{ timeLeft }} seconds to deal with this email.</span>
+      <span class='well'>We suggest you use {{ timer }} seconds to deal with this email.</span>
       <br><br><br>
       <blockquote ng-controller='mantra'>Mantra: {{ message }}</blockquote>
   </div>
   <br>
+<div>
   <div>
      <h4 class='well'>Respond to this email. Timer is above. Go. </h4>
-     <table class='table' ng-controller="CrunchController">
-        <tr><td> Received: </td><td> {{currentEmail.time}}</td></tr>
-        <tr><td> To: </td><td> {{currentEmail.to}}</td></tr> 
-        <tr><td> From: </td><td> {{currentEmail.from}}</td></tr>
-        <tr><td> Subject: </td><td> {{currentEmail.subject}}</td></tr>
-        <tr><td> Body: </td><td> {{currentEmail.body}}</td></tr>
+     <table class='table'>
+        <tr><td> Received: </td><td> {{inbox[0].time}}</td></tr>
+        <tr><td> From: </td><td> {{inbox[0].from}}</td></tr>
+        <tr><td> Subject: </td><td> {{inbox[0].subject}}</td></tr>
+        <tr><td> Body: </td><td> {{inbox[0].body}}</td></tr>
         </li>
      </table>
   <br>
-  <div class="input-group" ng-controller='ResponseController'>
+  <div class="input-group">
        <span class="input-group-addon">Response</span>
-       <input id="to" type="text" class="form-control" placeholder="To">
-       <input id="subject" type="text" class="form-control" placeholder="Subject">
+       <input id="to" type="text" class="form-control" value="{{inbox[0].from.slice(inbox[0].from.indexOf('<')+1)}}">
+       <input id="subject" type="text" class="form-control" value="Re: {{inbox[0].subject}}">
        <input id="message" type="text" class="form-control" placeholder="Write a message">
-       <button ng-click='send()' class="btn btn-primary btn-lg" role="button">Send</button><button ng-click='next()' class="btn btn-primary btn-lg" role="button">Next</button>
-     </div>
-
-    <!-- <div class='col-md-4'>
-      <a ng-show='currentEmail.manage'><img src="../images/manage.jpg"></a><a ng-show='currentEmail.focus'><img src="../images/focus.jpg"></a><br><a ng-show='currentEmail.avoid'><img src="../images/avoid.jpg"></a><a ng-show='currentEmail.limit'><img src="../images/limit.jpg"></a>
-    </div> -->
+       <button id="sendEmail" ng-click='send(); markAsRead();' class="btn btn-primary btn-lg" role="button">Send</button><button id="nextEmail" ng-click='next(); markAsRead();' class="btn btn-primary btn-lg" role="button">Next</button>
+  </div>
+</div>
   </div>
 </div>
 
-  <div class="container-fluid, col-md-4, pull-right">
+  <div class="container-fixed col-md-4 pull-right">
    <div>   
       <!--Sidebar content inside span2-->
        <h4 class='well'>The queue</h4>
-       <span ng-controller="CrunchController">
-          <li class="list-group-item disabled" ng-repeat="email in inbox | filter: {status: 'responded'}">{{email.from}}: {{email.subject}} @ {{email.time}}</li>
-          <li class="list-group-item" ng-repeat="email in inbox | filter: {status: 'sorted'}">{{email.from}}: {{email.subject}} @ {{email.time}}</li>
+       <span>
+          <li class="list-group-item disabled" ng-repeat="email in inbox">{{email.from}}: {{email.subject}} @ {{email.time}}</li>
+          <li class="list-group-item" ng-repeat="email in inbox | filter: {status: 'sorted'} | orderBy: 'bucket'">{{email.from}}: {{email.subject}} @ {{email.time}}</li>
        </span>
     </div>
+</div>
 </div>
 </div>

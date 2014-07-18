@@ -10,57 +10,113 @@ angular.module('myApp.main.note', ['ui.router'])
     });
 })
 
-//this is dummy data to test the list of inbox emails	
-.controller('NoteController', function($scope, Inbox, $rootScope) {
-    
-    $scope.inbox = Inbox.Inbox;
+.controller('NoteController', function($scope, $interval, $timeout, InboxFactory, Inbox, PointFactory, UpdateEmailTag) {
 
-    $scope.emailIndex = 0;
-    $scope.currentEmail = $scope.inbox[$scope.emailIndex]
-    $rootScope.timeLeft = 5;
+    $scope.inbox = Inbox.inbox;
+    $scope.timer = 10;
+
+    var result;
+
+    $timeout(function(){
+      $scope.timerStart();
+    }, 2000)
+
+    // This function resets the timer after the user sorts the email
+    $scope.timerReset = function(){
+      $interval.cancel(result);
+      $scope.timerStart();
+    };
+
+    // This function updates the points for the user
+    $scope.updatePoints = function(){
+      if ($scope.timer !== 0 && $scope.timer !== '0'){
+        PointFactory.incrementPoints(100);
+      }
+      if ($scope.inbox.length === 0){
+        PointFactory.incrementPoints(1000); 
+      }
+    };
+/*
+=======================================================================
+=======================================================================
+  These are the sorting functions for each email
+  At a high level, when an image is clicked on,
+  the email's 'bucket' property is updated to the
+  corresponding category
+  v         v          v          v          v          
+=======================================================================
+=======================================================================
+*/
 
     $scope.sortManage = function(){
-      $scope.inbox[$scope.emailIndex]['bucket'] = 'manage';
-      $scope.inbox[$scope.emailIndex]['status'] = 'sorted';
-      $scope.emailIndex++;
-      $scope.currentEmail = $scope.inbox[$scope.emailIndex]
-      $rootScope.timeLeft = 6;
+      // This updates the email's 'bucket' property
+      $scope.inbox[0]['bucket'] = 1;
+      // This updates the email's 'status' property
+      $scope.inbox[0]['status'] = 'sorted';
+      var id = $scope.inbox[0]['_id'];
+      var tag = 'sorted';
+      var bucket = 1;
+      UpdateEmailTag.update(id + '###' + tag + '###' + bucket);
+      $scope.inbox.shift();
+      $scope.updatePoints();
+      $scope.timerReset();
     };
     $scope.sortFocus = function(){
-      $scope.inbox[$scope.emailIndex]['bucket'] = 'focus';
-      $scope.inbox[$scope.emailIndex]['status'] = 'sorted';
-      $scope.emailIndex++;
-      $scope.currentEmail = $scope.inbox[$scope.emailIndex]
-      $rootScope.timeLeft = 6;
+      $scope.inbox[0]['bucket'] = 2;
+      $scope.inbox[0]['status'] = 'sorted';
+      var id = $scope.inbox[0]['_id'];
+      var tag = 'sorted';
+      var bucket = 2
+      UpdateEmailTag.update(id + '###' + tag + '###' + bucket);
+      $scope.inbox.shift();
+      $scope.updatePoints();
+      $scope.timerReset();
     };
     $scope.sortAvoid = function(){
-      $scope.inbox[$scope.emailIndex].bucket = 'avoid';
-      $scope.inbox[$scope.emailIndex]['status'] = 'sorted';
-      $scope.emailIndex++;
-      $scope.currentEmail = $scope.inbox[$scope.emailIndex]
-      $rootScope.timeLeft = 6;
+      $scope.inbox[0]['bucket'] = 3;
+      $scope.inbox[0]['status'] = 'sorted';
+      var id = $scope.inbox[0]['_id'];
+      var tag = 'sorted';
+      var bucket = 3;     
+      UpdateEmailTag.update(id + '###' + tag + '###' + bucket);
+      $scope.inbox.shift();
+      $scope.updatePoints();
+      $scope.timerReset();
     };
     $scope.sortLimit = function(){
-      $scope.inbox[$scope.emailIndex]['bucket'] = 'avoid';
-      $scope.inbox[$scope.emailIndex]['status'] = 'sorted';
-      $scope.emailIndex++;
-      $scope.currentEmail = $scope.inbox[$scope.emailIndex]
-      $rootScope.timeLeft = 6;
+      $scope.inbox[0]['bucket'] = 4;
+      $scope.inbox[0]['status'] = 'sorted';
+      var id = $scope.inbox[0]['_id'];
+      var tag = 'soted';
+      var bucket = 4;
+      UpdateEmailTag.update(id + '###' + tag + '###' + bucket);
+      $scope.inbox.shift();
+      $scope.updatePoints();
+      $scope.timerReset();
     };
 
-})
+/*
+=======================================================================
+=======================================================================
+  ^          ^          ^          ^           ^           
+  These are the sorting functions for each email 
+=======================================================================
+=======================================================================
+*/
+    // And here is the timer
+    $scope.timerStart = function(){
+      if ($scope.timer !== 10){
+        $scope.timer = 10;
+      }
+      result = $interval(function(){
+        if ($scope.timer === 0){
+          $scope.timer = '0';
+        } else if ($scope.timer === '0'){
+          $scope.timer = 0;
+        } else {
+          $scope.timer--;
+        }
+      },1000);
+    };
 
-.controller('EmailController', function($scope, Inbox){
-  
-})
-
-//this controller decrements the timeLeft variable once per second
-//TODO: add in a function that switches emails when timeLeft = 0;
-.controller('timeLeft',function($scope,$interval, Inbox, $rootScope){
-  $interval(function(){
-    if($rootScope.timeLeft > 0){
-  	  $rootScope.timeLeft--;
-      $scope.timeLeft = $rootScope.timeLeft;
-    }
-  },1000);
-})
+});

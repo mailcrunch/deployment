@@ -2,6 +2,15 @@
   "use strict";
   angular.module('myApp')
 
+  .factory('SpinnerFactory', function(){
+    var spinner = true;
+    var spinnerFunc = function(){
+      return !spinner;
+    };
+    return {
+      spinnerFunc: spinnerFunc
+    }
+  })
   // This factory keeps track of the points a user has
   .factory('PointFactory', function(){
     var pointTotal = 0;
@@ -33,10 +42,13 @@
         sortedInbox = response.data;
         return response;
       });      
-    }
+    };
+
+    var inbox = [];
 
     return {
-      getSortedInbox: getSortedInbox
+      getSortedInbox: getSortedInbox,
+      inbox: inbox
     }
   })
 
@@ -56,9 +68,12 @@
               if (response.data[i].headers['x-failed-recipients']){
                 response.data[i].body = 'Message delivery failed';
               } else {
-                console.log(response.data[i].body);
-                response.data[i].body = response.data[i].body.split('UTF-8')[1];
-                response.data[i].body = response.data[i].body.split('--')[0]; 
+                // console.log(response.data[i].body);
+                // response.data[i].body = response.data[i].body.split('UTF-8')[1];
+                // response.data[i].body = response.data[i].body.split('--')[0]; 
+                //make body pretty later.... might use these two strings but make it work better...
+                response.data[i].body = response.data[i].body;
+
               }
             }
           }

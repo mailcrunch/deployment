@@ -5,7 +5,6 @@
       <!--Sidebar content inside span2-->
        <div class='well'><h4>The queue </h4><p>What's on the docket for this crunch session</p></div>
        <span>
-          <button id="getEmails" type="type" ng-click="getEmails()" class="btn btn-primary">Get Emails</button>
           <li class="list-group-item disabled" ng-repeat="email in inbox | filter: {status: 'sorted'}">{{email.from}}: {{email.subject}} @ {{email.time}}</li>
           <li class="list-group-item" ng-repeat="email in inbox | filter: {status: 'pending'}">{{email.from}}: {{email.subject}} @ {{email.time}}</li>
        </span>
@@ -31,10 +30,6 @@
             <button ui-sref="myApp.main.crunch" class="btn-lg btn-primary btn-block">Crunch 'Em</button>
           </span>
           <br>
-          <br>
-          <div class="dots col-md-offset-6" ng-if="spinner">
-            Loading...
-          </div>
         </div>
       </div>
       <br>

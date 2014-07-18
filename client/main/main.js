@@ -1,6 +1,6 @@
-(function (angular) {
+
   "use strict";
-  angular.module('myApp.main', ['ui.router', 'myApp.main.crunch', 'myApp.main.note', 'myApp.main.home'])
+  angular.module('myApp.main', ['ui.router', 'myApp.main.crunch', 'myApp.main.note', 'myApp.main.home', 'myApp.main.spinner'])
   .config(function ($stateProvider){
     $stateProvider
       .state('myApp.main', {
@@ -10,6 +10,7 @@
       })
   })
   .controller('MainController', function($state) {
+
     $state.transitionTo('myApp.main.home');
   })
   .controller('PointController', function($scope, $interval, PointFactory){
@@ -18,4 +19,4 @@
       $scope.points = PointFactory.getPoints();
     }, 1000)
   })
-}(angular));
+

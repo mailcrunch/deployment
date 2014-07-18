@@ -2,9 +2,9 @@
 
 var Imap        = require('imap'), // Imap for the getting of emails. See https://github.com/mscdex/node-imap
     mongoClient = require('mongodb').MongoClient,
-    ObjectId = require('mongodb').ObjectID, //require this to use mongodb's ObjectID function for retrieval of BSON encoded ids
-    xoauth2 = require('xoauth2'), // xoauth2 is needed for accessing user's email. See https://developers.google.com/gmail/xoauth2_protocol
-    auth = require('../main/auth.js'); // For importing the clientId and secret for getting emails
+    ObjectId    = require('mongodb').ObjectID, //require this to use mongodb's ObjectID function for retrieval of BSON encoded ids
+    xoauth2     = require('xoauth2'), // xoauth2 is needed for accessing user's email. See https://developers.google.com/gmail/xoauth2_protocol
+    auth        = require('../main/auth.js'); // For importing the clientId and secret for getting emails
 
 
 //set up initial db configuration and indexes
@@ -20,6 +20,7 @@ mongoClient.connect('mongodb://localhost:27017/mailcrunch2', function(err,db){
 });
 
 module.exports = exports = {
+  // See comments for Get function below
   getLatestEmailsForDB: function(req,res,next){
     if (req.session.user){
       var username = req.session.user;

@@ -11,7 +11,6 @@
        </span>
     </div>
 </div>
-
 <div class="container-fixed">
   <span class='row'>
     <div class='col-md-8'>
@@ -31,6 +30,11 @@
           <span>
             <button ui-sref="myApp.main.crunch" class="btn-lg btn-primary btn-block">Crunch 'Em</button>
           </span>
+          <br>
+          <br>
+          <div class="dots col-md-offset-6" ng-if="spinner">
+            Loading...
+          </div>
         </div>
       </div>
       <br>
@@ -48,10 +52,7 @@
           <img src="../images/limit.jpg">
         </a>
       </h3>
-      <!-- TODO:  spinner doesn't seem to end when it should -->
-      <div class="dots col-md-offset-6" ng-if="spinner">
-        Loading...
-      </div>
+      
       <table class='table'>
         <tr><td> Received: </td><td> {{inbox[0].time}}</td></tr>
         <tr><td> From: </td><td> {{inbox[0].from}}</td></tr>

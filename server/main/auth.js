@@ -5,6 +5,6 @@ module.exports = {
   	'callbackURL' 	: 'http://localhost:3000/auth/google/callback',
   },
   'dbAuth' : {
-    'dbUri' : 'mongodb://admin:mailcrunchisawesome@ds050077.mongolab.com:50077/mailcrunch'
+    'dbUri' : 'mongodb://admin:ilovemailcrunch@ds050087.mongolab.com:50087/mailcrunch'
   }
 };

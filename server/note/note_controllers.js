@@ -92,7 +92,7 @@ module.exports = exports = {
                       //this line creates a unique id for the email based on the user's username and the message-id which should be unique
                       //for future versions might need to refactor as message-id might not be unique.
                       message.headersUniqHack = message.username + message.headers['message-id'][0].split('@')[0].slice(1);
-                      collection.update({headersUniqHack: message.headersUniqHack}, message, {upsert:false}, function(err,results){
+                      collection.insert( message, {w:1}, function(err,results){
                         if (err){
                           console.log(err);
                         }
@@ -228,7 +228,7 @@ module.exports = exports = {
                       //this line creates a unique id for the email based on the user's username and the message-id which should be unique
                       //for future versions might need to refactor as message-id might not be unique.
                       message.headersUniqHack = message.username + message.headers['message-id'][0].split('@')[0].slice(1);
-                      collection.update({headersUniqHack: message.headersUniqHack}, message, {upsert:true}, function(err,results){
+                      collection.insert( message, {w:1}, function(err,results){
                         if (err){
                           console.log(err);
                         }        
@@ -240,8 +240,15 @@ module.exports = exports = {
                       var collection = db.collection('emails');
                       collection.find({username:username,tag:'unsorted'}).toArray(function(err,emails){
                         if (err) throw err;
-                        res.end(JSON.stringify(emails));
-                        imap.end();
+                        if (emails.length > 0){
+                          console.log(emails);
+                          res.end(JSON.stringify(emails));
+                          imap.end();
+                        }
+                        else{
+                          imap.end();
+                          res.redirect('/#/public/crunch');
+                        }
                       });
                     });
                   });

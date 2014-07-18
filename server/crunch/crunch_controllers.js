@@ -14,7 +14,8 @@ var Crunch      = require('./crunch_model.js'),
 module.exports = exports = {
 
 post: function (req, res, next) {
-
+  if (req.session.user){
+    var username = req.session.user;
     var buffer = '';
     req.on('data', function (data) {
       buffer += data.toString('utf8')
@@ -31,7 +32,7 @@ post: function (req, res, next) {
         }
         var collection = db.collection('users');
         collection.findOne({
-          username: 'bizarroforrest@gmail.com'
+          username: username
         }, function (err, results) {
 
 
@@ -66,10 +67,13 @@ post: function (req, res, next) {
         res.end();
       });
     });
-  },
+  }
+},
 
  
 postUpdate: function (req, res, next) {
+  if (req.session.user){
+    var username = req.session.user;
     var buffer = '';
     req.on('data', function (chunk) {
       buffer += chunk.toString('utf8');
@@ -81,7 +85,7 @@ postUpdate: function (req, res, next) {
           }
           var collection = db.collection('users');
           collection.findOne({
-            username: 'bizarroforrest@gmail.com'
+            username: username
           }, function (err, results) {
             var xoauth2Token;
             var xoauth2gen = xoauth2.createXOAuth2Generator({
@@ -132,6 +136,6 @@ postUpdate: function (req, res, next) {
           });
         });
       });
-
     }
-  };
+  }
+};

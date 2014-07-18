@@ -16,9 +16,11 @@ angular.module('myApp.main.note', ['ui.router'])
     $scope.timer = 10;
 
     var result;
+
     $timeout(function(){
       $scope.timerStart();
     }, 2000)
+
     // This function resets the timer after the user sorts the email
     $scope.timerReset = function(){
       $interval.cancel(result);

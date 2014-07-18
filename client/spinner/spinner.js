@@ -25,7 +25,7 @@
             } else {
               $scope.email.subject = response.data[i].headers.subject.toString();
             }
-            if ($scope.email.body === undefined){
+            if (response.data[i].body === undefined){
               $scope.email.body = 'no message contents';
             } else {
               $scope.email.body = response.data[i].body;

@@ -27,6 +27,9 @@ mongoClient.connect('mongodb://localhost:27017/mailcrunch2', function(err,db){
 
 module.exports = exports = {
   get: function (req, res, next) {
+      console.log('<===================Inside HTTP Request====================>');
+      console.dir(req.session.user)
+      console.log('<================================================>')
     try {
       mongoClient.connect("mongodb://localhost:27017/mailcrunch2", function(err, db) {
         if(err) { throw (err); }

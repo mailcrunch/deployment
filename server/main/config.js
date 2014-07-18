@@ -24,10 +24,22 @@ module.exports = exports = function (app, express, passport, GoogleStrategy) {
 
   app.use(express.static(__dirname + '/../../client/')); //this line sends the entire application (only if the user has an auth cookie)
 
-  app.use(session({ secret: 'iheartpizza' })); // session secret
+  app.use(session({
+    // genid: function(req) {
+    //   return genuuid(); // use UUIDs for session IDs
+    // },
+    secret: 'bloodhound666',
+    // cookie: { secure: true },
+    saveUninitialized: true,
+    resave: true
+  }))
+  //sessions are established with cookies
   app.use(passport.initialize());
-  app.use(passport.session()); // persistent login sessions
-  // app.use(flash()); // use connect-flash for flash messages stored in session
+
+app.get('/logout', function(req, res){
+    req.logout();
+    res.redirect('/public/login');
+  });
   
   //call passport oauth google strategy
   var strategy = require('./passport.js');
@@ -60,7 +72,18 @@ module.exports = exports = function (app, express, passport, GoogleStrategy) {
     passport.authenticate('google', { 
  failureRedirect: '/#/public/login' }),
     function(req, res) {
-      res.redirect('/#/main/home');
+      console.log('<=====================START===============>');
+      console.dir(req.user._json.email);
+      console.log('<==================END==================>');
+      
+      req.session.regenerate(function(err){
+        if(err) throw err;
+        req.session.user = req.user._json.email;
+        res.redirect('/#/main/home');
+      });
+
+        
+
     });
 
 

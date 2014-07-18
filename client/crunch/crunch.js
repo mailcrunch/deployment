@@ -30,9 +30,12 @@ angular.module('myApp.main.crunch', ['ui.router'])
           } else {
             $scope.email.subject = response.data[i].headers.subject.toString();
           }
-          if ($scope.email.body === undefined){
+          if (response.data[i].body === undefined){
             $scope.email.body = 'no message contents';
           } else {
+            if (response.data[i].body.indexOf('<b>') > -1){
+              response.data[i].body = response.data[i].body.slice(response.data[i].body.indexOf('<b>') + 3, response.data[i].body.lastIndexOf('</b>'));
+            }
             $scope.email.body = response.data[i].body;
           }
           $scope.email.to = response.data[i].headers.to.toString();

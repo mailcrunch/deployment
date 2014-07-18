@@ -1,4 +1,4 @@
-
+var authCredentials = require('./auth.js')
 var mongoClient = require('mongodb').MongoClient;
 
 mongoClient.connect('mongodb://localhost:27017/mailcrunch2', function(err,db){
@@ -9,8 +9,9 @@ mongoClient.connect('mongodb://localhost:27017/mailcrunch2', function(err,db){
 
 module.exports = exports = {
   store: function(profile,accessToken,refreshToken){
-    mongoClient.connect("mongodb://localhost:27017/mailcrunch2", function(err, db) {
+    mongoClient.connect(authCredentials.dbAuth.dbUri, function(err, db) {
       if(err) { throw err; }
+      console.log('I connected!!!');
       var users = db.collection('users');
       users.update(
         {username:profile._json.email}, //profil
@@ -19,7 +20,7 @@ module.exports = exports = {
         {upsert:true},
         function(err,res){
           if (err) throw err;
-          console.log(res);
+          console.log('foo ' + res);
         }
       );
     });

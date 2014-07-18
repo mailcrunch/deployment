@@ -29,7 +29,6 @@
               $scope.email.body = 'no message contents';
             } else {
               if (response.data[i].body.indexOf('<b>') > -1){
-                console.log('hrmmmmm')
                 response.data[i].body = response.data[i].body.slice(response.data[i].body.indexOf('<b>') + 3, response.data[i].body.lastIndexOf('</b>'));
               }
               $scope.email.body = response.data[i].body;

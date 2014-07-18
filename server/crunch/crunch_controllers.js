@@ -25,7 +25,7 @@ module.exports = exports = {
         var subject = buffer[1];
         var message = buffer[2];
 
-        mongoClient.connect("mongodb://localhost:27017/mailcrunch2", function (err, db) {
+        mongoClient.connect(auth.dbAuth.dbUri, function (err, db) {
           if (err) {
             throw (err);
           }
@@ -83,7 +83,7 @@ module.exports = exports = {
         buffer += chunk.toString('utf8');
       });
       req.on('end', function () {
-        mongoClient.connect("mongodb://localhost:27017/mailcrunch2", function (err, db) {
+        mongoClient.connect(auth.dbAuth.dbUri, function (err, db) {
           if (err) {
             throw (err);
           }

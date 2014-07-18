@@ -9,7 +9,7 @@ var Imap        = require('imap'), // Imap for the getting of emails. See https:
 
 //set up initial db configuration and indexes
 
-mongoClient.connect('mongodb://localhost:27017/mailcrunch2', function(err,db){
+mongoClient.connect(auth.dbAuth.dbUri, function(err,db){
   db.createCollection('emails',function(err,collection) {});
   db.createCollection('users',function(err,collection){});
   db.createIndex('users', {username: 1}, {unique: true}, function(err,res){});
@@ -24,7 +24,7 @@ module.exports = exports = {
   getLatestEmailsForDB: function(req,res,next){
     if (req.session.user){
       var username = req.session.user;
-      mongoClient.connect('mongodb://localhost:27017/mailcrunch2', function(err,db){
+      mongoClient.connect(auth.dbAuth.dbUri, function(err,db){
         if (err) throw err;
         var collection = db.collection('users');
         collection.findOne({username: username}, function(err,results){
@@ -126,7 +126,7 @@ module.exports = exports = {
   },
   getUnsortedEmailsForClient: function(req,res,next){
     if (req.session.user){
-      mongoClient.connect("mongodb://localhost:27017/mailcrunch2", function(err, db) {
+      mongoClient.connect(auth.dbAuth.dbUri, function(err, db) {
         if(err) { throw (err); }
         var collection = db.collection('emails');
         collection.find({username:req.session.user, tag:'unsorted'}).toArray(function(err, emails){
@@ -145,7 +145,7 @@ module.exports = exports = {
   get: function (req, res, next) {
     if (req.session.user){
       var username = req.session.user;
-      mongoClient.connect('mongodb://localhost:27017/mailcrunch2', function(err,db){
+      mongoClient.connect(auth.dbAuth.dbUri, function(err,db){
         if (err) throw err;
         var collection = db.collection('users');
         collection.findOne({username:username}, function(err,results){
@@ -272,7 +272,7 @@ module.exports = exports = {
       //returns array fo sorted emails from server-db
       //eventually should also sort by date as secondary?
       //also need to replace username with active user... and add in auth
-      mongoClient.connect("mongodb://localhost:27017/mailcrunch2", function(err, db) {
+      mongoClient.connect(auth.dbAuth.dbUri, function(err, db) {
         if (err) throw err;
         var collection = db.collection('emails');
         collection.find({username:username, tag:'sorted'}).sort({bucket:1}).toArray(function(err,emails){
@@ -303,7 +303,7 @@ module.exports = exports = {
       var tag = buffer[1];
       var bucket = buffer[2];
       try {
-        mongoClient.connect("mongodb://localhost:27017/mailcrunch2", function(err, db) {
+        mongoClient.connect(auth.dbAuth.dbUri, function(err, db) {
           if(err) { throw err; }
           var collection = db.collection('emails');   
           //update items with matching id (with checking username for security!)

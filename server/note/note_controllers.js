@@ -235,21 +235,21 @@ module.exports = exports = {
                         // console.log(results);  
                       });    
                     });
-                    //connect to database and pull out all the emails
-                    fetched.once('end', function(){
-                      var collection = db.collection('emails');
-                      collection.find({username:username,tag:'unsorted'}).toArray(function(err,emails){
-                        if (err) throw err;
-                        if (emails.length > 0){
-                          console.log(emails);
-                          res.end(JSON.stringify(emails));
-                          imap.end();
-                        }
-                        else{
-                          imap.end();
-                          res.redirect('/#/public/crunch');
-                        }
-                      });
+                  });
+                  //connect to database and pull out all the emails
+                  fetched.once('end', function(){
+                    var collection = db.collection('emails');
+                    collection.find({username:username,tag:'unsorted'}).toArray(function(err,emails){
+                      if (err) throw err;
+                      if (emails.length > 0){
+                        console.log('length of emails: ', emails.length);
+                        res.end(JSON.stringify(emails));
+                        imap.end();
+                      }
+                      else{
+                        imap.end();
+                        res.redirect('/#/public/crunch');
+                      }
                     });
                   });
                 });

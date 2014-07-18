@@ -143,6 +143,9 @@ module.exports = exports = {
     }
   },
   get: function (req, res, next) {
+      console.log('<===================Inside HTTP Request====================>');
+      console.dir(req.session.user)
+      console.log('<================================================>')
     try {
       // Connect to database, so that we can access information stored on login to query user's email
       mongoClient.connect("mongodb://localhost:27017/mailcrunch2", function(err, db) {

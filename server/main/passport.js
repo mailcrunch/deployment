@@ -2,6 +2,7 @@
 
 var express = require('express'),
     passport = require('passport'),
+    // session = require('express-session'),
     util = require('util'),
     GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
     userDB = require('./userDB.js'),
@@ -44,9 +45,11 @@ passport.use(new GoogleStrategy({
     console.log('dsfsd: ' + raw.email);
     // store tokens in user database:
     //and start session...
+    
     try{
-    userDB.store(profile, accessToken, refreshToken);
+      userDB.store(profile, accessToken, refreshToken);
     }
+
     catch(e){
       console.log(e);
       return done(e);

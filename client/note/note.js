@@ -87,7 +87,7 @@ angular.module('myApp.main.note', ['ui.router'])
       $scope.inbox[0]['bucket'] = 4;
       $scope.inbox[0]['status'] = 'sorted';
       var id = $scope.inbox[0]['_id'];
-      var tag = 'soted';
+      var tag = 'sorted';
       var bucket = 4;
       UpdateEmailTag.update(id + '###' + tag + '###' + bucket);
       $scope.inbox.shift();

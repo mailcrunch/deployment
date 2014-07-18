@@ -2,6 +2,15 @@
   "use strict";
   angular.module('myApp')
 
+  .factory('SpinnerFactory', function(){
+    var spinner = true;
+    var spinnerFunc = function(){
+      return !spinner;
+    };
+    return {
+      spinnerFunc: spinnerFunc
+    }
+  })
   // This factory keeps track of the points a user has
   .factory('PointFactory', function(){
     var pointTotal = 0;
@@ -33,10 +42,13 @@
         sortedInbox = response.data;
         return response;
       });      
-    }
+    };
+
+    var inbox = [];
 
     return {
-      getSortedInbox: getSortedInbox
+      getSortedInbox: getSortedInbox,
+      inbox: inbox
     }
   })
 

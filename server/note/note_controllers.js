@@ -1,16 +1,10 @@
 "use strict";
 
-var Note        = require('./note_model.js'),
-    Q           = require('q'),
-    Imap        = require('imap'),
-    inspect     = require('util').inspect,
-    Parser      = require('imap-parser'),
-    parser      = new Parser(),
+var Imap        = require('imap'), // Imap for the getting of emails. See https://github.com/mscdex/node-imap
     mongoClient = require('mongodb').MongoClient,
-    //require this to use mongodb's ObjectID function for retrieval of BSON encoded ids
-    ObjectId = require('mongodb').ObjectID,
-    xoauth2 = require('xoauth2'),
-    auth = require('../main/auth.js');
+    ObjectId    = require('mongodb').ObjectID, //require this to use mongodb's ObjectID function for retrieval of BSON encoded ids
+    xoauth2     = require('xoauth2'), // xoauth2 is needed for accessing user's email. See https://developers.google.com/gmail/xoauth2_protocol
+    auth        = require('../main/auth.js'); // For importing the clientId and secret for getting emails
 
 
 //set up initial db configuration and indexes
@@ -26,6 +20,7 @@ mongoClient.connect('mongodb://localhost:27017/mailcrunch2', function(err,db){
 });
 
 module.exports = exports = {
+  // See comments for Get function below
   getLatestEmailsForDB: function(req,res,next){
     if (req.session.user){
       var username = req.session.user;
@@ -173,22 +168,35 @@ module.exports = exports = {
               tls: true,
               authTimeout: 20000
             });
+
+            // Open the specified mailbox with read-only access set to true
+            // This is not where we want to mark the emails as 'read'
+
             var openInbox = function(cb){
               imap.openBox('INBOX', true, cb);
-            }
+            };
             var headers;
+            // Establish Imap connection with above credentials
             imap.connect();
+            // Upon successful connection a 'ready' event is fired
             imap.once('ready', function(){
               openInbox(function(err,box){
                 if (err) throw err;
+                // This is where we search the inbox for all unread messages
                 imap.search(['UNSEEN'], function(err,results){
                   if (err) throw err;
+                  // The sought messages now need to be fetched one by one.
+                  // We need to specify the Headers and Text bodies in order to retrieve both
                   var fetched = imap.fetch(results,{ struct: true, bodies:['HEADER', 'TEXT']});
+                  // Upon successful fetch of a message, a 'message' event is fired  
                   fetched.on('message', function(msg,seqno){
+                    // At this point it works like Node
+                    // When a msg is recieved it emits 'body', 'attributes' and 'end' events
                     var bodyBuffer = '';
                     var headerBuffer = '';
                     var UID;
                     msg.on('body', function(stream,info){
+                      // This grabs the headers
                       if (info.which === 'HEADER'){
                         stream.on('data', function(data){
                           headerBuffer += data;
@@ -197,17 +205,21 @@ module.exports = exports = {
                           headerBuffer = Imap.parseHeader(headerBuffer);
                         });
                       }
+                      // This grabs the message body.
+                      // The message body is not always as clean as you might want it to be. That is why we have to parse it in client/common/factories.js
                       if (info.which === 'TEXT'){
                         stream.on('data', function(chunk){
                           bodyBuffer += chunk;
                         });
                       }
                     });
+                    // This grabs the UID of the email, which we will need later to retrieve this particular email to mark as 'read'
+                    // The use of 'once' vs 'on' is unclear from node-imap docs
                     msg.once('attributes', function(attrs){
                       UID = attrs.uid;
                     });
                     msg.on('end', function(){
-                      console.log('in message end....')
+                      //add individual email to database with appropriate tags if it is not currently in db
                       var message = {body:bodyBuffer.toString('utf8'), headers: headerBuffer, uid: UID};
                       var collection = db.collection('emails');
                       message.tag = 'unsorted';
@@ -235,6 +247,7 @@ module.exports = exports = {
                   });
                 });
               });
+
               imap.once('error', function(err) {
                 console.log('imap err  ', err);
               });
@@ -248,18 +261,6 @@ module.exports = exports = {
         });
       });
     }
-  },
-
-  post: function (req, res, next) {
-    var note = req.body.note;
-    var $promise = Q.nbind(Note.create, Note);
-    $promise(note)
-      .then(function (id) {
-        res.send(id);
-      })
-      .fail(function (reason) {
-        next(reason);
-      });
   },
 
   getSortedInbox: function(req,res,next){

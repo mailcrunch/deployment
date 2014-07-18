@@ -1,14 +1,14 @@
-"use strict";
+// "use strict";
 
-var mongoose = require('mongoose');
+// var mongoose = require('mongoose');
 
-var NoteSchema = new mongoose.Schema({
-  content: String,
+// var NoteSchema = new mongoose.Schema({
+//   content: String,
 
-  title: {
-    type: String,
-    required: true
-  }
-});
+//   title: {
+//     type: String,
+//     required: true
+//   }
+// });
 
-module.exports = exports = mongoose.model('notes', NoteSchema);
+// module.exports = exports = mongoose.model('notes', NoteSchema);

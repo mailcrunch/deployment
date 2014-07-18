@@ -10,45 +10,16 @@ angular.module('myApp.main.note', ['ui.router'])
     });
 })
 
-.controller('NoteController', function($scope, $interval, InboxFactory, Inbox, PointFactory, UpdateEmailTag) {
+.controller('NoteController', function($scope, $interval, $timeout, InboxFactory, Inbox, PointFactory, UpdateEmailTag) {
 
-    $scope.inbox = [];
+    $scope.inbox = Inbox.inbox;
     $scope.timer = 10;
 
     var result;
-    $scope.getEmails = function(){
-      // This function works the same as in client/crunch/crunch.js
-      $scope.clicked = true;
-      InboxFactory.getEm()
-        .then(function(response){
-          for (var i = 0; i < response.data.length; i++){
-            if (response.data[i].headers.from !== undefined){
-              $scope.email = {
-                status: 'pending',
-                bucket: null
-              };
-              if (response.data[i].headers.subject === undefined){
-                $scope.email.subject = 'no subject';
-              } else {
-                $scope.email.subject = response.data[i].headers.subject.toString();
-              }
-              if (response.data[i].body === undefined){
-                $scope.email.body = 'no message contents';
-              } else {
-                $scope.email.body = response.data[i].body;
-              }
-              $scope.email.to = response.data[i].headers.to.toString();
-              $scope.email.from = response.data[i].headers.from.toString();
-              $scope.email.time = response.data[i].headers.date.toString();
-              $scope.email.id = response.data[i].uid.toString();
-              $scope.email._id = response.data[i]._id;
-              $scope.inbox.push($scope.email); 
-            }
-            $scope.clicked = false;
-          }
-          $scope.timerStart();
-        });
-    };
+
+    $timeout(function(){
+      $scope.timerStart();
+    }, 2000)
 
     // This function resets the timer after the user sorts the email
     $scope.timerReset = function(){
@@ -62,7 +33,7 @@ angular.module('myApp.main.note', ['ui.router'])
         PointFactory.incrementPoints(100);
       }
       if ($scope.inbox.length === 0){
-        PointFactory.incrementPoints(100); 
+        PointFactory.incrementPoints(1000); 
       }
     };
 /*

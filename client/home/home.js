@@ -12,6 +12,6 @@ angular.module('myApp.main.home', ['ui.router'])
 
 //this is dummy data to test the list of inbox emails	
 .controller('HomeController', function($scope) {
-    
+
 })
 

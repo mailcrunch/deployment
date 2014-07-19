@@ -18,9 +18,7 @@
     "passport-local": "^1.0.0",
     "q": "*",
     "tiny-lr": "*",
-    "xoauth2": "^0.1.8"
-  },
-  "devDependencies": {
+    "xoauth2": "^0.1.8",
     "gulp": "*",
     "gulp-bower": "*",
     "gulp-jshint": "*",
@@ -33,5 +31,7 @@
     "gulp-concat": "*",
     "gulp-uglify": "*",
     "gulp-stylus": "*"
+  },
+  "devDependencies": {
   }
 }

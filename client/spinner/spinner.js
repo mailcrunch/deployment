@@ -14,6 +14,7 @@
     InboxFactory.getEm()
       .then(function(response){
         $scope.spinner = response.data.length;
+        // console.lo
         for (var i = 0; i < response.data.length; i++){
           if (response.data[i].headers.from !== undefined){
             $scope.email = {
@@ -40,6 +41,10 @@
             $scope.email._id = response.data[i]._id;
             Inbox.inbox.push($scope.email); 
           }
+        }
+        //temporary bug fix for double emails?
+        if (Inbox.inbox.length > response.data.length){
+          Inbox.inbox.length = response.data.length;
         }
         $timeout(function(){
           $state.transitionTo('myApp.main.note')

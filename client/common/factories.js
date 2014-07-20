@@ -2,6 +2,24 @@
   "use strict";
   angular.module('myApp')
 
+
+  //=============================================================================
+  // This is where we get and store the profile information for a specific user
+  //=============================================================================
+  .factory('ProfileFactory',function(){
+
+
+    return {
+      firstName: "Jane",
+      lastName: "Doe",
+      userEmail: "superFreak@gmail.com"
+    }
+  })
+
+
+//=============================================================================
+// This factory controlls the use of the spinner on our loading page
+//=============================================================================
   .factory('SpinnerFactory', function(){
     var spinner = true;
     var spinnerFunc = function(){
@@ -11,7 +29,10 @@
       spinnerFunc: spinnerFunc
     }
   })
+
+  //=============================================================================
   // This factory keeps track of the points a user has
+  //=============================================================================
   .factory('PointFactory', function(){
     var pointTotal = 0;
     // This function is called any time a user sorts or crunches an email

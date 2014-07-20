@@ -20,9 +20,9 @@
         console.log("Response received:")
         console.dir(response.data);
         console.dir(response.data[0]);
-        console.dir(response.data.displayName);
-        console.dir(response.data.name);
-        console.dir(response.data.username);
+        // console.dir(response.data.displayName);
+        // console.dir(response.data.name);
+        // console.dir(response.data.username);
         // firstName = response.displayName;
         // lastName = response.name;
         // userEmail = response.username;

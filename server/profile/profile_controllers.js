@@ -16,7 +16,7 @@ module.exports = exports = {
         var collection = db.collection('users');
         collection.find({username:username}).toArray(function(err,profileData){
           if (err) throw err;
-          res.end(JSON.stringify("success!"));
+          res.end(JSON.stringify(profileData));
         });
       });
     }

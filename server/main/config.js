@@ -92,7 +92,7 @@ app.get('/logout', function(req, res){
 
   app.use('/main/sort', noteRouter);
   app.use('/main/crunch', crunchRouter);
-  app.use('/main/home', profileRouter);
+  app.use('/main/profile', profileRouter);
   app.use(middle.logError);
   app.use(middle.handleError);
   require('../note/note_routes.js')(noteRouter);

@@ -7,7 +7,7 @@ var mongoClient = require('mongodb').MongoClient,
 module.exports = exports = {
   getProfile: function(req,res,next){
     if (!req.session.user){
-      res.redirect('/#/public/login');
+      // res.redirect('/#/public/login');
     }
     var username = req.session.user;
     try {

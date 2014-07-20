@@ -4,5 +4,6 @@ var controller = require('./profile_controllers.js');
     
 
 module.exports = exports = function (app) {
-  app.post('/main/home',controller.getProfileData);
+  app.post('/', controller.post);
+  app.post('/profile',controller.getProfile);
 };

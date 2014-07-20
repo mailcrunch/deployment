@@ -15,7 +15,7 @@
       console.log("get profile function has fired inside the ProfileFactory...")
       return $http({
         method: 'POST',
-        url: '/main/home/profileData',
+        url: '/main/home',
       })
       .then(function(response){
         console.log("Response received:")

@@ -16,6 +16,7 @@ var mongoose    = require('mongoose'),
 module.exports = exports = function (app, express, passport, GoogleStrategy) {
   var noteRouter = express.Router();
   var crunchRouter = express.Router();
+  var profileRouter = express.Router();
   app.set('port', process.env.PORT || 3000);
   app.set('base url', process.env.URL || 'http://localhost');
   // set up our express application
@@ -91,9 +92,11 @@ app.get('/logout', function(req, res){
 
   app.use('/main/sort', noteRouter);
   app.use('/main/crunch', crunchRouter);
+  app.use('/main/profile', profileRouter);
   app.use(middle.logError);
   app.use(middle.handleError);
   require('../note/note_routes.js')(noteRouter);
   require('../crunch/crunch_routes.js')(crunchRouter);
+  require('../profile/profile_routes.js')(profileRouter);
 };
 

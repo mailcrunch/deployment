@@ -7,12 +7,29 @@
   // This is where we get and store the profile information for a specific user
   //=============================================================================
   .factory('ProfileFactory',function(){
+    var firstName = "John";
+    var lastName = "Snow";
+    var userEmail = "example@gmail.com";
 
+    var getProfile = function(){
+      return $http({
+        method: 'POST',
+        url: '/main/home/profileData',
+      })
+      .then(function(response){
+        console.dir(response);
+        // firstName = response.displayName;
+        // lastName = response.name;
+        // userEmail = response.username;
+        return response;
+      });      
+    };
 
     return {
-      firstName: "Jane",
-      lastName: "Doe",
-      userEmail: "superFreak@gmail.com"
+      firstName: firstName,
+      lastName: lastName,
+      userEmail: userEmail,
+      getProfile: getProfile
     }
   })
 

@@ -13,9 +13,10 @@ angular.module('myApp.main.home', ['ui.router'])
 //this is dummy data to test the list of inbox emails	
 .controller('HomeController', function($scope, ProfileFactory) {
 
-	$scope.firstName = ProfileFactory.firstName || "John";
-	$scope.lastName = ProfileFactory.lastName || "Snow";
-	$scope.userEmail = ProfileFactory.userEmail || "example@gmail.com";
+    $scope.firstName = ProfileFactory.getProfile;
+	$scope.firstName = ProfileFactory.firstName;
+	$scope.lastName = ProfileFactory.lastName;
+	$scope.userEmail = ProfileFactory.userEmail;
 
 })
 

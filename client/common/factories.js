@@ -12,14 +12,13 @@
     var userEmail = "example@gmail.com";
 
     var getProfile = function(){
-      console.log("get profile function has fired inside the ProfileFactory...")
       return $http({
         method: 'POST',
         url: '/main/profile/data',
       })
       .then(function(response){
         console.log("Response received:")
-        console.log(response);
+        console.dir(response);
         // firstName = response.displayName;
         // lastName = response.name;
         // userEmail = response.username;

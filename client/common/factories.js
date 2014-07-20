@@ -18,14 +18,11 @@
       })
       .then(function(response){
         console.log("Response received:")
-        console.log(".data property");
-        console.dir(response.data);
         console.log(".data[0] property");
         console.dir(response.data[0]);
-
         console.log("attempt to access the displayName and username properties")
-        console.dir(response.data.displayName);
-        console.dir(response.data.username);
+        console.dir(response.data[0].displayName);
+        console.dir(response.data[0].username);
         return response;
       });      
     };

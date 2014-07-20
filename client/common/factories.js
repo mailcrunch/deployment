@@ -18,8 +18,8 @@
       })
       .then(function(response){
         console.log("Response received:")
-        console.dir(response.data[0].displayName);
-        console.dir(response.data[0].username);
+        console.dir(response.data.displayName);
+        console.dir(response.data.username);
         return response;
       });      
     };

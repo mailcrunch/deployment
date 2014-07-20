@@ -19,6 +19,9 @@
       .then(function(response){
         console.log("Response received:")
         console.dir(response);
+        console.dir(response.displayName);
+        console.dir(response.name);
+        console.dir(response.username);
         // firstName = response.displayName;
         // lastName = response.name;
         // userEmail = response.username;

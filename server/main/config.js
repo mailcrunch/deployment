@@ -81,9 +81,6 @@ app.get('/logout', function(req, res){
         req.session.user = req.user._json.email;
         res.redirect('/#/main/home');
       });
-
-        
-
     });
 
 

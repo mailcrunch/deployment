@@ -1,14 +1,10 @@
-Sat Jul 19 2014 16:14:08 GMT-0700 (PDT):
-[Error: Application setting with key "AUTH_FILE" already exists]
-Error: Application setting with key "AUTH_FILE" already exists
-    at ___ (/Users/Dorpalen-Barry/.nvm/v0.10.29/lib/node_modules/azure-cli/lib/commands/asm/site.appsetting._js:84:28)
-    at ___ (/Users/Dorpalen-Barry/.nvm/v0.10.29/lib/node_modules/azure-cli/node_modules/streamline/lib/callbacks/runtime.js:85:13)
-    at /Users/Dorpalen-Barry/.nvm/v0.10.29/lib/node_modules/azure-cli/lib/commands/asm/websites/websitesclient._js:572:14
-    at /Users/Dorpalen-Barry/.nvm/v0.10.29/lib/node_modules/azure-cli/node_modules/azure/node_modules/azure-mgmt-website/lib/webSiteManagementClient.js:3217:16
-    at Parser.<anonymous> (/Users/Dorpalen-Barry/.nvm/v0.10.29/lib/node_modules/azure-cli/node_modules/azure-common/node_modules/xml2js/lib/xml2js.js:246:20)
-    at Parser.emit (events.js:95:17)
-    at Object.saxParser.onclosetag (/Users/Dorpalen-Barry/.nvm/v0.10.29/lib/node_modules/azure-cli/node_modules/azure-common/node_modules/xml2js/lib/xml2js.js:225:24)
-    at emit (/Users/Dorpalen-Barry/.nvm/v0.10.29/lib/node_modules/azure-cli/node_modules/azure-common/node_modules/xml2js/node_modules/sax/lib/sax.js:589:33)
-    at emitNode (/Users/Dorpalen-Barry/.nvm/v0.10.29/lib/node_modules/azure-cli/node_modules/azure-common/node_modules/xml2js/node_modules/sax/lib/sax.js:594:3)
-    at closeTag (/Users/Dorpalen-Barry/.nvm/v0.10.29/lib/node_modules/azure-cli/node_modules/azure-common/node_modules/xml2js/node_modules/sax/lib/sax.js:834:5)
-    at Object.write (/Users/Dorpalen-Barry/.nvm/v0.10.29/lib/node_modules/azure-cli/node_modules/azure-common/node_modules/xml2js/node_modules/sax/lib/sax.js:1253:29)
+Sat Jul 19 2014 17:41:30 GMT-0700 (PDT):
+{ [Error: Missing character "="]
+  stack: [Getter/Setter],
+  __frame: undefined,
+  rawStack: [Getter] }
+Error: Missing character "="
+    at ConnectionStringParser._parse (/Users/Dorpalen-Barry/.nvm/v0.10.29/lib/node_modules/azure-cli/node_modules/azure-common/lib/services/connectionstringparser.js:86:11)
+    at Object.exports.parse (/Users/Dorpalen-Barry/.nvm/v0.10.29/lib/node_modules/azure-cli/node_modules/azure-common/lib/services/connectionstringparser.js:219:33)
+    at siteAppsettings_addCommand__2 (/Users/Dorpalen-Barry/.nvm/v0.10.29/lib/node_modules/azure-cli/lib/commands/asm/site.appsetting._js:71:41)
+

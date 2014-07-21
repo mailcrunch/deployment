@@ -1,3 +1,5 @@
+///DO NOT COMMIT SECURE DATA HERE!
+
 module.exports = {
   'googleAuth' : {
   	'clientID' 		: process.env.clientID || require('./API_KEYS_GIT_IGNORE_THIS.js').googleAuth.clientID,

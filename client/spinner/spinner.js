@@ -13,8 +13,7 @@
     $scope.spinner = 0;
     InboxFactory.getEm()
       .then(function(response){
-        $scope.spinner = response.data.length;
-        // console.lo
+        $scope.spinner = response.data[0].length;
         for (var i = 0; i < response.data.length; i++){
           if (response.data[i].headers.from !== undefined){
             $scope.email = {

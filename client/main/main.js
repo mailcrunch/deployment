@@ -18,6 +18,8 @@
     $interval(function(){
       $scope.points = PointFactory.getPoints();
     }, 1000)
-    $scope.logout = Auth.logout;
+    $scope.logout = function(){
+      Auth.logout();
+    };
   })
 

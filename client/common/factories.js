@@ -109,11 +109,12 @@
           // On getting a succesful response, the email body needs to be 
           // formatted. Take a look at the raw response to see why...
           for (var i = 0; i < response.data.length; i++){
+
             if (response.data[i].headers['x-mailer'] === undefined){
               if (response.data[i].headers['x-failed-recipients']){
                 response.data[i].body = 'Message delivery failed';
               } else {
-                // console.log(response.data[i].body);
+                
                 // response.data[i].body = response.data[i].body.split('UTF-8')[1];
                 // response.data[i].body = response.data[i].body.split('--')[0]; 
                 //make body pretty later.... might use these two strings but make it work better...

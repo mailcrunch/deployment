@@ -9,7 +9,7 @@ var mongoClient = require('mongodb').MongoClient;
 
 module.exports = exports = {
   store: function(profile,accessToken,refreshToken){
-    mongoClient.connect(authCredentials.dbAuth.dbUri, function(err, db) {
+    mongoClient.connect(process.env.dbURI, function(err, db) {
       if(err) { throw err; }
       console.log('I connected!!!');
       var users = db.collection('users');

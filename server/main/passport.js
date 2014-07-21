@@ -31,7 +31,7 @@ passport.deserializeUser(function(obj, done) {
 passport.use(new GoogleStrategy({
     clientID: authCredentials.googleAuth.clientID,
     clientSecret: authCredentials.googleAuth.clientSecret,
-    callbackURL: authCredentials.googleAuth.callbackURL,
+    callbackURL: '/auth/google/callback',
   },
   function(accessToken, refreshToken, profile, done) {
     console.log('acc:' + accessToken + '  refreshToken:' + refreshToken + '  prof:');

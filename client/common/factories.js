@@ -18,13 +18,11 @@
         data.fullName = response.data[0].displayName;
         data.userEmail = response.data[0].username;
         return data;
-      });     
+      })     
     };
 
-
-
     return {
-      getProfile: getProfile
+      getProfile: getProfile;
     }
   })
 

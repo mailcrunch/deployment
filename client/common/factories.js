@@ -117,13 +117,11 @@
             if (response.data[i].headers['x-mailer'] === undefined){
               if (response.data[i].headers['x-failed-recipients']){
                 response.data[i].body = 'Message delivery failed';
-              } else {
-                
-                // response.data[i].body = response.data[i].body.split('UTF-8')[1];
-                // response.data[i].body = response.data[i].body.split('--')[0]; 
-                //make body pretty later.... might use these two strings but make it work better...
+              } else if (response.data[i].body.indexOf('This is an automatically generated Delivery Status') > -1) {
                 response.data[i].body = response.data[i].body;
-
+              } else {
+                response.data[i].body = response.data[i].body.split('UTF-8')[1];
+                response.data[i].body = response.data[i].body.split('--')[0]; 
               }
             }
           }

@@ -1,3 +1,5 @@
+///DO NOT COMMIT SECURE DATA HERE!
+
 module.exports = {
   'googleAuth' : {
     'clientID'    : 'googleClientAPI key goes here',
@@ -6,6 +8,7 @@ module.exports = {
   },
   'dbAuth' : {
     'dbUri' : 'mongodb://localhost:27017/mailcrunch2' //this needs to change to mongolab db for deployment
-  }
+  },
+  'sessionSecret':'Put-Session-Secret-Here' //changeme when deploying live
 };
 

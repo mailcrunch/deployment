@@ -12,7 +12,7 @@ angular.module('myApp.main.home', ['ui.router'])
 
 //this constroller calls a function that collects user profile data from 
 // the database (via a factory) and returns it to the client for display
-.controller('HomeController', function($scope, $Q, ProfileFactory) {
+.controller('HomeController', function($scope, $q, ProfileFactory) {
 
   ProfileFactory.getProfile().then(function(){
     console.log(ProfileFactory.fullName);

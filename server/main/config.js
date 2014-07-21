@@ -69,7 +69,7 @@ app.get('/logout', function(req, res){
   //   request.  If authentication fails, the user will be redirected back to the
   //   login page.  Otherwise, the primary route function function will be called,
   //   which, in this example, will redirect the user to the home page.
-  app.get('/auth/google/callback', 
+  app.get('/oauth2callback', 
     passport.authenticate('google', { 
  failureRedirect: '/#/public/login' }),
     function(req, res) {

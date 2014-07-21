@@ -15,7 +15,7 @@ angular.module('myApp.main.home', ['ui.router'])
 .controller('HomeController', function($scope, $q, ProfileFactory) {
 
   var usrProfile = ProfileFactory.getProfile()
-    .then(function(){
+    .then(function(usrProfile){
       console.log(usrProfile);
       $scope.fullName = usrProfile.fullName;
   	  $scope.userEmail = usrProfile.userEmail;

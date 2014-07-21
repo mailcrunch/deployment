@@ -50,7 +50,7 @@ app.get('/logout', function(req, res){
   //   request.  The first step in Google authentication will involve redirecting
   //   the user to google.com.  After authenticating, Google will redirect the
   //   user back to this application at /auth/google/return
-  app.get('/auth/google', 
+  app.get('/auth/google',
     passport.authenticate('google', {
       scope: ['https://www.googleapis.com/auth/userinfo.profile',
               'https://mail.google.com',
@@ -69,7 +69,7 @@ app.get('/logout', function(req, res){
   //   request.  If authentication fails, the user will be redirected back to the
   //   login page.  Otherwise, the primary route function function will be called,
   //   which, in this example, will redirect the user to the home page.
-  app.get('/oauth2callback', 
+  app.get('/auth/google/callback',
     passport.authenticate('google', { 
  failureRedirect: '/#/public/login' }),
     function(req, res) {

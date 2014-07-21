@@ -51,7 +51,7 @@ passport.use(new GoogleStrategy({
     }
 
     catch(e){
-      console.log(e);
+      console.log('fpo ',e);
       return done(e);
     }
     finally{

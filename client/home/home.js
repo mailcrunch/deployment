@@ -20,5 +20,5 @@ angular.module('myApp.main.home', ['ui.router'])
       $scope.fullName = usrProfile.fullName;
   	  $scope.userEmail = usrProfile.userEmail;
     })
-}
+});
 

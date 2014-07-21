@@ -16,8 +16,8 @@
         url: '/main/profile/data',
       })
       .then(function(response){
-        var fullName = response.data[0].displayName;
-        var userEmail = response.data[0].username;
+        fullName = response.data[0].displayName;
+        userEmail = response.data[0].username;
         console.log("resp received & new values set");
         return response;
       });      

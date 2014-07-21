@@ -181,12 +181,17 @@ module.exports = exports = {
             // Upon successful connection a 'ready' event is fired
             imap.once('ready', function(){
               openInbox(function(err,box){
-                if (err) throw err;
+                if (err) console.log(err);
                 // This is where we search the inbox for all unread messages
                 imap.search(['UNSEEN'], function(err,results){
-                  if (err) throw err;
+                  if (err) console.log(err);
                   // The sought messages now need to be fetched one by one.
                   // We need to specify the Headers and Text bodies in order to retrieve both
+                  if (results.length === 0){
+                    res.end('no messages today');
+                    imap.end();
+                    return;
+                  }
                   var fetched = imap.fetch(results,{ struct: true, bodies:['HEADER', 'TEXT']});
                   // Upon successful fetch of a message, a 'message' event is fired  
                   fetched.on('message', function(msg,seqno){
@@ -240,7 +245,7 @@ module.exports = exports = {
                   fetched.once('end', function(){
                     var collection = db.collection('emails');
                     collection.find({username:username,tag:'unsorted'}).toArray(function(err,emails){
-                      if (err) throw err;
+                      if (err) console.log(err);
                       if (emails.length > 0){
                         console.log('length of emails: ', emails.length);
                         res.end(JSON.stringify(emails));

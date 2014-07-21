@@ -9,11 +9,20 @@
         controller: 'SpinnerController'
       })
   })
-  .controller('SpinnerController', function($state,$scope,$timeout, InboxFactory, Inbox) {
+  .controller('SpinnerController', function($state, $scope, $timeout, InboxFactory, Inbox) {
     $scope.spinner = 0;
     InboxFactory.getEm()
       .then(function(response){
         $scope.spinner = response.data[0].length;
+        if (response.data[0].length === 0){
+          $timeout(function(){
+            $state.transitionTo('myApp.main.note')
+          }, 1000)
+        }
+        console.log('howdy pardner ', response);
+        if (response.data === 'no messages today'){
+          $state.transitionTo('myApp.main.crunch');
+        }
         for (var i = 0; i < response.data.length; i++){
           if (response.data[i].headers.from !== undefined){
             $scope.email = {

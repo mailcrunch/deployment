@@ -109,7 +109,11 @@
           // On getting a succesful response, the email body needs to be 
           // formatted. Take a look at the raw response to see why...
           for (var i = 0; i < response.data.length; i++){
-
+            console.log('buzzlgihtyaer ',response.data[i]);
+            console.log(response.data);
+            if (response.data === 'no messages today'){
+              return response;
+            }
             if (response.data[i].headers['x-mailer'] === undefined){
               if (response.data[i].headers['x-failed-recipients']){
                 response.data[i].body = 'Message delivery failed';

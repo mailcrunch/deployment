@@ -22,7 +22,7 @@
     };
 
     return {
-      getProfile: getProfile;
+      getProfile: getProfile
     }
   })
 

@@ -22,8 +22,13 @@
         console.log(fullName);
         console.log(userEmail);
         return response;
-      });      
+      });
+      console.log("outside the first function")
+      console.log(fullName);
+      console.log(userEmail);      
     };
+
+
 
     return {
       fullName: fullName,

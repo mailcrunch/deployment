@@ -9,7 +9,7 @@
         controller: 'SpinnerController'
       })
   })
-  .controller('SpinnerController', function($state,$scope,$timeout,InboxFactory, Inbox) {
+  .controller('SpinnerController', function($state,$scope,$timeout, InboxFactory, Inbox) {
     $scope.spinner = 0;
     InboxFactory.getEm()
       .then(function(response){

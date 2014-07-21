@@ -10,8 +10,15 @@ angular.module('myApp.main.home', ['ui.router'])
     });
 })
 
-//this is dummy data to test the list of inbox emails	
-.controller('HomeController', function($scope) {
+//this constroller calls a function that collects user profile data from 
+// the database (via a factory) and returns it to the client for display
+.controller('HomeController', function($scope, $q, ProfileFactory) {
 
-})
+  var usrProfile = ProfileFactory.getProfile()
+    .then(function(usrProfile){
+      console.log(usrProfile);
+      $scope.fullName = usrProfile.fullName;
+  	  $scope.userEmail = usrProfile.userEmail;
+    })
+});
 

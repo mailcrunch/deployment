@@ -1,11 +1,11 @@
 module.exports = {
   'googleAuth' : {
-  	'clientID' 		: process.env.clientID,
-  	'clientSecret' 	: process.env.clientSecret,
-  	'callbackURL' 	: process.env.callbackURL
+    'clientID'    : 'googleClientAPI key goes here',
+    'clientSecret'  : 'google Client Secret goes here',
+  	'callbackURL' 	: '/auth/google/callback', //this might need to change for azure deployment
   },
   'dbAuth' : {
-    'dbUri' : process.env.dbURI
+    'dbUri' : 'mongodb://localhost:27017/mailcrunch2' //this needs to change to mongolab db for deployment
   }
 };
 

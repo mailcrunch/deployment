@@ -19,6 +19,8 @@
         fullName = response.data[0].displayName;
         userEmail = response.data[0].username;
         console.log("resp received & new values set");
+        console.log(fullName);
+        console.log(userEmail);
         return response;
       });      
     };

@@ -5,7 +5,7 @@ module.exports = {
   	'callbackURL' 	: process.env.callbackURL
   },
   'dbAuth' : {
-    'dbUri' : process.env.dbURI
+    'dbUri' : process.env.dbURI || 'http://localhost:27017'
   }
 };
 

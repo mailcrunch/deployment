@@ -14,10 +14,8 @@ angular.module('myApp.main.home', ['ui.router'])
 // the database (via a factory) and returns it to the client for display
 .controller('HomeController', function($scope, $q, ProfileFactory) {
 
-  var data = ProfileFactory.getProfile().then(function(){
-    console.log(data);
-    $scope.fullName = data.fullName
-	  $scope.userEmail = data.userEmail
-  })
-})
+  var usrProfile = ProfileFactory.getProfile()
+  console.log(usrProfile);
+  $scope.fullName = usrProfile.fullName;
+	$scope.userEmail = usrProfile.userEmail;
 

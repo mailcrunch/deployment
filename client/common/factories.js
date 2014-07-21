@@ -14,10 +14,10 @@
         url: '/main/profile/data',
       })
       .then(function(response){
-        var data = {};
-        data.fullName = response.data[0].displayName;
-        data.userEmail = response.data[0].username;
-        return data;
+        var profile = {};
+        profile.fullName = response.data[0].displayName;
+        profile.userEmail = response.data[0].username;
+        return profile;
       })     
     };
 

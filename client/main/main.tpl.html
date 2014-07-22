@@ -18,17 +18,26 @@
         <li>
           <a href="/logout">Logout</a>
         </li>
-      </ul>
-    </div>
-    <div class='container-static pull-right' ng-controller="PointController">
-      <div class='navbar-header'>
-        <a class="navbar-brand">CrunchPoints</a>
-      </div>
-      <ul class="nav navbar-nav">
         <li>
-          <a>{{points}}</a>
+          <a href="http://hackreactor.com">
+            <img style="position: fixed; top: 0; right: 0; border: 0;"
+            src="http://i.imgur.com/x86kKmF.png"
+            alt="Built at Hack Reactor">
+            </a>
         </li>
       </ul>
+    </div>
+    <div ng-controller="PointController">
+      <div class='navbar-header'>
+        <center>
+        <h3 style="position: absolute; top: 0; right: 200px; border: 0; color: steelblue">CrunchPoints</h3>
+      </div>
+      <ul>
+        <li>
+          <h3 style="position: absolute; top: 0; right: 125px; border: 0; color: steelblue">{{points}}</h3>
+        </li>
+      </ul>
+    </center>
     </div>
   </nav>
 </header>

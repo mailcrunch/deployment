@@ -16,6 +16,8 @@
 
 This is an open source email project. The purpose is to bring email into the 21st century by making it faster to process and social in nature.
 
+Git
+
 ## Requirements
 
 - Express 4.x

@@ -2,6 +2,8 @@
   "use strict";
   angular.module('myApp')
 
+  // This factory makes a get request to the server and checks if the user is logged in
+  // The response is used in all controllers to check if the user is logged in and transition states if they are not
   .factory('LoginFactory', function($http){
     var loginCheck = function(){
       return $http({

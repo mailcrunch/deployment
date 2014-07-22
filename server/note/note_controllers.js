@@ -22,7 +22,9 @@ mongoClient.connect(auth.dbAuth.dbUri, function(err,db){
 module.exports = exports = {
   // See comments for Get function below
   getLatestEmailsForDB: function(req,res,next){
-    if (req.session.user){
+    if (!req.session.user){
+      res.redirect('/')
+    } else {
       var username = req.session.user;
       mongoClient.connect(auth.dbAuth.dbUri, function(err,db){
         if (err) throw err;
@@ -120,12 +122,11 @@ module.exports = exports = {
         });
       });
     }
-    else{
-      res.redirect('/#/login');
-    }
   },
   getUnsortedEmailsForClient: function(req,res,next){
-    if (req.session.user){
+    if (!req.session.user){
+      res.redirect('/');
+    } else {
       mongoClient.connect(auth.dbAuth.dbUri, function(err, db) {
         if(err) { throw (err); }
         var collection = db.collection('emails');
@@ -138,12 +139,11 @@ module.exports = exports = {
         });
       });
     }
-    else{
-      res.redirect('/#/login'); 
-    }
   },
   get: function (req, res, next) {
-    if (req.session.user){
+    if (!req.session.user){
+      res.redirect('/');
+    } else {
       var username = req.session.user;
       mongoClient.connect(auth.dbAuth.dbUri, function(err,db){
         if (err) throw err;
@@ -251,10 +251,6 @@ module.exports = exports = {
                         res.end(JSON.stringify(emails));
                         imap.end();
                       }
-                      else{
-                        imap.end();
-                        res.redirect('/#/public/crunch');
-                      }
                     });
                   });
                 });
@@ -277,61 +273,63 @@ module.exports = exports = {
 
   getSortedInbox: function(req,res,next){
     if (!req.session.user){
-      res.redirect('/#/login');
-    }
-    var username = req.session.user;
-    try {
-      //returns array fo sorted emails from server-db
-      //eventually should also sort by date as secondary?
-      //also need to replace username with active user... and add in auth
-      mongoClient.connect(auth.dbAuth.dbUri, function(err, db) {
-        if (err) throw err;
-        var collection = db.collection('emails');
-        collection.find({username:username, tag:'sorted'}).sort({bucket:1}).toArray(function(err,emails){
-          if (err) throw err;
-          res.end(JSON.stringify(emails));
-        });
-      });
-    }
-    catch (e){
-      console.log(e);
-    }
-  },
-
-  //This function updates the email Tag (and optionally a bucket) on an email
-  updateEmailTag: function(req,res,next){
-   if (!req.session.user){
-    res.redirect('/#/login');
-   }
-   var username = req.session.user;
-   var buffer = '';
-    req.on('data', function(data){
-      buffer += data.toString('utf8')
-    });
-    req.on('end', function(){
-      console.log(buffer);
-      buffer = buffer.split('###');
-      var id = buffer[0];
-      var tag = buffer[1];
-      var bucket = buffer[2];
+      res.redirect('/#/public/login');
+    } else {
+      var username = req.session.user;
       try {
+        //returns array fo sorted emails from server-db
+        //eventually should also sort by date as secondary?
+        //also need to replace username with active user... and add in auth
         mongoClient.connect(auth.dbAuth.dbUri, function(err, db) {
-          if(err) { throw err; }
-          var collection = db.collection('emails');   
-          //update items with matching id (with checking username for security!)
-          collection.update({_id:new ObjectId(id), username:username}, {$set: {tag:tag, bucket:bucket}}, function(err, res){
-            if (err){
-              throw err;
-            }
-            console.log(res);
-            console.log('id ' + id + '###' + tag);
+          if (err) throw err;
+          var collection = db.collection('emails');
+          collection.find({username:username, tag:'sorted'}).sort({bucket:1}).toArray(function(err,emails){
+            if (err) throw err;
+            res.end(JSON.stringify(emails));
           });
         });
       }
       catch (e){
         console.log(e);
       }
-    });
-    res.end();
+    }
   },
+
+  //This function updates the email Tag (and optionally a bucket) on an email
+  updateEmailTag: function(req,res,next){
+   if (!req.session.user){
+    res.redirect('/#/public/login');
+   } else {
+     var username = req.session.user;
+     var buffer = '';
+      req.on('data', function(data){
+        buffer += data.toString('utf8')
+      });
+      req.on('end', function(){
+        console.log(buffer);
+        buffer = buffer.split('###');
+        var id = buffer[0];
+        var tag = buffer[1];
+        var bucket = buffer[2];
+        try {
+          mongoClient.connect(auth.dbAuth.dbUri, function(err, db) {
+            if(err) { throw err; }
+            var collection = db.collection('emails');   
+            //update items with matching id (with checking username for security!)
+            collection.update({_id:new ObjectId(id), username:username}, {$set: {tag:tag, bucket:bucket}}, function(err, res){
+              if (err){
+                throw err;
+              }
+              console.log(res);
+              console.log('id ' + id + '###' + tag);
+            });
+          });
+        }
+        catch (e){
+          console.log(e);
+        }
+      });
+      res.end();
+    }
+  }
 };

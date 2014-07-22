@@ -3,20 +3,6 @@
   angular.module('myApp')
 
 
-  .factory('AuthFactory', function($http){
-    var logout = function(){
-      return $http({
-        method: 'GET',
-        url: '/logout'
-      })
-      .then(function(response){
-        return response;
-      })
-    };
-    return {
-      logout: logout
-    }
-  })
   //=============================================================================
   // This is where we get and store the profile information for a specific user
   //=============================================================================

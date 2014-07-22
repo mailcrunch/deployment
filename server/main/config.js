@@ -38,8 +38,10 @@ module.exports = exports = function (app, express, passport, GoogleStrategy) {
   app.use(passport.initialize());
 
 app.get('/logout', function(req, res){
-    req.logout();
-    res.redirect('/public/login');
+    req.session.destroy(function(err){
+      console.log(err);
+      res.redirect('/#/public/login');
+    });
   });
   
   //call passport oauth google strategy
@@ -73,10 +75,6 @@ app.get('/logout', function(req, res){
     passport.authenticate('google', { 
  failureRedirect: '/#/public/login' }),
     function(req, res) {
-      console.log('<=====================START===============>');
-      console.dir(req.user._json.email);
-      console.log('<==================END==================>');
-      
       req.session.regenerate(function(err){
         if(err) throw err;
         req.session.user = req.user._json.email;
@@ -84,11 +82,6 @@ app.get('/logout', function(req, res){
       });
     });
 
-
-  app.get('/logout', function(req, res){
-    req.logout();
-    res.redirect('/public/login');
-  });
 
   app.use('/main/sort', noteRouter);
   app.use('/main/crunch', crunchRouter);

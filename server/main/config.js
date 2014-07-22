@@ -60,13 +60,12 @@ app.get('/logout', function(req, res){
               'https://www.googleapis.com/auth/plus.profile.emails.read',
               'https://www.googleapis.com/auth/plus.login'],
       accessType: 'offline', approvalPrompt: 'force' ,
-      failureRedirect: '/public/login' 
+      failureRedirect: '/#/public/login' 
     }),
     function(req, res) {
       res.redirect('/auth/google/data');
     });
 
-  // GET /auth/google/return
   //   Use passport.authenticate() as route middleware to authenticate the
   //   request.  If authentication fails, the user will be redirected back to the
   //   login page.  Otherwise, the primary route function function will be called,

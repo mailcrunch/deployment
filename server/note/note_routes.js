@@ -7,4 +7,5 @@ module.exports = exports = function (app) {
   app.post('/updateEmailTag',controller.updateEmailTag);
   app.post('/getSortedInbox', controller.getSortedInbox);
   app.get('/', controller.get);
+  app.get('/session', controller.login);
 };

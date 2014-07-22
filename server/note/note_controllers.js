@@ -20,6 +20,15 @@ mongoClient.connect(auth.dbAuth.dbUri, function(err,db){
 });
 
 module.exports = exports = {
+
+  login: function(req, res, next){
+    console.log('session user: ', req.session.user)
+    if (req.session.user === undefined){
+      res.end('false')
+    } else {
+      res.end('true')
+    }
+  },
   // See comments for Get function below
   getLatestEmailsForDB: function(req,res,next){
     if (!req.session.user){
@@ -141,6 +150,7 @@ module.exports = exports = {
     }
   },
   get: function (req, res, next) {
+    console.log('bugs bunny ', req.session.user);
     if (!req.session.user){
       res.redirect('/');
     } else {

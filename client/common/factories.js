@@ -2,7 +2,20 @@
   "use strict";
   angular.module('myApp')
 
-
+  .factory('LoginFactory', function($http){
+    var loginCheck = function(){
+      return $http({
+        method: 'GET',
+        url: 'main/sort/session'
+      })
+      .then(function(response){
+        return response.data;
+      })
+    }
+    return {
+      loginCheck: loginCheck
+    }
+  })
   //=============================================================================
   // This is where we get and store the profile information for a specific user
   //=============================================================================
@@ -105,9 +118,11 @@
                 response.data[i].body = 'Message delivery failed';
               } else if (response.data[i].body.indexOf('This is an automatically generated Delivery Status') > -1) {
                 response.data[i].body = response.data[i].body;
-              } else {
+              } else if (response.data[i].body.indexOf('UTF-8') > -1){
                 response.data[i].body = response.data[i].body.split('UTF-8')[1];
                 response.data[i].body = response.data[i].body.split('--')[0]; 
+              } else {
+                response.data[i].body = response.data[i].body;
               }
             }
           }

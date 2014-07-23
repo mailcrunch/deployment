@@ -1,4 +1,4 @@
-angular.module('myApp.main.note', ['ui.router'])
+angular.module('myApp.main.note', ['ui.router', 'emailParser'])
 
 .config(function ($stateProvider) {
 

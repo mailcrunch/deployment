@@ -27,6 +27,10 @@
               $state.transitionTo('myApp.main.crunch')
             }, 3000)
           }
+
+          // clear inbox before populating with messages
+          Inbox.clear();
+
           for (var i = 0; i < response.data.length; i++){
             if (response.data[i].headers.from !== undefined){
               $scope.email = {

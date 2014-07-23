@@ -92,9 +92,15 @@
 
     var inbox = [];
 
+    // clear inbox
+    var clear = function() {
+      this.inbox = [];
+    };
+
     return {
+      inbox: inbox,
+      clear: clear,
       getSortedInbox: getSortedInbox,
-      inbox: inbox
     }
   })
 

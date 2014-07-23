@@ -1,4 +1,5 @@
 node_modules/
 _DS_Store
 DS_Store
-/main/API_KEYS_GIT_IGNORE_THIS.js
+API_KEYS_GIT_IGNORE_THIS.js
+client/lib/

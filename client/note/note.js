@@ -1,5 +1,6 @@
 angular.module('myApp.main.note', ['ui.router', 'ngSanitize', 'emailParser'])
 
+
 .config(function ($stateProvider) {
 
   $stateProvider

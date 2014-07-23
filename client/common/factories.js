@@ -157,6 +157,7 @@
           //   }
           // }
           console.log("requestion!");
+
           // After formatting, return response to client/note/note.js
           return response;
         });

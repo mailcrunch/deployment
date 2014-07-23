@@ -19,7 +19,7 @@
       } else {
       InboxFactory.getEm()
         .then(function(response){
-      console.log('got here')
+      console.log('got here');
           $scope.spinner = response.data.length;
           if (response.data === 'no messages today'){
             $scope.spinner = 0;

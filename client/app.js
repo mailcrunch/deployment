@@ -2,6 +2,7 @@
   "use strict";
   angular.module('myApp', [
     'ngFx',
+    'ngSanitize',
     'ui.router',
     'ngAnimate',
     'fx.animations',

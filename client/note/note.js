@@ -52,7 +52,7 @@ angular.module('myApp.main.note', ['ui.router'])
     =======================================================================
     =======================================================================
     */
-
+    // buckets refer to...what?
         $scope.sortManage = function(){
           // This updates the email's 'bucket' property
           $scope.inbox[0]['bucket'] = 1;

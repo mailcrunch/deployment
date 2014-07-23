@@ -117,7 +117,7 @@
           // formatted. Take a look at the raw response to see why...
           for (var i = 0; i < response.data.length; i++){
             console.log('buzzlgihtyaer ',response.data[i]);
-            console.log(response.data);
+            console.log('full response data:', response.data);
             if (response.data === 'no messages today'){
               return response;
             }
@@ -127,8 +127,17 @@
               } else if (response.data[i].body.indexOf('This is an automatically generated Delivery Status') > -1) {
                 response.data[i].body = response.data[i].body;
               } else if (response.data[i].body.indexOf('UTF-8') > -1){
-                response.data[i].body = response.data[i].body.split('UTF-8')[1];
-                response.data[i].body = response.data[i].body.split('--')[0]; 
+                if (response.data[i].body.indexOf('Content-Transfer-Encoding: quoted-printable') > -1) {
+                  response.data[i].body = response.data[i].body.split('Content-Transfer-Encoding: quoted-printable')[1];
+                  response.data[i].body = response.data[i].body.split('--')[0]; 
+                } else {
+                //right now it's only grabbing plain text, which is why it isn't displaying properly.
+                // gonna grab the HTML, too, and display that first and if not available, then plain text
+                // response.data[i].body = response.data[i].body.split('UTF-8')[1];
+                // response.data[i].body = response.data[i].body.split('--')[0]; 
+                  response.data[i].body = response.data[i].body.split('text/html; charset=UTF-8')[1];
+                  response.data[i].body = response.data[i].body.split('--')[0]; 
+                }
               } else {
                 response.data[i].body = response.data[i].body;
               }
@@ -136,7 +145,6 @@
           }
           // After formatting, return response to client/note/note.js
           return response;
-          
         });
       };
       return {

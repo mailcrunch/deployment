@@ -2,11 +2,12 @@
   "use strict";
   angular.module('myApp')
 
-  .filter('safe', function($sce) {
-    return function(htmlString) {
-        return $sce.trustAsHtml(htmlString);
-    };
-})
+// didn't end up needing this filter for ngSanitize
+//   .filter('safe', function($sce) {
+//     return function(htmlString) {
+//         return $sce.trustAsHtml(htmlString);
+//     };
+// })
 
 
   // This factory makes a get request to the server and checks if the user is logged in

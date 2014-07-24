@@ -23,9 +23,7 @@ angular.module('myApp.main.crunch', ['ui.router', 'ngSanitize'])
       .then(function(response){
         console.log("email received from getsortedinbox in crunch", response.data);
         // The promise returned is the email data
-        // This data must be formatted to use in our app
-        // Take a look at the response to see how it is currently formatted
-        // and then take a look to see what we are adding below
+ 
         for (var i = 0; i < response.data.length; i++){
           if (response.data[i].headers.from !== undefined){
             $scope.email = {

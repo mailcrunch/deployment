@@ -208,6 +208,7 @@ module.exports = exports = {
                   // Upon successful fetch of a message, a 'message' event is fired  
                   fetched.on('message', function(msg,seqno){
                     var parser = new MailParser({showAttachmentLinks: true});
+
                     var currentParsedEmail;
 
                     var buffer = '';
@@ -237,6 +238,7 @@ module.exports = exports = {
                       console.log(currentParsedEmail);
 
                       var message = {body: currentParsedEmail.html, headers: currentParsedEmail.headers, uid: UID};
+
                       //add individual email to database with appropriate tags if it is not currently in db
 
                       var collection = db.collection('emails');

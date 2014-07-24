@@ -1,4 +1,4 @@
-angular.module('myApp.main.note', ['ui.router', 'emailParser'])
+angular.module('myApp.main.note', ['ui.router', 'ngSanitize', 'emailParser'])
 
 .config(function ($stateProvider) {
 
@@ -9,8 +9,13 @@ angular.module('myApp.main.note', ['ui.router', 'emailParser'])
       controller: 'NoteController'
     });
 })
+.filter('safe', function($sce) {
+    return function(htmlString) {
+        return $sce.trustAsHtml(htmlString);
+    };
+})
 
-.controller('NoteController', function($scope, $state, $interval, $timeout, InboxFactory, Inbox, PointFactory, UpdateEmailTag, LoginFactory) {
+.controller('NoteController', function($scope, $sce, $state, $interval, $timeout, InboxFactory, Inbox, PointFactory, UpdateEmailTag, LoginFactory) {
     LoginFactory.loginCheck()
     .then(function(response){
       if (response === 'false'){

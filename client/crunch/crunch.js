@@ -1,4 +1,4 @@
-angular.module('myApp.main.crunch', ['ui.router'])
+angular.module('myApp.main.crunch', ['ui.router', 'ngSanitize'])
 
 .config(function($stateProvider) {
 
@@ -21,6 +21,7 @@ angular.module('myApp.main.crunch', ['ui.router'])
     // This function is in common/factories.js
     Inbox.getSortedInbox()
       .then(function(response){
+        console.log("email received from getsortedinbox in crunch", response.data);
         // The promise returned is the email data
         // This data must be formatted to use in our app
         // Take a look at the response to see how it is currently formatted

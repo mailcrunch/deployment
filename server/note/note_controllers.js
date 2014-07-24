@@ -207,7 +207,7 @@ module.exports = exports = {
 
                   // Upon successful fetch of a message, a 'message' event is fired  
                   fetched.on('message', function(msg,seqno){
-                    var parser = new MailParser();
+                    var parser = new MailParser({showAttachmentLinks: true});
                     var currentParsedEmail;
 
                     var buffer = '';
@@ -236,7 +236,7 @@ module.exports = exports = {
                       currentParsedEmail = mailObj;
                       console.log(currentParsedEmail);
 
-                      var message = {body: currentParsedEmail.text, headers: currentParsedEmail.headers, uid: UID};
+                      var message = {body: currentParsedEmail.html, headers: currentParsedEmail.headers, uid: UID};
                       //add individual email to database with appropriate tags if it is not currently in db
 
                       var collection = db.collection('emails');
@@ -245,7 +245,7 @@ module.exports = exports = {
                       message.createdAt = message.headers.date;
                       //this line creates a unique id for the email based on the user's username and the message-id which should be unique
                       //for future versions might need to refactor as message-id might not be unique.
-                      message.headersUniqHack = message.username + message.headers['message-id'][0].split('@')[0].slice(1);
+                      message.headersUniqHack = message.username + message.headers['message-id'].split('@')[0].slice(1);
                       collection.insert( message, {w:1}, function(err,results){
                         if (err){
                           console.log(err);

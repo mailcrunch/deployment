@@ -145,14 +145,16 @@ angular.module('myApp.main.crunch', ['ui.router'])
         // This function checks what 'bucket' or category the email has been
         // sorted into and calls the corresponding timer function
         var bucketChecker = function(){
-          if($scope.inbox[0].bucket === '1'){
-              manageTimer();
-          }else if($scope.inbox[0].bucket === '2'){
-              focusTimer();
-          }else if ($scope.inbox[0].bucket === '3'){
-              avoidTimer();
-          }else if ($scope.inbox[0].bucket === '4'){
-              limitTimer();
+          if ($scope.inbox[0]) {
+            if ($scope.inbox[0].bucket === '1') {
+                manageTimer();
+            } else if ($scope.inbox[0].bucket === '2') {
+                focusTimer();
+            } else if ($scope.inbox[0].bucket === '3') {
+                avoidTimer();
+            } else if ($scope.inbox[0].bucket === '4') {
+                limitTimer();
+            }
           }
         };
 
@@ -219,14 +221,16 @@ angular.module('myApp.main.crunch', ['ui.router'])
     .then(function(response){
       $scope.inbox = response.data;
       $scope.message = "What's done is done."
-      if($scope.inbox[0]['bucket'] === '1'){
-        $scope.message = "Take time to handle this yourself. It's important and pressing."
-      }else if($scope.inbox[0]['bucket'] === '2'){
-        $scope.message = "Schedule time to come back to this. It's an investment in the future."  
-      }else if($scope.inbox[0]['bucket'] === '3'){
-        $scope.message = "How can you delegate this task?"
-      }else if($scope.inbox[0]['bucket'] === '4'){
-        $scope.message = "Read this only for your entertainment, and spend the minimum amount of time on it possible."
+      if ($scope.inbox[0]) {
+        if ($scope.inbox[0]['bucket'] === '1') {
+          $scope.message = "Take time to handle this yourself. It's important and pressing."
+        } else if ($scope.inbox[0]['bucket'] === '2') {
+          $scope.message = "Schedule time to come back to this. It's an investment in the future."  
+        } else if ($scope.inbox[0]['bucket'] === '3') {
+          $scope.message = "How can you delegate this task?"
+        } else if ($scope.inbox[0]['bucket'] === '4') {
+          $scope.message = "Read this only for your entertainment, and spend the minimum amount of time on it possible."
+        }
       }
     });
 })

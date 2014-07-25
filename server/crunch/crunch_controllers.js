@@ -123,11 +123,7 @@ module.exports = exports = {
                   if (err) throw err;
                   // We are only searching the inbox for the specific email we just sent
                   // This is contained in the buffer object
-                  imap.search([buffer], function (err, results) {
-                    if (err) throw err;
-                    // This is where we are marking the email as 'read' or 'seen'
-                    imap.addFlags(results, 'SEEN');
-                  });
+                  imap.addFlags([buffer], 'SEEN');
                 });
               });
 

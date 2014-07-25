@@ -22,6 +22,7 @@ angular.module('myApp.main.home', ['ui.router'])
         .then(function(usrProfile){
           $scope.fullName = usrProfile.fullName;
       	  $scope.userEmail = usrProfile.userEmail;
+          $scope.profilePhoto = usrProfile.profilePhoto;
         })
     }
   })

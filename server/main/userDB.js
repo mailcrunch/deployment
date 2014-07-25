@@ -16,7 +16,7 @@ module.exports = exports = {
       users.update(
         {username:profile._json.email}, //profil
         {username:profile._json.email, profile:profile._json, displayName: profile.displayName, name: profile.name, emails: profile.emails,
-          provider: profile.provider, accessToken:accessToken,refreshToken:refreshToken},
+          provider: profile.provider, profilePhoto:profile.photos, accessToken:accessToken,refreshToken:refreshToken},
         {upsert:true},
         function(err,res){
           if (err) throw err;

@@ -14,6 +14,7 @@ angular.module('myApp.main.note', ['ui.router', 'ngSanitize'])
 .controller('NoteController', function($scope, $sce, $state, $interval, $timeout, InboxFactory, Inbox, PointFactory, UpdateEmailTag, LoginFactory) {
     LoginFactory.loginCheck()
     .then(function(response){
+      $scope.quantity = 9;
       if (response === 'false'){
         $state.transitionTo('myApp.public.login')
       } else {

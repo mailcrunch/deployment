@@ -5,8 +5,8 @@
       <!--Sidebar content inside span2-->
        <div class='well'><h4>The queue </h4><p>What's on the docket for this crunch session</p></div>
        <span>
-          <li class="list-group-item disabled" ng-repeat="email in inbox | filter: {status: 'sorted'}">{{email.from}}: {{email.subject}} @ {{email.time}}</li>
-          <li class="list-group-item" ng-repeat="email in inbox | filter: {status: 'pending'}">{{email.from}}: {{email.subject}} @ {{email.time}}</li>
+          <li class="list-group-item disabled" ng-repeat="email in inbox | filter: {status: 'sorted'} | limitTo:quantity">{{email.from}}: {{email.subject}} @ {{email.time}}</li>
+          <li class="list-group-item" ng-repeat="email in inbox | filter: {status: 'pending'} | limitTo:quantity">{{email.from}}: {{email.subject}} @ {{email.time}}</li>
        </span>
     </div>
 </div>

@@ -20,13 +20,8 @@
       InboxFactory.getEm()
         .then(function(response){
       console.log('got here');
-// TODO remove debugging
-console.log("===== RESPONSE in InboxFactory =====");
-console.dir(response);
           $scope.spinner = response.data.length;
           if (response.data === 'no messages today'){
-// TODO remove debugging
-console.log("+++++ NO MESSAGES TODAY +++++");
             $scope.spinner = 0;
             $timeout(function(){
               $state.transitionTo('myApp.main.crunch')
@@ -39,8 +34,6 @@ console.log("+++++ NO MESSAGES TODAY +++++");
           // process new messages if found
           // MailCrunch server responds with "no messages today" when no unseen messages found
           if (response.data !== 'no messages today') {
-// TODO remove debugging
-console.log("+++++ SOME MESSAGES TODAY +++++");
             for (var i = 0; i < response.data.length; i++){
               if (response.data[i].headers.from !== undefined){
                 $scope.email = {
@@ -66,7 +59,7 @@ console.log("+++++ SOME MESSAGES TODAY +++++");
                 $scope.email.time = response.data[i].headers.date.toString();
                 $scope.email.id = response.data[i].uid.toString();
                 $scope.email._id = response.data[i]._id;
-                Inbox.inbox.push($scope.email); 
+                Inbox.inbox.push($scope.email);
               }
             }
             //temporary bug fix for double emails?

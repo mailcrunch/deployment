@@ -117,16 +117,12 @@
   // This factory sends a GET request to the server to retrieve emails via IMAP
   // See server/note/note_routes.js then server/note/note_controllers.js
   .factory('InboxFactory', function($http){
-// TODO remove debugging
-console.log("===== entered InboxFactory =====");
       var getEm = function(){
         return $http({
           method: 'GET',
           url: '/main/sort'
         })
         .then(function(response){
-// TODO remove debugging
-console.log("===== resolve InboxFactory Promise =====");
           // On getting a succesful response, the email body needs to be 
           // formatted. Take a look at the raw response to see why...
           // for (var i = 0; i < response.data.length; i++){

@@ -238,10 +238,7 @@ module.exports = exports = {
                       console.log(currentParsedEmail);
 
                       var message = {body: currentParsedEmail.html, headers: currentParsedEmail.headers, uid: UID};
-<<<<<<< HEAD
 
-=======
->>>>>>> fix mailparser and ngsanitize to display emails properly
                       //add individual email to database with appropriate tags if it is not currently in db
 
                       var collection = db.collection('emails');

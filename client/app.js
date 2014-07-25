@@ -2,7 +2,6 @@
   "use strict";
   angular.module('myApp', [
     'ngFx',
-    'emailParser',
     'ngSanitize',
     'ui.router',
     'ngAnimate',

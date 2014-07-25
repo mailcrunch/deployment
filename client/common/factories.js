@@ -115,7 +115,7 @@
 
   // This factory sends a GET request to the server to retrieve emails via IMAP
   // See server/note/note_routes.js then server/note/note_controllers.js
-  .factory('InboxFactory', function($http, $parseEmail){
+  .factory('InboxFactory', function($http){
       var getEm = function(){
         return $http({
           method: 'GET',

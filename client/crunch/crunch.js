@@ -164,7 +164,7 @@ angular.module('myApp.main.crunch', ['ui.router', 'ngSanitize','textAngular'])
           // It is constructed this way so that the server can parse it and
           // put the right values in the right places
           // See server/crunch/crunch_controllers.js --the 'post' function
-          var message = $('#to').val() + '###' + $('#subject').val() + '###' + $('#message').val();
+          var message = $('#to').val() + '###' + $('#subject').val() + '###' + $scope.message;/*$('#message').val()*/
           // See client/common/factories.js
           SendMessageFactory.sendMessage(message);
           // These are variables needed for the UpdateEmailTag function
@@ -181,7 +181,8 @@ angular.module('myApp.main.crunch', ['ui.router', 'ngSanitize','textAngular'])
           bucketChecker();
 
           // This sets out message reply to be blank
-          $('#message').val('');
+          // $('#message').val('');
+          $scope.message = '';
 
           if ($scope.inbox.length > 0) {
             // If there are emails in the queue, this updates the subject

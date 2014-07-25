@@ -5,7 +5,7 @@
 <div>
 <span class="row">
   <div class="col-xs-6 col-md-2">
-      <img src="../images/user_blank.png" alt="..." class="img-rounded">
+      <img src={{profilePhoto}} alt="..." class="img-rounded">
   </div>
   <div class="col-xs-6 col-md-3">
         <p>{{ fullName }}</p><p>{{ userEmail }}</p>
@@ -23,45 +23,25 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-xs-6 col-md-2">
-        <!-- <a href="#" class="thumbnail"> -->
-          <!-- <img src="../images/badgeOutline.jpg" alt="..."> -->
           <img ng-src="../img/Badge1.png" ng-if="badgeOneShower()">
         <p ng-if="badgeOneShower()">Level 1 - Super Sorter</p>
         <p ng-if="!badgeOneShower()">Level 1 - Unachieved</p>
-        <!-- </a> -->
       </div>
       <div class="col-xs-6 col-md-2">
-        <!-- <a href="#" class="thumbnail"> -->
-          <!-- <img src="../images/badgeOutline.jpg" alt="..."> -->
         <img ng-src="../img/Badge2.png" ng-if="badgeTwoShower()">
         <p ng-if="badgeTwoShower()">Level 2 - Crunch Captain</p>
         <p ng-if="!badgeTwoShower()">Level 2 - Unachieved</p>
-        <!-- </a> -->
       </div>
       <div class="col-xs-6 col-md-2">
-        <!-- <a href="#" class="thumbnail"> -->
-          <!-- <img src="../images/badgeOutline.jpg" alt="..."> -->
           <img ng-src="../img/Badge3.png" ng-if="badgeThreeShower()">
           <p ng-if="badgeThreeShower()">Level 3 - Mail Master</p>
           <p ng-if="!badgeThreeShower()">Level 3 - Unachieved</p>
-        <!-- </a> -->
       </div>
       <div class="col-xs-6 col-md-2">
-        <!-- <a href="#" class="thumbnail"> -->
-          <!-- <img src="../images/badgeOutline.jpg" alt="..."> -->
           <img ng-src="../img/Badge4.png" ng-if="badgeFourShower()">
           <p ng-if="badgeFourShower()">Level 4 - EMT- Extreme Mail Technician</p>
           <p ng-if="!badgeFourShower()">Level 4 - Unachieved</p>
-
-        <!-- </a> -->
       </div>
-      <!-- <div class="col-xs-6 col-md-2"> -->
-        <!-- <a href="#" class="thumbnail"> -->
-          <!-- <img src="../images/badgeOutline.jpg" alt="..."> -->
-          <!-- <img ng-src="../img/Badge5.png" ng-show="badgeFiveShower()"> -->
-        <!-- </a> -->
-        <!-- <p>Level 5 - Unachieved</p> -->
-      <!-- </div> -->
     </div>
   </div>
 </div>

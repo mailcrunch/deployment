@@ -41,6 +41,7 @@
         var profile = {};
         profile.fullName = response.data[0].displayName;
         profile.userEmail = response.data[0].username;
+        profile.profilePhoto = response.data[0].profile.picture;
         return profile;
       })     
     };

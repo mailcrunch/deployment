@@ -191,6 +191,8 @@ module.exports = exports = {
             imap.connect();
             // Upon successful connection a 'ready' event is fired
             imap.once('ready', function(){
+// TODO remove debugging
+console.log("<<<<< opening Inbox >>>>>");
               openInbox(function(err,box){
                 if (err) console.log(err);
                 // This is where we search the inbox for all unread messages
@@ -199,6 +201,9 @@ module.exports = exports = {
                   // The sought messages now need to be fetched one by one.
                   // We need to specify the Headers and Text bodies in order to retrieve both
                   if (results.length === 0){
+// TODO remove debugging
+console.log("+++++ no IMAP unseen messages +++++")
+console.log("+++++ returning 'no messages today' +++++")
                     res.end('no messages today');
                     imap.end();
                     return;
@@ -235,7 +240,8 @@ module.exports = exports = {
 
                     parser.on('end', function(mailObj){
                       currentParsedEmail = mailObj;
-                      console.log(currentParsedEmail);
+// TODO remove debugging
+console.log(currentParsedEmail);
 
                       var message = {body: currentParsedEmail.html, headers: currentParsedEmail.headers, uid: UID};
 
@@ -250,31 +256,54 @@ module.exports = exports = {
                       message.headersUniqHack = message.username + message.headers['message-id'].split('@')[0].slice(1);
                       collection.insert( message, {w:1}, function(err,results){
                         if (err){
+// TODO remove debugging
+console.log("===== OH MY GAWD! =====");
                           console.log(err);
                         }        
                       });    
                     });
                   });
+// TODO remove debugging
+console.log(">>>>> registering fetched end listener <<<<<");
                   //connect to database and pull out all the emails
                   fetched.once('end', function(){
+// TODO remove debugging
+console.log("===== pulling from database after imap fetch finishes =====");
                     var collection = db.collection('emails');
                     collection.find({username:username,tag:'unsorted'}).toArray(function(err,emails){
+// TODO remove debugging
+console.log(">>>>> collection find toArray callback <<<<<");
+console.log("err: " + err);
+console.log("email length: " + emails.length);
                       if (err) console.log(err);
                       if (emails.length > 0){
                         console.log('length of emails: ', emails.length);
+// TODO remove debugging
+console.log("===== EMAILS structure =====");
+console.dir(emails);
                         res.end(JSON.stringify(emails));
-                        imap.end();
+                      } else {
+                        res.end('no messages today');
                       }
+                      imap.end();
                     });
                   });
                 });
               });
 
+// TODO remove debugging
+console.log("<<<<< registering IMAP error listener >>>>>");
               imap.once('error', function(err) {
+// TODO remove debugging
+console.log(">>>>> IMAP ERRORED OUT <<<<<");
                 console.log('imap err  ', err);
               });
 
+// TODO remove debugging
+console.log("<<<<< registering IMAP end listener >>>>>");
               imap.once('end', function() {
+// TODO remove debugging
+console.log(">>>>> IMAP CONNECTION FINISHED <<<<<");
                 console.log('Connection ended');
                 imap.end();
               });

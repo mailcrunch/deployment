@@ -20,8 +20,13 @@
       InboxFactory.getEm()
         .then(function(response){
       console.log('got here');
+// TODO remove debugging
+console.log("===== RESPONSE in InboxFactory =====");
+console.dir(response);
           $scope.spinner = response.data.length;
           if (response.data === 'no messages today'){
+// TODO remove debugging
+console.log("+++++ NO MESSAGES TODAY +++++");
             $scope.spinner = 0;
             $timeout(function(){
               $state.transitionTo('myApp.main.crunch')
@@ -34,6 +39,8 @@
           // process new messages if found
           // MailCrunch server responds with "no messages today" when no unseen messages found
           if (response.data !== 'no messages today') {
+// TODO remove debugging
+console.log("+++++ SOME MESSAGES TODAY +++++");
             for (var i = 0; i < response.data.length; i++){
               if (response.data[i].headers.from !== undefined){
                 $scope.email = {

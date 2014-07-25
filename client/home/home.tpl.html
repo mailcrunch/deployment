@@ -25,33 +25,33 @@
       <div class="col-xs-6 col-md-2">
         <!-- <a href="#" class="thumbnail"> -->
           <!-- <img src="../images/badgeOutline.jpg" alt="..."> -->
-          <img ng-src="../img/Badge1.png" ng-show="badgeOneShower()">
-        <p ng-show="badgeOneShower()">Level 1 - Super Sorter</p>
-        <p ng-hide="badgeOneShower()">Level 1 - Unachieved</p>
+          <img ng-src="../img/Badge1.png" ng-if="badgeOneShower()">
+        <p ng-if="badgeOneShower()">Level 1 - Super Sorter</p>
+        <p ng-if="!badgeOneShower()">Level 1 - Unachieved</p>
         <!-- </a> -->
       </div>
       <div class="col-xs-6 col-md-2">
         <!-- <a href="#" class="thumbnail"> -->
           <!-- <img src="../images/badgeOutline.jpg" alt="..."> -->
-          <img ng-src="../img/Badge2.png" ng-show="badgeTwoShower()">
-        <p ng-show="badgeTwoShower()">Level 2 - Crunch Captain</p>
-        <p ng-hide="badgeTwoShower()">Level 2 - Unachieved</p>
+        <img ng-src="../img/Badge2.png" ng-if="badgeTwoShower()">
+        <p ng-if="badgeTwoShower()">Level 2 - Crunch Captain</p>
+        <p ng-if="!badgeTwoShower()">Level 2 - Unachieved</p>
         <!-- </a> -->
       </div>
       <div class="col-xs-6 col-md-2">
         <!-- <a href="#" class="thumbnail"> -->
           <!-- <img src="../images/badgeOutline.jpg" alt="..."> -->
-          <img ng-src="../img/Badge3.png" ng-show="badgeThreeShower()">
-          <p ng-show="badgeThreeShower()">Level 3 - Mail Master</p>
-          <p ng-hide="badgeThreeShower()">Level 3 - Unachieved</p>
+          <img ng-src="../img/Badge3.png" ng-if="badgeThreeShower()">
+          <p ng-if="badgeThreeShower()">Level 3 - Mail Master</p>
+          <p ng-if="!badgeThreeShower()">Level 3 - Unachieved</p>
         <!-- </a> -->
       </div>
       <div class="col-xs-6 col-md-2">
         <!-- <a href="#" class="thumbnail"> -->
           <!-- <img src="../images/badgeOutline.jpg" alt="..."> -->
-          <img ng-src="../img/Badge4.png" ng-show="badgeFourShower()">
-          <p ng-show="badgeFourShower()">Level 4 - EMT- Extreme Mail Technician</p>
-          <p ng-hide="badgeFourShower()">Level 4 - Unachieved</p>
+          <img ng-src="../img/Badge4.png" ng-if="badgeFourShower()">
+          <p ng-if="badgeFourShower()">Level 4 - EMT- Extreme Mail Technician</p>
+          <p ng-if="!badgeFourShower()">Level 4 - Unachieved</p>
 
         <!-- </a> -->
       </div>

@@ -1,4 +1,4 @@
-angular.module('myApp.main.crunch', ['ui.router', 'ngSanitize'])
+angular.module('myApp.main.crunch', ['ui.router', 'ngSanitize','textAngular'])
 
 .config(function($stateProvider) {
 

@@ -25,5 +25,36 @@ angular.module('myApp.main.home', ['ui.router'])
         })
     }
   })
+})
+
+//controller for badges 
+
+.controller('BadgeController', function($scope, PointFactory) {
+  $scope.points = PointFactory.getPoints();
+
+  $scope.badgeOneShower = function () {
+    if ($scope.points >= 100) {
+      return true;
+    }
+    else return false;
+  };
+  $scope.badgeTwoShower = function () {
+    if ($scope.points >= 500) {
+      return true;
+    }
+     else return false;
+  };
+  $scope.badgeThreeShower = function () {
+    if ($scope.points >= 800) {
+      return true;
+    }
+     else return false;
+  };
+  $scope.badgeFourShower = function () {
+    if ($scope.points >= 1000) {
+      return true;
+    }
+     else return false;
+  };
 });
 

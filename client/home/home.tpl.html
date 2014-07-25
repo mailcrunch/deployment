@@ -19,39 +19,49 @@
 
     </span>
 
-<div class='jumbotron'>
+<div class='jumbotron' ng-controller="BadgeController">
   <div class="container-fluid">
     <div class="row">
       <div class="col-xs-6 col-md-2">
-        <a href="#" class="thumbnail">
-          <img src="../images/badgeOutline.jpg" alt="...">
-        </a>
-        <p>Level 1 - Unachieved</p>
+        <!-- <a href="#" class="thumbnail"> -->
+          <!-- <img src="../images/badgeOutline.jpg" alt="..."> -->
+          <img ng-src="../img/Badge1.png" ng-show="badgeOneShower()">
+        <p ng-show="badgeOneShower()">Level 1 - Super Sorter</p>
+        <p ng-hide="badgeOneShower()">Level 1 - Unachieved</p>
+        <!-- </a> -->
       </div>
       <div class="col-xs-6 col-md-2">
-        <a href="#" class="thumbnail">
-          <img src="../images/badgeOutline.jpg" alt="...">
-        </a>
-        <p>Level 2 - Unachieved</p>
+        <!-- <a href="#" class="thumbnail"> -->
+          <!-- <img src="../images/badgeOutline.jpg" alt="..."> -->
+          <img ng-src="../img/Badge2.png" ng-show="badgeTwoShower()">
+        <p ng-show="badgeTwoShower()">Level 2 - Crunch Captain</p>
+        <p ng-hide="badgeTwoShower()">Level 2 - Unachieved</p>
+        <!-- </a> -->
       </div>
       <div class="col-xs-6 col-md-2">
-        <a href="#" class="thumbnail">
-          <img src="../images/badgeOutline.jpg" alt="...">
-        </a>
-        <p>Level 3 - Unachieved</p>
+        <!-- <a href="#" class="thumbnail"> -->
+          <!-- <img src="../images/badgeOutline.jpg" alt="..."> -->
+          <img ng-src="../img/Badge3.png" ng-show="badgeThreeShower()">
+          <p ng-show="badgeThreeShower()">Level 3 - Mail Master</p>
+          <p ng-hide="badgeThreeShower()">Level 3 - Unachieved</p>
+        <!-- </a> -->
       </div>
       <div class="col-xs-6 col-md-2">
-        <a href="#" class="thumbnail">
-          <img src="../images/badgeOutline.jpg" alt="...">
-        </a>
-        <p>Level 4 - Unachieved</p>
+        <!-- <a href="#" class="thumbnail"> -->
+          <!-- <img src="../images/badgeOutline.jpg" alt="..."> -->
+          <img ng-src="../img/Badge4.png" ng-show="badgeFourShower()">
+          <p ng-show="badgeFourShower()">Level 4 - EMT- Extreme Mail Technician</p>
+          <p ng-hide="badgeFourShower()">Level 4 - Unachieved</p>
+
+        <!-- </a> -->
       </div>
-      <div class="col-xs-6 col-md-2">
-        <a href="#" class="thumbnail">
-          <img src="../images/badgeOutline.jpg" alt="...">
-        </a>
-        <p>Level 5 - Unachieved</p>
-      </div>
+      <!-- <div class="col-xs-6 col-md-2"> -->
+        <!-- <a href="#" class="thumbnail"> -->
+          <!-- <img src="../images/badgeOutline.jpg" alt="..."> -->
+          <!-- <img ng-src="../img/Badge5.png" ng-show="badgeFiveShower()"> -->
+        <!-- </a> -->
+        <!-- <p>Level 5 - Unachieved</p> -->
+      <!-- </div> -->
     </div>
   </div>
 </div>

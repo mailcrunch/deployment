@@ -10,11 +10,6 @@ angular.module('myApp.main.note', ['ui.router', 'ngSanitize'])
       controller: 'NoteController'
     });
 })
-.filter('safe', function($sce) {
-    return function(htmlString) {
-        return $sce.trustAsHtml(htmlString);
-    };
-})
 
 .controller('NoteController', function($scope, $sce, $state, $interval, $timeout, InboxFactory, Inbox, PointFactory, UpdateEmailTag, LoginFactory) {
     LoginFactory.loginCheck()

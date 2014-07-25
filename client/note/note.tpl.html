@@ -52,7 +52,10 @@
         <tr><td> Received: </td><td> {{inbox[0].time}}</td></tr>
         <tr><td> From: </td><td> {{inbox[0].from}}</td></tr>
         <tr><td> Subject: </td><td> {{inbox[0].subject}}</td></tr>
-        <tr><td> Body: </td><td> {{inbox[0].body}}</td></tr>
+        <!-- need to parse the body string so that the html can be inserted -->
+        <tr><td> Body: </td><td ng-bind-html="inbox[0].body"></td></tr>
+        <!-- <tr><td> Body: </td><td> {{inbox[0].body}}</td></tr> -->
+
       </table>
     </div>
    </span>

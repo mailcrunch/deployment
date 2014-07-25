@@ -1,4 +1,5 @@
-angular.module('myApp.main.note', ['ui.router'])
+angular.module('myApp.main.note', ['ui.router', 'ngSanitize'])
+
 
 .config(function ($stateProvider) {
 
@@ -9,8 +10,13 @@ angular.module('myApp.main.note', ['ui.router'])
       controller: 'NoteController'
     });
 })
+.filter('safe', function($sce) {
+    return function(htmlString) {
+        return $sce.trustAsHtml(htmlString);
+    };
+})
 
-.controller('NoteController', function($scope, $state, $interval, $timeout, InboxFactory, Inbox, PointFactory, UpdateEmailTag, LoginFactory) {
+.controller('NoteController', function($scope, $sce, $state, $interval, $timeout, InboxFactory, Inbox, PointFactory, UpdateEmailTag, LoginFactory) {
     LoginFactory.loginCheck()
     .then(function(response){
       if (response === 'false'){
@@ -52,7 +58,7 @@ angular.module('myApp.main.note', ['ui.router'])
     =======================================================================
     =======================================================================
     */
-
+    // buckets refer to...what?
         $scope.sortManage = function(){
           // This updates the email's 'bucket' property
           $scope.inbox[0]['bucket'] = 1;

@@ -19,7 +19,7 @@
       } else {
       InboxFactory.getEm()
         .then(function(response){
-      console.log('got here')
+      console.log('got here');
           $scope.spinner = response.data.length;
           if (response.data === 'no messages today'){
             $scope.spinner = 0;
@@ -48,6 +48,7 @@
               if (response.data[i].body === undefined){
                 $scope.email.body = 'no message contents';
               } else {
+                //escape otherwise all contents shows up as bold
                 if (response.data[i].body.indexOf('<b>') > -1){
                   response.data[i].body = response.data[i].body.slice(response.data[i].body.indexOf('<b>') + 3, response.data[i].body.lastIndexOf('</b>'));
                 }

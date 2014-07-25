@@ -2,6 +2,14 @@
   "use strict";
   angular.module('myApp')
 
+// didn't end up needing this filter for ngSanitize
+//   .filter('safe', function($sce) {
+//     return function(htmlString) {
+//         return $sce.trustAsHtml(htmlString);
+//     };
+// })
+
+
   // This factory makes a get request to the server and checks if the user is logged in
   // The response is used in all controllers to check if the user is logged in and transition states if they are not
   .factory('LoginFactory', function($http){
@@ -18,6 +26,7 @@
       loginCheck: loginCheck
     }
   })
+
   //=============================================================================
   // This is where we get and store the profile information for a specific user
   //=============================================================================
@@ -115,28 +124,43 @@
         .then(function(response){
           // On getting a succesful response, the email body needs to be 
           // formatted. Take a look at the raw response to see why...
-          for (var i = 0; i < response.data.length; i++){
-            console.log('buzzlgihtyaer ',response.data[i]);
-            console.log(response.data);
-            if (response.data === 'no messages today'){
-              return response;
-            }
-            if (response.data[i].headers['x-mailer'] === undefined){
-              if (response.data[i].headers['x-failed-recipients']){
-                response.data[i].body = 'Message delivery failed';
-              } else if (response.data[i].body.indexOf('This is an automatically generated Delivery Status') > -1) {
-                response.data[i].body = response.data[i].body;
-              } else if (response.data[i].body.indexOf('UTF-8') > -1){
-                response.data[i].body = response.data[i].body.split('UTF-8')[1];
-                response.data[i].body = response.data[i].body.split('--')[0]; 
-              } else {
-                response.data[i].body = response.data[i].body;
-              }
-            }
-          }
+          // for (var i = 0; i < response.data.length; i++){
+          //   console.log('buzzlgihtyaer ',response.data[i]);
+          //   if (response.data === 'no messages today'){
+          //     return response;
+          //   }
+          //   if (response.data[i].headers['x-mailer'] === undefined){
+          //     if (response.data[i].headers['x-failed-recipients']){
+          //       response.data[i].body = 'Message delivery failed';
+          //     } else if (response.data[i].body.indexOf('This is an automatically generated Delivery Status') > -1) {
+          //       response.data[i].body = response.data[i].body;
+          //     } else if (response.data[i].body.indexOf('UTF-8') > -1){
+          //        // if (response.data[i].body.indexOf('Content-Type: multipart/alternative') > -1) {
+          //       //   response.data[i].body = response.data[i].body.split('Content-Transfer-Encoding: quoted-printable')[1];
+          //       //     response.data[i].body = response.data[i].body.split('--')[0]; 
+          //       //  }
+          //       //  else if (response.data[i].body.indexOf('Content-Transfer-Encoding: quoted-printable') > -1) {
+          //       //   response.data[i].body = response.data[i].body.split('Content-Transfer-Encoding: quoted-printable')[1];
+          //       //   response.data[i].body = response.data[i].body.split('--')[0]; 
+          //       // } else {
+          //       //right now it's only grabbing plain text, which is why it isn't displaying properly.
+          //       // gonna grab the HTML, too, and display that first and if not available, then plain text
+          //       // response.data[i].body = response.data[i].body.split('UTF-8')[1];
+          //       // response.data[i].body = response.data[i].body.split('--')[0]; 
+          //         response.data[i].body = response.data[i].body.split('UTF-8')[1];
+          //         response.data[i].body = response.data[i].body.split('--')[0]; 
+          //     } else {
+          //       response.data[i].body = response.data[i].body;
+          //     //   var formattedBody = $parseEmail(response.data[i].body);
+          //     //   console.log('formatted email data:', formattedBody);
+          //     //   response.data[i].body = formattedBody;
+          //     }
+          //   }
+          // }
+          console.log("requestion!");
+
           // After formatting, return response to client/note/note.js
           return response;
-          
         });
       };
       return {

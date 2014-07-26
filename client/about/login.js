@@ -11,5 +11,4 @@ angular.module('myApp.public.about', ['ui.router'])
 })
 
 .controller('AboutController', function($scope) {
-	
 });

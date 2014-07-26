@@ -1,5 +1,6 @@
 (function (angular) {
   "use strict";
+
   angular.module('myApp', [
     'ngFx',
     'ngSanitize',
@@ -8,6 +9,7 @@
     'fx.animations',
     'myApp.public',
     'myApp.main'])
+
   .config(function($stateProvider) {
     $stateProvider
       .state('myApp', {
@@ -15,6 +17,7 @@
         template: '<ui-view></ui-view>'
       });
   })
+  
   .run(function ($state) {
     $state.transitionTo('myApp.public');
   });

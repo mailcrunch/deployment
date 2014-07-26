@@ -1,31 +1,29 @@
-
   "use strict";
   angular.module('myApp.main.spinner', ['ui.router'])
-  .config(function ($stateProvider){
+  .config(function ($stateProvider) {
     $stateProvider
       .state('myApp.main.spinner', {
         url: '/spinner',
         templateUrl: 'spinner/spinner.tpl.html',
         controller: 'SpinnerController'
-      })
+      });
   })
+
   .controller('SpinnerController', function($state, $scope, $timeout, InboxFactory, Inbox, LoginFactory) {
     $scope.spinner = '...';
     LoginFactory.loginCheck()
-
-    .then(function(response){
+    .then(function(response) {
       if (response === 'false'){
-        $state.transitionTo('myApp.public.login')
+        $state.transitionTo('myApp.public.login');
       } else {
       InboxFactory.getEm()
-        .then(function(response){
-      console.log('got here');
+        .then(function(response) {
           $scope.spinner = response.data.length;
           if (response.data === 'no messages today'){
             $scope.spinner = 0;
-            $timeout(function(){
-              $state.transitionTo('myApp.main.crunch')
-            }, 3000)
+            $timeout(function() {
+              $state.transitionTo('myApp.main.crunch');
+            }, 3000);
           }
 
           // clear inbox before populating with messages
@@ -66,12 +64,12 @@
             // if (Inbox.inbox.length > response.data.length){
             //   Inbox.inbox.length = response.data.length;
             // }
-            $timeout(function(){
-              $state.transitionTo('myApp.main.note')
+            $timeout(function() {
+              $state.transitionTo('myApp.main.note');
             }, 4000);
           }
-        })
+        });
       }
-    })
-  })
+    });
+  });
 

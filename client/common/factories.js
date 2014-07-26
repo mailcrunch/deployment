@@ -2,29 +2,22 @@
   "use strict";
   angular.module('myApp')
 
-// didn't end up needing this filter for ngSanitize
-//   .filter('safe', function($sce) {
-//     return function(htmlString) {
-//         return $sce.trustAsHtml(htmlString);
-//     };
-// })
-
-
   // This factory makes a get request to the server and checks if the user is logged in
-  // The response is used in all controllers to check if the user is logged in and transition states if they are not
-  .factory('LoginFactory', function($http){
-    var loginCheck = function(){
+  // The response is used in all controllers to check if the user is logged in and 
+  // transition states if they are not
+  .factory('LoginFactory', function($http) {
+    var loginCheck = function() {
       return $http({
         method: 'GET',
         url: 'main/sort/session'
       })
-      .then(function(response){
+      .then(function(response) {
         return response.data;
-      })
-    }
+      });
+    };
     return {
       loginCheck: loginCheck
-    }
+    };
   })
 
   //=============================================================================

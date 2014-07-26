@@ -1,4 +1,3 @@
-
 "use strict";
 
 var nodemailer  = require('nodemailer'), // Nodemailer is what we use to transmit email via SMTP. See https://github.com/andris9/Nodemailer
@@ -16,7 +15,7 @@ module.exports = exports = {
 
       var buffer = '';
       req.on('data', function (data) {
-        buffer += data.toString('utf8')
+        buffer += data.toString('utf8');
       });
       req.on('end', function () {
         // The buffer object will be the formatted string from client/crunch/crunch.js

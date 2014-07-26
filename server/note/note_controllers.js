@@ -9,8 +9,7 @@ var Imap        = require('imap'), // Imap for the getting of emails. See https:
 
 
 //set up initial db configuration and indexes
-
-mongoClient.connect(auth.dbAuth.dbUri, function(err,db){
+mongoClient.connect(auth.dbAuth.dbUri, function(err,db) {
   db.createCollection('emails',function(err,collection) {});
   db.createCollection('users',function(err,collection){});
   db.createIndex('users', {username: 1}, {unique: true}, function(err,res){});
@@ -21,9 +20,7 @@ mongoClient.connect(auth.dbAuth.dbUri, function(err,db){
 });
 
 module.exports = exports = {
-
-  login: function(req, res, next){
-    console.log('session user: ', req.session.user)
+  login: function(req, res, next) {
     if (req.session.user === undefined){
       res.end('false')
     } else {
@@ -133,7 +130,7 @@ module.exports = exports = {
   //     });
   //   }
   // },
-  getUnsortedEmailsForClient: function(req,res,next){
+  getUnsortedEmailsForClient: function(req,res,next) {
     if (!req.session.user){
       res.redirect('/');
     } else {
@@ -151,7 +148,6 @@ module.exports = exports = {
     }
   },
   get: function (req, res, next) {
-    console.log('bugs bunny ', req.session.user);
     if (!req.session.user){
       res.redirect('/');
     } else {
@@ -310,17 +306,16 @@ module.exports = exports = {
   },
 
   //This function updates the email Tag (and optionally a bucket) on an email
-  updateEmailTag: function(req,res,next){
+  updateEmailTag: function(req,res,next) {
    if (!req.session.user){
     res.redirect('/#/public/login');
    } else {
      var username = req.session.user;
      var buffer = '';
       req.on('data', function(data){
-        buffer += data.toString('utf8')
+        buffer += data.toString('utf8');
       });
-      req.on('end', function(){
-        console.log(buffer);
+      req.on('end', function() {
         buffer = buffer.split('###');
         var id = buffer[0];
         var tag = buffer[1];
@@ -330,7 +325,7 @@ module.exports = exports = {
             if(err) { throw err; }
             var collection = db.collection('emails');   
             //update items with matching id (with checking username for security!)
-            collection.update({_id:new ObjectId(id), username:username}, {$set: {tag:tag, bucket:bucket}}, function(err, res){
+            collection.update({_id:new ObjectId(id), username:username}, {$set: {tag:tag, bucket:bucket}}, function(err, res) {
               if (err){
                 throw err;
               }

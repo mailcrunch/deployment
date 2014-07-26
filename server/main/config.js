@@ -1,6 +1,5 @@
 "use strict";
 
-
 var mongoose    = require('mongoose'),
     morgan      = require('morgan'),
     cookieParser  = require('cookie-parser'),

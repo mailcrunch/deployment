@@ -5,7 +5,7 @@ var mongoClient = require('mongodb').MongoClient,
     auth        = require('../main/auth.js'); // For importing the clientId and secret for getting emails
 
 module.exports = exports = {
-  getProfile: function(req,res,next){
+  getProfile: function(req,res,next) {
     if (!req.session.user){
       res.redirect('/#/public/login');
     }
@@ -14,7 +14,7 @@ module.exports = exports = {
       mongoClient.connect(auth.dbAuth.dbUri, function(err, db) {
         if (err) throw err;
         var collection = db.collection('users');
-        collection.find({username:username}).toArray(function(err,profileData){
+        collection.find({username:username}).toArray(function(err,profileData) {
           if (err) throw err;
           res.end(JSON.stringify(profileData));
         });

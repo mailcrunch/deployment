@@ -1,7 +1,6 @@
 angular.module('myApp.main.crunch', ['ui.router', 'ngSanitize','textAngular'])
 
 .config(function($stateProvider) {
-
   $stateProvider
     .state('myApp.main.crunch', {
       url: '/crunch',
@@ -14,16 +13,14 @@ angular.module('myApp.main.crunch', ['ui.router', 'ngSanitize','textAngular'])
   LoginFactory.loginCheck()
   .then(function(response){
     if (response === 'false'){
-      $state.transitionTo('myApp.public.login')
+      $state.transitionTo('myApp.public.login');
     } else {
-
     $scope.inbox = [];
     // This function is in common/factories.js
     Inbox.getSortedInbox()
       .then(function(response){
         console.log("email received from getsortedinbox in crunch", response.data);
         // The promise returned is the email data
- 
         for (var i = 0; i < response.data.length; i++){
           if (response.data[i].headers.from !== undefined){
             $scope.email = {
@@ -59,7 +56,7 @@ angular.module('myApp.main.crunch', ['ui.router', 'ngSanitize','textAngular'])
 
         // This function calls the point incrementer based on whether the user
         // has crunched the email in the alotted time
-        var updatePoints = function(){
+        var updatePoints = function() {
           if ($scope.timer !== 0 && $scope.timer !== '0'){
             PointFactory.incrementPoints(100);
           }
@@ -73,7 +70,7 @@ angular.module('myApp.main.crunch', ['ui.router', 'ngSanitize','textAngular'])
   =======================================================================
   =======================================================================
   */
-        var manageTimer = function(){
+        var manageTimer = function() {
           if ($scope.timer !== 300){
             $scope.timer = 300;
           }
@@ -89,7 +86,7 @@ angular.module('myApp.main.crunch', ['ui.router', 'ngSanitize','textAngular'])
         };
 
 
-        var focusTimer = function(){
+        var focusTimer = function() {
           if ($scope.timer !== 240){
             $scope.timer = 240;
           }
@@ -104,7 +101,7 @@ angular.module('myApp.main.crunch', ['ui.router', 'ngSanitize','textAngular'])
           },1000);
         };
 
-        var avoidTimer = function(){
+        var avoidTimer = function() {
           if ($scope.timer !== 120){
             $scope.timer = 120;
           }
@@ -119,7 +116,7 @@ angular.module('myApp.main.crunch', ['ui.router', 'ngSanitize','textAngular'])
           },1000);
         };
 
-        var limitTimer = function(){
+        var limitTimer = function() {
           if ($scope.timer !== 60){
             $scope.timer = 60;
           }
@@ -143,7 +140,7 @@ angular.module('myApp.main.crunch', ['ui.router', 'ngSanitize','textAngular'])
   */
         // This function checks what 'bucket' or category the email has been
         // sorted into and calls the corresponding timer function
-        var bucketChecker = function(){
+        var bucketChecker = function() {
           if ($scope.inbox[0]) {
             if ($scope.inbox[0].bucket === '1') {
                 manageTimer();
@@ -159,7 +156,7 @@ angular.module('myApp.main.crunch', ['ui.router', 'ngSanitize','textAngular'])
 
         // The function is called when the send button is clicked
         // See client/crunch/crunch.tpl.html
-        $scope.send = function(){
+        $scope.send = function() {
           // This is the message data that will be sent to our server
           // It is constructed this way so that the server can parse it and
           // put the right values in the right places
@@ -179,11 +176,9 @@ angular.module('myApp.main.crunch', ['ui.router', 'ngSanitize','textAngular'])
           $interval.cancel(timerId);
           updatePoints();
           bucketChecker();
-
           // This sets out message reply to be blank
           // $('#message').val('');
           $scope.message = '';
-
           if ($scope.inbox.length > 0) {
             // If there are emails in the queue, this updates the subject
             $('#subject').val('RE: '+ $scope.inbox[0].subject);
@@ -191,12 +186,11 @@ angular.module('myApp.main.crunch', ['ui.router', 'ngSanitize','textAngular'])
             // Otherwise, this is the subject
             $('#subject').val('');
           }
-
         };
         
         // This function is called when the 'next' button is clicked
         // See client/crunch/crunch.tpl.html
-        $scope.next = function(){
+        $scope.next = function() {
           $scope.inbox.shift();
           $interval.cancel(timerId);
           updatePoints();
@@ -204,33 +198,32 @@ angular.module('myApp.main.crunch', ['ui.router', 'ngSanitize','textAngular'])
         };
 
         // This function marks emails as read. See client/common/factories.js
-        $scope.markAsRead = function(){
+        $scope.markAsRead = function() {
           var messageID = $scope.inbox[0].id;
           SendMessageFactory.markingAsRead(messageID);
         };
-      
         bucketChecker();
       });
     }
-  })
+  });
 })
 
-.controller('mantra',function($scope, Inbox){
+.controller('mantra',function($scope, Inbox) {
   // This function gets the emails and builds the inbox for this controller
   Inbox.getSortedInbox()
     .then(function(response){
       $scope.inbox = response.data;
-      $scope.message = "What's done is done."
+      $scope.message = "What's done is done.";
       if ($scope.inbox[0]) {
         if ($scope.inbox[0]['bucket'] === '1') {
-          $scope.message = "Take time to handle this yourself. It's important and pressing."
+          $scope.message = "Take time to handle this yourself. It's important and pressing.";
         } else if ($scope.inbox[0]['bucket'] === '2') {
-          $scope.message = "Schedule time to come back to this. It's an investment in the future."  
+          $scope.message = "Schedule time to come back to this. It's an investment in the future.";
         } else if ($scope.inbox[0]['bucket'] === '3') {
-          $scope.message = "How can you delegate this task?"
+          $scope.message = "How can you delegate this task?";
         } else if ($scope.inbox[0]['bucket'] === '4') {
-          $scope.message = "Read this only for your entertainment, and spend the minimum amount of time on it possible."
+          $scope.message = "Read this only for your entertainment, and spend the minimum amount of time on it possible.";
         }
       }
     });
-})
+});

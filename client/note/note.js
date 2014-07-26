@@ -1,8 +1,6 @@
 angular.module('myApp.main.note', ['ui.router', 'ngSanitize'])
 
-
 .config(function ($stateProvider) {
-
   $stateProvider
     .state('myApp.main.note', {
       url: '/sort',
@@ -13,29 +11,28 @@ angular.module('myApp.main.note', ['ui.router', 'ngSanitize'])
 
 .controller('NoteController', function($scope, $sce, $state, $interval, $timeout, InboxFactory, Inbox, PointFactory, UpdateEmailTag, LoginFactory) {
     LoginFactory.loginCheck()
-    .then(function(response){
+    .then(function(response) {
       $scope.quantity = 9;
       if (response === 'false'){
-        $state.transitionTo('myApp.public.login')
+        $state.transitionTo('myApp.public.login');
       } else {
-
         $scope.inbox = Inbox.inbox;
         $scope.timer = 10;
 
         var result;
 
-        $timeout(function(){
+        $timeout(function() {
           $scope.timerStart();
-        }, 2000)
+        }, 2000);
 
         // This function resets the timer after the user sorts the email
-        $scope.timerReset = function(){
+        $scope.timerReset = function() {
           $interval.cancel(result);
           $scope.timerStart();
         };
 
         // This function updates the points for the user
-        $scope.updatePoints = function(){
+        $scope.updatePoints = function() {
           if ($scope.timer !== 0 && $scope.timer !== '0'){
             PointFactory.incrementPoints(100);
           }
@@ -55,7 +52,7 @@ angular.module('myApp.main.note', ['ui.router', 'ngSanitize'])
     =======================================================================
     */
     // buckets refer to...what?
-        $scope.sortManage = function(){
+        $scope.sortManage = function() {
           // This updates the email's 'bucket' property
           $scope.inbox[0]['bucket'] = 1;
           // This updates the email's 'status' property
@@ -68,18 +65,18 @@ angular.module('myApp.main.note', ['ui.router', 'ngSanitize'])
           $scope.updatePoints();
           $scope.timerReset();
         };
-        $scope.sortFocus = function(){
+        $scope.sortFocus = function() {
           $scope.inbox[0]['bucket'] = 2;
           $scope.inbox[0]['status'] = 'sorted';
           var id = $scope.inbox[0]['_id'];
           var tag = 'sorted';
-          var bucket = 2
+          var bucket = 2;
           UpdateEmailTag.update(id + '###' + tag + '###' + bucket);
           $scope.inbox.shift();
           $scope.updatePoints();
           $scope.timerReset();
         };
-        $scope.sortAvoid = function(){
+        $scope.sortAvoid = function() {
           $scope.inbox[0]['bucket'] = 3;
           $scope.inbox[0]['status'] = 'sorted';
           var id = $scope.inbox[0]['_id'];
@@ -90,7 +87,7 @@ angular.module('myApp.main.note', ['ui.router', 'ngSanitize'])
           $scope.updatePoints();
           $scope.timerReset();
         };
-        $scope.sortLimit = function(){
+        $scope.sortLimit = function() {
           $scope.inbox[0]['bucket'] = 4;
           $scope.inbox[0]['status'] = 'sorted';
           var id = $scope.inbox[0]['_id'];
@@ -111,11 +108,11 @@ angular.module('myApp.main.note', ['ui.router', 'ngSanitize'])
     =======================================================================
     */
         // And here is the timer
-        $scope.timerStart = function(){
+        $scope.timerStart = function() {
           if ($scope.timer !== 10){
             $scope.timer = 10;
           }
-          result = $interval(function(){
+          result = $interval(function() {
             if ($scope.timer === 0){
               $scope.timer = '0';
             } else if ($scope.timer === '0'){
@@ -126,6 +123,5 @@ angular.module('myApp.main.note', ['ui.router', 'ngSanitize'])
           },1000);
         };
       }
-    })
-
+    });
 });

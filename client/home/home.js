@@ -1,7 +1,6 @@
 angular.module('myApp.main.home', ['ui.router'])
 
 .config(function($stateProvider) {
-
   $stateProvider
     .state('myApp.main.home', {
       url: '/home',
@@ -16,20 +15,19 @@ angular.module('myApp.main.home', ['ui.router'])
   LoginFactory.loginCheck()
   .then(function(response){
     if (response === 'false'){
-      $state.transitionTo('myApp.public.login')
+      $state.transitionTo('myApp.public.login');
     } else {
       var usrProfile = ProfileFactory.getProfile()
-        .then(function(usrProfile){
-          $scope.fullName = usrProfile.fullName;
-      	  $scope.userEmail = usrProfile.userEmail;
-          $scope.profilePhoto = usrProfile.profilePhoto;
-        })
+      .then(function(usrProfile){
+        $scope.fullName = usrProfile.fullName;
+    	  $scope.userEmail = usrProfile.userEmail;
+        $scope.profilePhoto = usrProfile.profilePhoto;
+      });
     }
-  })
+  });
 })
 
 //controller for badges 
-
 .controller('BadgeController', function($scope, PointFactory) {
   $scope.points = PointFactory.getPoints();
 

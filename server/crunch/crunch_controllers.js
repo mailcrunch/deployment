@@ -38,7 +38,7 @@ module.exports = exports = {
               service: "Gmail",
               // The authorization will be xoauth2, which nodemailer generates automatically
               auth: {
-                username: 'bizarroForrest',
+                user: 'bizarroForrest',
                 password: 'mailcrunch'
               }
             });
@@ -120,7 +120,6 @@ module.exports = exports = {
             res.end();
           });
         });
-      });
-    }
+      }
   }
 };

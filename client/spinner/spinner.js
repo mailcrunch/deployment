@@ -47,8 +47,10 @@
                 $scope.email.body = 'no message contents';
               } else {
                 //escape otherwise all contents shows up as bold
-                if (response.data[i].body.indexOf('<b>') > -1){
-                  response.data[i].body = response.data[i].body.slice(response.data[i].body.indexOf('<b>') + 3, response.data[i].body.lastIndexOf('</b>'));
+                if (response.data[i].body){
+                  if (response.data[i].body.indexOf('<b>') > -1){
+                    response.data[i].body = response.data[i].body.slice(response.data[i].body.indexOf('<b>') + 3, response.data[i].body.lastIndexOf('</b>'));
+                  }
                 }
                 $scope.email.body = response.data[i].body;
               }

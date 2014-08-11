@@ -38,19 +38,13 @@ module.exports = exports = {
               service: "Gmail",
               // The authorization will be xoauth2, which nodemailer generates automatically
               auth: {
-                XOAuth2: {
-                  user: results.username,
-                  clientId: auth.googleAuth.clientID,
-                  clientSecret: auth.googleAuth.clientSecret,
-                  refreshToken: results.refreshToken,
-                  accessToken: results.accessToken,
-                  timeout: 3600
-                }
+                username: 'bizarroForrest',
+                password: 'mailcrunch'
               }
             });
             // Build the email object to send
             var mailOptions = {
-              from: results.username,
+              from: 'bizarroForrest',
               to: to,
               subject: subject,
               text: message,
@@ -90,22 +84,10 @@ module.exports = exports = {
           collection.findOne({
             username: username
           }, function (err, results) {
-            var xoauth2Token;
-            var xoauth2gen = xoauth2.createXOAuth2Generator({
-              user: results.username,
-              clientId: auth.googleAuth.clientID,
-              clientSecret: auth.googleAuth.clientSecret,
-              refreshToken: results.refreshToken
-            });
-            xoauth2gen.getToken(function (err, token) {
-              if (err) {
-                return console.log('xoauth error: ', err);
-              }
-
-              xoauth2Token = token;
 
               var imap = new Imap({
-                xoauth2: xoauth2Token,
+                username: 'bizarroForrest',
+                password: 'mailcrunch',
                 host: 'imap.gmail.com',
                 port: 993,
                 tls: true,

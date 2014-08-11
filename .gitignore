@@ -1,5 +1,5 @@
 node_modules/
 _DS_Store
 DS_Store
-API_KEYS_GIT_IGNORE_THIS.js
+server/main/API_KEYS_GIT_IGNORE_THIS.js
 client/lib/
